@@ -1,118 +1,218 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import React from 'react';
-import type {PropsWithChildren} from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
+  Image,
   View,
+  TouchableOpacity,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
+import Calendar from './src/screens/Calendar/Calendar';
+import Mypage from './src/screens/My/Mypage';
+import Home from './src/screens/Home/Home';
+import Nft from './src/screens/NFT/Nft';
+import Login from './src/screens/Login/Login';
+import Input from './src/screens/Login/Input';
 
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
+
+type HeaderProps = {
+  navigation: NativeStackNavigationProp<any, any>;
+  back?: boolean;
+};
+
+const Header: React.FC<HeaderProps> = ({navigation, back}) => {
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
+    <View style={styles.header}>
+      {back && (
+        <TouchableOpacity
+          onPress={() => navigation.pop()}
+          style={styles.back}>
+          <Image
+            style={styles.back}
+            source={require('./assets/back.png')} 
+          />
+        </TouchableOpacity>
+      )}
+      <View>
+        <Image
+          style={styles.back}
+          source={require('./assets/duck.png')}
+        />
+      </View>
     </View>
   );
 }
 
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+const HomeStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="HomeScreen"
+      component={Home}
+      options={({navigation}) => ({
+        header: () => <Header navigation={navigation} />,
+      })}
+    />
+  </Stack.Navigator>
+);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+const CalendarStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="CalendarScreen"
+      component={Calendar}
+      options={({navigation}) => ({
+        header: () => <Header navigation={navigation} back={true} />,
+      })}
+    />
+  </Stack.Navigator>
+);
+
+const NftStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="NftScreen"
+      component={Nft}
+      options={({navigation}) => ({
+        header: () => <Header navigation={navigation} back={true} />,
+      })}
+    />
+  </Stack.Navigator>
+);
+
+const MypageStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="MypageScreen"
+      component={Mypage}
+      options={({navigation}) => ({
+        header: () => <Header navigation={navigation} back={true} />,
+      })}
+    />
+  </Stack.Navigator>
+);
+
+const MainScreen = () => {
+  return (
+    <Tab.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        tabBarLabelStyle: {
+          fontSize: 14,
+        },
+        tabBarStyle: {
+          height: 80,
+        },
+        tabBarHideOnKeyboard: true,
+        tabBarItemStyle: {
+          flex: 1,
+        },
+      }}>
+      <Tab.Screen
+        name="Home"
+        component={HomeStack}
+        options={{
+          headerShown: false,
+          tabBarIcon: () => (
+            <Image
+              style={styles.back}
+              source={require('./assets/home.png')}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="CalendarTab"
+        component={CalendarStack}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <Image
+              style={styles.back}
+              source={require('./assets/calendar.png')}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="NftTab"
+        component={NftStack}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <Image
+              style={styles.back}
+              source={require('./assets/nft.png')}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="MypageTab"
+        component={MypageStack}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <Image
+              style={styles.back}
+              source={require('./assets/my.png')}
+            />
+          ),
+        }}
+      />
+    </Tab.Navigator>
+  );
+}
+
+function App(): React.JSX.Element {
+  const [isLogged, setIsLogged] = useState(true);
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName={isLogged ? "Main" : "Login"}>
+        {isLogged ? (
+          <>
+            <Stack.Screen
+              name="Main"
+              component={MainScreen}
+              options={{headerShown: false}}
+            />
+          </>
+        ) : (
+          <>
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="Input"
+              component={Input}
+              options={{headerShown: false}}
+            />
+          </>
+        )}
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  header: {
+    // 스타일 정의
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
+  back: {
+    width: 30,
+    height: 30,
+  }
 });
 
 export default App;
