@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -9,10 +9,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Calendar from './src/screens/Calendar/Calendar';
 import Mypage from './src/screens/My/Mypage';
@@ -24,30 +23,29 @@ import Input from './src/screens/Login/Input';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+type RootStackParamList = {
+  Main: undefined;
+  Login: undefined;
+  Input: undefined;
+};
+
 type HeaderProps = {
-  navigation: NativeStackNavigationProp<any, any>;
+  navigation: NativeStackNavigationProp<RootStackParamList>;
   back?: boolean;
 };
 
-const Header: React.FC<HeaderProps> = ({navigation, back}) => {
+const Header: React.FC<HeaderProps> = ({ navigation, back }) => {
   return (
     <View style={styles.header}>
       {back && (
-        <TouchableOpacity
-          onPress={() => navigation.pop()}
-          style={styles.back}>
-          <Image
-            style={styles.back}
-            source={require('./assets/back.png')} 
-          />
+        <TouchableOpacity onPress={() => navigation.pop()} style={styles.backIconContainer}>
+          <Image style={styles.backIcon} source={require('./assets/back.png')} />
         </TouchableOpacity>
       )}
-      <View>
-        <Image
-          style={styles.back}
-          source={require('./assets/duck.png')}
-        />
+      <View style={styles.logoContainer}>
+        <Image style={styles.logo} source={require('./assets/duck.png')} />
       </View>
+      <View style={styles.placeholder} />
     </View>
   );
 }
@@ -57,7 +55,7 @@ const HomeStack = () => (
     <Stack.Screen
       name="HomeScreen"
       component={Home}
-      options={({navigation}) => ({
+      options={({ navigation }) => ({
         header: () => <Header navigation={navigation} />,
       })}
     />
@@ -69,7 +67,7 @@ const CalendarStack = () => (
     <Stack.Screen
       name="CalendarScreen"
       component={Calendar}
-      options={({navigation}) => ({
+      options={({ navigation }) => ({
         header: () => <Header navigation={navigation} back={true} />,
       })}
     />
@@ -81,7 +79,7 @@ const NftStack = () => (
     <Stack.Screen
       name="NftScreen"
       component={Nft}
-      options={({navigation}) => ({
+      options={({ navigation }) => ({
         header: () => <Header navigation={navigation} back={true} />,
       })}
     />
@@ -93,7 +91,7 @@ const MypageStack = () => (
     <Stack.Screen
       name="MypageScreen"
       component={Mypage}
-      options={({navigation}) => ({
+      options={({ navigation }) => ({
         header: () => <Header navigation={navigation} back={true} />,
       })}
     />
@@ -121,9 +119,10 @@ const MainScreen = () => {
         component={HomeStack}
         options={{
           headerShown: false,
+          tabBarLabel: '',
           tabBarIcon: () => (
             <Image
-              style={styles.back}
+              style={styles.tabIcon}
               source={require('./assets/home.png')}
             />
           ),
@@ -134,9 +133,10 @@ const MainScreen = () => {
         component={CalendarStack}
         options={{
           headerShown: false,
-          tabBarIcon: ({focused}) => (
+          tabBarLabel: '',
+          tabBarIcon: ({ focused }) => (
             <Image
-              style={styles.back}
+              style={styles.tabIcon}
               source={require('./assets/calendar.png')}
             />
           ),
@@ -147,9 +147,10 @@ const MainScreen = () => {
         component={NftStack}
         options={{
           headerShown: false,
-          tabBarIcon: ({focused}) => (
+          tabBarLabel: '',
+          tabBarIcon: ({ focused }) => (
             <Image
-              style={styles.back}
+              style={styles.tabIcon}
               source={require('./assets/nft.png')}
             />
           ),
@@ -160,9 +161,10 @@ const MainScreen = () => {
         component={MypageStack}
         options={{
           headerShown: false,
-          tabBarIcon: ({focused}) => (
+          tabBarLabel: '',
+          tabBarIcon: ({ focused }) => (
             <Image
-              style={styles.back}
+              style={styles.tabIcon}
               source={require('./assets/my.png')}
             />
           ),
@@ -172,7 +174,7 @@ const MainScreen = () => {
   );
 }
 
-function App(): React.JSX.Element {
+const App = (): React.JSX.Element => {
   const [isLogged, setIsLogged] = useState(true);
 
   return (
@@ -183,7 +185,7 @@ function App(): React.JSX.Element {
             <Stack.Screen
               name="Main"
               component={MainScreen}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
           </>
         ) : (
@@ -191,12 +193,12 @@ function App(): React.JSX.Element {
             <Stack.Screen
               name="Login"
               component={Login}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name="Input"
               component={Input}
-              options={{headerShown: false}}
+              options={{ headerShown: false }}
             />
           </>
         )}
@@ -207,12 +209,45 @@ function App(): React.JSX.Element {
 
 const styles = StyleSheet.create({
   header: {
-    // 스타일 정의
+    height: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    position: 'relative',
+    backgroundColor: '#F7F7F7',
   },
-  back: {
-    width: 30,
-    height: 30,
-  }
+  backIconContainer: {
+    position: 'absolute',
+    left: 10,
+    zIndex: 1,
+  },
+  backIcon: {
+    width: 18,
+    height: 18,
+    resizeMode: "contain",
+  },
+  logoContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  logo: {
+    width: 35,
+    height: 35,
+    resizeMode: "contain",
+    left: 13,
+  },
+  placeholder: {
+    width: 18, // backIcon과 동일한 너비
+  },
+  tabIcon: {
+    width: 28,
+    height: 28,
+    resizeMode: "contain",
+  },
 });
 
 export default App;
+
+
