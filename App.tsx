@@ -98,6 +98,19 @@ const MypageStack = () => (
   </Stack.Navigator>
 );
 
+// MainScreen과 독립적
+const InputStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="InputScreen"
+      component={Input}
+      options={({ navigation }) => ({
+        header: () => <Header navigation={navigation} back={true} />,
+      })}
+    />
+  </Stack.Navigator>
+);
+
 const MainScreen = () => {
   return (
     <Tab.Navigator
@@ -175,7 +188,7 @@ const MainScreen = () => {
 }
 
 const App = (): React.JSX.Element => {
-  const [isLogged, setIsLogged] = useState(true);
+  const [isLogged, setIsLogged] = useState(false);
 
   return (
     <NavigationContainer>
@@ -197,7 +210,7 @@ const App = (): React.JSX.Element => {
             />
             <Stack.Screen
               name="Input"
-              component={Input}
+              component={InputStack}
               options={{ headerShown: false }}
             />
           </>
@@ -215,7 +228,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 10,
     position: 'relative',
-    backgroundColor: '#F7F7F7',
+    backgroundColor: 'white',
+    borderBottomColor: 'gray',
+    borderBottomWidth: 0.2,
   },
   backIconContainer: {
     position: 'absolute',

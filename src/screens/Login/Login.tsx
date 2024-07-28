@@ -2,16 +2,11 @@ import React from 'react';
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-
 
 type RootStackParamList = {
   Login: undefined;
   Input: undefined;
 };
-
-const Stack = createStackNavigator<RootStackParamList>();
 
 const Login: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Login'>>();
@@ -27,25 +22,6 @@ const Login: React.FC = () => {
         <Image source={require('../../../assets/login.png')} />
       </TouchableOpacity>
     </View>
-  );
-}
-
-const InputScreen: React.FC = () => {
-  return (
-    <View>
-      {/* Input screen content */}
-    </View>
-  );
-}
-
-const App: React.FC = () => {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen name="Login" component={Login} />
-        <Stack.Screen name="Input" component={InputScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
   );
 }
 
