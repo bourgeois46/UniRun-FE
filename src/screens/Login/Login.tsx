@@ -8,7 +8,7 @@ type RootStackParamList = {
   Input: undefined;
 };
 
-const Login: React.FC = () => {
+const Login: React.FC<{}> = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Login'>>();
 
   const handleLogin = () => {

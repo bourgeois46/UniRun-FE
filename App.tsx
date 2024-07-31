@@ -8,7 +8,6 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -27,6 +26,9 @@ type RootStackParamList = {
   Main: undefined;
   Login: undefined;
   Input: undefined;
+  Home: undefined; 
+  Calendar: undefined; 
+  Nft: undefined;
 };
 
 type HeaderProps = {
@@ -50,86 +52,22 @@ const Header: React.FC<HeaderProps> = ({ navigation, back }) => {
   );
 }
 
-const HomeStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="HomeScreen"
-      component={Home}
-      options={({ navigation }) => ({
-        header: () => <Header navigation={navigation} />,
-      })}
-    />
-  </Stack.Navigator>
-);
-
-const CalendarStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="CalendarScreen"
-      component={Calendar}
-      options={({ navigation }) => ({
-        header: () => <Header navigation={navigation} back={true} />,
-      })}
-    />
-  </Stack.Navigator>
-);
-
-const NftStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="NftScreen"
-      component={Nft}
-      options={({ navigation }) => ({
-        header: () => <Header navigation={navigation} back={true} />,
-      })}
-    />
-  </Stack.Navigator>
-);
-
-const MypageStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="MypageScreen"
-      component={Mypage}
-      options={({ navigation }) => ({
-        header: () => <Header navigation={navigation} back={true} />,
-      })}
-    />
-  </Stack.Navigator>
-);
-
-// MainScreen과 독립적
-const InputStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen
-      name="InputScreen"
-      component={Input}
-      options={({ navigation }) => ({
-        header: () => <Header navigation={navigation} back={true} />,
-      })}
-    />
-  </Stack.Navigator>
-);
 
 const MainScreen = () => {
   return (
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={{
-        tabBarLabelStyle: {
-          fontSize: 14,
-        },
         tabBarStyle: {
           height: 80,
         },
-        tabBarHideOnKeyboard: true,
         tabBarItemStyle: {
           flex: 1,
         },
       }}>
       <Tab.Screen
         name="Home"
-        component={HomeStack}
+        component={Home}
         options={{
           headerShown: false,
           tabBarLabel: '',
@@ -142,8 +80,8 @@ const MainScreen = () => {
         }}
       />
       <Tab.Screen
-        name="CalendarTab"
-        component={CalendarStack}
+        name="Calendar"
+        component={Calendar}
         options={{
           headerShown: false,
           tabBarLabel: '',
@@ -156,8 +94,8 @@ const MainScreen = () => {
         }}
       />
       <Tab.Screen
-        name="NftTab"
-        component={NftStack}
+        name="Nft"
+        component={Nft}
         options={{
           headerShown: false,
           tabBarLabel: '',
@@ -170,8 +108,8 @@ const MainScreen = () => {
         }}
       />
       <Tab.Screen
-        name="MypageTab"
-        component={MypageStack}
+        name="Mypage"
+        component={Mypage}
         options={{
           headerShown: false,
           tabBarLabel: '',
@@ -190,15 +128,46 @@ const MainScreen = () => {
 const App = (): React.JSX.Element => {
   const [isLogged, setIsLogged] = useState(false);
 
+  const handleLoginSuccess = () => {
+    setIsLogged(true);
+  };
+
+  const handleLogoutSuccess = () => {
+    setIsLogged(false);
+  };
+
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={isLogged ? "Main" : "Login"}>
-        {isLogged ? (
+      {isLogged ? (
           <>
             <Stack.Screen
               name="Main"
               component={MainScreen}
-              options={{ headerShown: false }}
+              options={({ navigation }) => ({
+                header: () => <Header navigation={navigation} back={true} />,
+              })}
+            />
+             <Stack.Screen
+              name="Home"
+              component={Home}
+              options={({ navigation }) => ({
+                header: () => <Header navigation={navigation} back={true} />,
+              })}
+            />
+            <Stack.Screen
+              name="Calendar"
+              component={Calendar}
+              options={({ navigation }) => ({
+                header: () => <Header navigation={navigation} back={true} />,
+              })}
+            />
+            <Stack.Screen
+              name="Nft"
+              component={Nft}
+              options={({ navigation }) => ({
+                header: () => <Header navigation={navigation} back={true} />,
+              })}
             />
           </>
         ) : (
@@ -210,8 +179,16 @@ const App = (): React.JSX.Element => {
             />
             <Stack.Screen
               name="Input"
-              component={InputStack}
+              component={Input}
               options={{ headerShown: false }}
+            />
+            {/* 카카오 로그인 연동 후 삭제 */}
+             <Stack.Screen
+              name="Home"
+              component={Home}
+              options={({ navigation }) => ({
+                header: () => <Header navigation={navigation} back={true} />,
+              })}
             />
           </>
         )}
@@ -254,7 +231,7 @@ const styles = StyleSheet.create({
     left: 13,
   },
   placeholder: {
-    width: 18, // backIcon과 동일한 너비
+    width: 18,
   },
   tabIcon: {
     width: 28,
@@ -264,5 +241,6 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+
 
 

@@ -1,8 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import type { StackNavigationProp } from '@react-navigation/stack';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ImageSourcePropType  } from 'react-native';
 
-const Input: React.FC = () => {
+type RootStackParamList = {
+  Home: undefined;
+};
+
+const Input: React.FC<{}> = () => {
   const [selectedGender, setSelectedGender] = useState<string | null>(null);
+  const signupImage: ImageSourcePropType = require('../../../assets/signup.png');
+
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Home'>>();
+  
+  const handleSignup = () => {
+    navigation.navigate('Home');
+  };
 
   return (
     <View style={styles.container}>
@@ -11,12 +24,12 @@ const Input: React.FC = () => {
 
       <View style={styles.formRow}>
         <Text style={styles.label}>닉네임</Text>
-        <TextInput style={styles.inputRow} placeholder="ex) 러닝덕, 단비" />
+        <TextInput style={[styles.inputRow, styles.textInput]} placeholder="ex) 러닝덕, 단비" />
       </View>
 
       <View style={styles.formRow}>
         <Text style={styles.label}>학교</Text>
-        <TextInput style={styles.inputRow} placeholder="ex) 동덕여자대학교" />
+        <TextInput style={[styles.inputRow, styles.textInput]} placeholder="ex) 동덕여자대학교" />
       </View>
 
       <View style={styles.formRow}>
@@ -51,35 +64,44 @@ const Input: React.FC = () => {
 
       <View style={styles.formRow}>
         <Text style={styles.label}>출생연도</Text>
-        <View style={styles.birthYearContainer}>
-          <TextInput style={styles.birthYearInput} keyboardType="numeric" />
+        <View style={styles.labelcontainer}>
+          <View style={styles.birthYearContainer}>
+            <TextInput style={[styles.birthYearInput, styles.textInput]} keyboardType="numeric" />
+          </View>
+          <Text style={styles.coloredlabel}>   년도</Text>
         </View>
-        <Text style={styles.coloredlabel}>   년도</Text>
       </View>
 
       <View style={styles.formRow}>
         <Text style={styles.label}>키</Text>
-        <View style={styles.unitContainer}>
-          <TextInput style={styles.inputRow} keyboardType="numeric" />
+        <View style={styles.labelcontainer}>
+          <View style={styles.unitContainer}>
+            <TextInput style={[styles.inputRow, styles.textInput]} keyboardType="numeric" />
+          </View>
+          <Text style={styles.coloredlabel}>   CM</Text>
         </View>
-        <Text style={styles.coloredlabel}>   CM</Text>
       </View>
 
       <View style={styles.formRow}>
         <Text style={styles.label}>체중</Text>
-        <View style={styles.unitContainer}>
-          <TextInput style={styles.inputRow} keyboardType="numeric" />
+        <View style={styles.labelcontainer}>
+          <View style={styles.unitContainer}>
+            <TextInput style={[styles.inputRow, styles.textInput]} keyboardType="numeric" />
+          </View>
+          <Text style={styles.coloredlabel}>   KG</Text>
         </View>
-        <Text style={styles.coloredlabel}>   KG</Text>
       </View>
 
-      <View style={styles.formRow}>
+      <View style={styles.formCol}>
         <Text style={styles.label}>목표 설정</Text>
-        <TextInput style={styles.inputRow} placeholder="ex) 포기하지말고 꾸준히!" />
+        <TextInput
+          style={[styles.textInput, styles.inputGoal]} 
+          placeholder="ex) 포기하지말고 꾸준히!"
+        />
       </View>
 
-      <TouchableOpacity style={styles.signupButton}>
-        <Image style={styles.signupImage} source={require('../../../assets/signup.png')} />
+      <TouchableOpacity style={styles.signupButton} onPress={handleSignup} >
+        <Image style={styles.signupImage} source={signupImage} />  
       </TouchableOpacity>
     </View>
   );
@@ -105,9 +127,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 38,
+    justifyContent: 'space-between',
   },
-  formGroup: {
-    marginBottom: 50,
+  formCol: {
+    flexDirection: 'column',
+    marginBottom: 38, 
   },
   label: {
     fontSize: 17,
@@ -120,6 +144,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
     marginRight: 15,
+    marginTop: 10,
     color: '#0F2869',
     minWidth: 80,
   },
@@ -134,6 +159,19 @@ const styles = StyleSheet.create({
     borderBottomColor: '#0F2869',
     paddingVertical: 5,
     flex: 1,
+    textAlign: 'center',
+  },
+  inputGoal: {
+    borderBottomWidth: 1, 
+    borderBottomColor: '#0F2869',
+    paddingVertical: 5,
+    textAlign: 'center',
+    marginTop: 8, 
+  },
+  textInput: {
+    color: '#0F2869', 
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   genderContainer: {
     flexDirection: 'row',
@@ -171,11 +209,19 @@ const styles = StyleSheet.create({
     padding: 5,
     flex: 1,
     marginLeft: 50,
+    textAlign: 'center',
   },
   unitContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
+  },
+  labelcontainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end', 
+    flex: 1,
+    left: 54,
   },
   signupButton: {
     alignItems: 'center',
@@ -193,4 +239,5 @@ const styles = StyleSheet.create({
 });
 
 export default Input;
+
 

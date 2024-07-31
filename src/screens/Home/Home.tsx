@@ -1,10 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-export default function Home() {
+const Home: React.FC = () => {
   return (
     <View>
       <Text>home</Text>
     </View>
   )
 }
+
+export default Home;
