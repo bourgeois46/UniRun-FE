@@ -1,4 +1,6 @@
 import React from 'react';
+import type { StackNavigationProp } from '@react-navigation/stack';
+import {useNavigation} from '@react-navigation/native';
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
 
 interface RunningStartModalProps {
@@ -6,7 +8,17 @@ interface RunningStartModalProps {
   onClose: () => void;
 }
 
+type RootStackParamList = {
+    Running: undefined;
+  };
+
 const RunningStartModal: React.FC<RunningStartModalProps> = ({ visible, onClose }) => {
+    const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Running'>>();
+  
+    const handleRunning = () => {
+      navigation.navigate('Running');
+    };
+
   return (
     <Modal visible={visible} animationType="fade" transparent={true} onRequestClose={onClose}>
       <View style={styles.modalContainer}>
@@ -21,7 +33,8 @@ const RunningStartModal: React.FC<RunningStartModalProps> = ({ visible, onClose 
               <Text style={styles.buttonText}>돌아가기</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button2} onPress={() => { 
-              console.log('러닝 시작 버튼 클릭됨'); 
+              console.log('러닝 시작 버튼 클릭됨');
+              handleRunning(); 
             }}>
               <Text style={styles.buttonText}>시작하기</Text>
             </TouchableOpacity>

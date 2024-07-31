@@ -18,6 +18,8 @@ import Home from './src/screens/Home/Home';
 import Nft from './src/screens/NFT/Nft';
 import Login from './src/screens/Login/Login';
 import Input from './src/screens/Login/Input';
+import Running from './src/screens/Home/Running';
+import Record from './src/screens/Home/Record';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -29,6 +31,8 @@ type RootStackParamList = {
   Home: undefined; 
   Calendar: undefined; 
   Nft: undefined;
+  Running: undefined;
+  Record: undefined;
 };
 
 type HeaderProps = {
@@ -165,6 +169,20 @@ const App = (): React.JSX.Element => {
             <Stack.Screen
               name="Nft"
               component={Nft}
+              options={({ navigation }) => ({
+                header: () => <Header navigation={navigation} back={true} />,
+              })}
+            />
+             <Stack.Screen
+              name="Running"
+              component={Running}
+              options={({ navigation }) => ({
+                header: () => <Header navigation={navigation} back={true} />,
+              })}
+            />
+             <Stack.Screen
+              name="Record"
+              component={Record}
               options={({ navigation }) => ({
                 header: () => <Header navigation={navigation} back={true} />,
               })}
