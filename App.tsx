@@ -126,7 +126,7 @@ const MainScreen = () => {
 }
 
 const App = (): React.JSX.Element => {
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(true);
 
   const handleLoginSuccess = () => {
     setIsLogged(true);
