@@ -1,39 +1,35 @@
 import React from 'react';
 import type { StackNavigationProp } from '@react-navigation/stack';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
 
-interface RunningStartModalProps {
-  visible: boolean;
-  onClose: () => void;
-}
-
 type RootStackParamList = {
-    Running: undefined;
-  };
+  Running: undefined;
+};
 
-const RunningStartModal: React.FC<RunningStartModalProps> = ({ visible, onClose }) => {
-    const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Running'>>();
-  
-    const handleRunning = () => {
-      navigation.navigate('Running');
-    };
+const RunningStartModal: React.FC<{ visible: boolean; onClose: () => void }> = ({ visible, onClose }) => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Running'>>();
+
+  const handleRunning = () => {
+    navigation.navigate('Running');
+  };
 
   return (
     <Modal visible={visible} animationType="fade" transparent={true} onRequestClose={onClose}>
       <View style={styles.modalContainer}>
         <View style={styles.modalView}>
+          <Text style={styles.closeText} onPress={onClose}>X</Text>
           <Text style={styles.title}>러닝 시작 알림</Text>
           <Text style={styles.message}>3초 후에 러닝이 시작됩니다!</Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button1} onPress={() => { 
-              console.log('돌아가기 버튼 클릭됨'); 
+              // console.log('돌아가기 버튼 클릭됨'); 
               onClose();
             }}>
               <Text style={styles.buttonText}>돌아가기</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button2} onPress={() => { 
-              console.log('러닝 시작 버튼 클릭됨');
+              // console.log('러닝 시작 버튼 클릭됨');
               handleRunning(); 
             }}>
               <Text style={styles.buttonText}>시작하기</Text>
@@ -68,12 +64,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: 'black',
-    right: 65,
     marginBottom: 10,
   },
   message: {
     fontSize: 13,
-    right: 45,
     marginBottom: 20,
   },
   buttonContainer: {
@@ -100,6 +94,14 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 16,
+  },
+  closeText: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'black',
   },
 });
 

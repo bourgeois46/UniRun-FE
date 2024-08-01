@@ -1,27 +1,31 @@
-import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { View, Image, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
 import RunningStartModal from '../../modal/RunningStartModal';
 
 const Home: React.FC = () => {
-  const [isModalVisible, setIsModalVisible] = useState<boolean>(true);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const onPressModalOpen = () => {
-    console.log('모달 열기 버튼 클릭됨');
     setIsModalVisible(true);
-    console.log('isModalVisible:', isModalVisible);  // 상태값 로그 추가
   };
 
   const onPressModalClose = () => {
-    console.log('모달 닫기 버튼 클릭됨');
     setIsModalVisible(false);
   };
 
   return (
     <View style={styles.container}>
       <Image source={require('../../../assets/home_main.png')} style={styles.image} />
-      <TouchableOpacity onPress={onPressModalOpen}>
-        <Image source={require('../../../assets/ticket.png')} style={styles.ticket} />
-      </TouchableOpacity>
+      <Pressable 
+          onPress={onPressModalOpen}  
+          style={({ pressed }) => [
+             styles.ticketPressable,
+            {
+             opacity: pressed ? 0.5 : 1, // 터치 효과
+            },
+          ]}>
+        <Image source={require('../../../assets/ticket.png')} />
+      </Pressable>
       <RunningStartModal visible={isModalVisible} onClose={onPressModalClose} />
     </View>
   );
@@ -41,14 +45,12 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: '-15%',
   },
-  ticket: {
-    resizeMode: 'contain',
+  ticketPressable: {
     position: 'absolute',
-    top: 130,
-    left: -185,
+    bottom: '8%',   
+    zIndex: 2, 
   },
 });
 
 export default Home;
-
 
