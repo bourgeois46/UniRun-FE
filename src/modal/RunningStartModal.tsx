@@ -64,10 +64,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: 'black',
+    right: 70,
     marginBottom: 10,
   },
   message: {
     fontSize: 13,
+    right: 47,
     marginBottom: 20,
   },
   buttonContainer: {

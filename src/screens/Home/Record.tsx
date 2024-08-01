@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import type { RouteProp } from '@react-navigation/native';
@@ -26,10 +26,43 @@ const Record: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Text>Record</Text>
-      <RunningDoneModal visible={isModalVisible} onClose={onPressModalClose} />
-    </View>
-  );
+    <View style={styles.gridContainer}>
+      <View style={styles.gridItem}>
+        <Image source={require('../../../assets/date.png')} style={styles.icon} />
+    
+        <Text style={styles.valueDay}>SAT</Text>
+        <Text style={styles.valueDate}>2024/06/22</Text>
+      </View>
+      <View style={styles.gridItem}>
+        <Image source={require('../../../assets/time.png')} style={styles.icon} />
+        <Text style={styles.valueNumber}>00:08:58</Text>
+      </View>
+
+      {/* 가로 점선 */}
+      <View style={styles.horizontalLine} />
+
+      <View style={styles.gridItem}>
+        <Image source={require('../../../assets/distance.png')} style={styles.icon} />
+        <View style={styles.valueContainer}>
+            <Text style={styles.valueNumber}>3.75</Text>
+            <Text style={styles.valueUnit}>km</Text>
+          </View>
+        </View>
+        <View style={styles.gridItem}>
+          <Image source={require('../../../assets/cal.png')} style={styles.icon} />
+          <View style={styles.valueContainer}>
+            <Text style={styles.valueNumber}>20</Text>
+            <Text style={styles.valueUnit}>m</Text>
+          </View>
+        </View>
+      </View>
+
+       {/* 세로 점선 */}
+      <View style={styles.verticalLine} />
+
+    <RunningDoneModal visible={isModalVisible} onClose={onPressModalClose} />
+  </View>
+);
 };
 
 const styles = StyleSheet.create({
@@ -70,6 +103,84 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: 'black',
+  },
+  gridContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    width: '90%',
+    height: '40%',
+    marginTop: 385,
+    //borderWidth: 1,
+  },
+  gridItem: {
+    width: '45%',
+    height: '45%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    //borderWidth: 1,
+    margin: '2.5%',
+  },
+  icon: {
+    resizeMode: "cover",
+    right: '25%',
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginTop: 5,
+  },
+  valueContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+  valueNumber: {
+    marginTop: 18,
+    fontSize: 28,
+    left: 24,
+    fontWeight: 'bold',
+    color: '#0F2869',
+  },
+  valueUnit: {
+    fontSize: 26,
+    left: 24,
+    fontWeight: 'bold',
+    marginLeft: 5,
+    color: '#0F2869',
+  },
+  valueDay: {
+    top: 10,
+    fontWeight: 'bold',
+    fontSize: 20,
+    color: '#0F2869',
+    left: 50,
+  },
+  valueDate: {
+    top: 10,
+    fontWeight: 'bold',
+    fontSize: 20,
+    color: '#0F2869',
+    left: 20,
+  },
+  horizontalLine: {
+    position: 'absolute',
+    width: '100%',
+    top: 150,
+    height: 1,
+    borderStyle: 'dashed',
+    borderWidth: 0.8,
+    borderColor: '#D9D9D9',
+    marginVertical: 5,
+  },
+  verticalLine: {
+    position: 'absolute',
+    bottom: 20,
+    width: 1,
+    height: '40%',
+    borderStyle: 'dashed',
+    borderWidth: 0.8,
+    borderColor: '#D9D9D9',
+    marginHorizontal: 10,
   },
 });
 
