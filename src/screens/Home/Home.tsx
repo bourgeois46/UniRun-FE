@@ -16,6 +16,7 @@ const Home: React.FC = () => {
   return (
     <View style={styles.container}>
       <Image source={require('../../../assets/home_main.png')} style={styles.image} />
+      
       <Pressable 
           onPress={onPressModalOpen}  
           style={({ pressed }) => [
@@ -26,6 +27,7 @@ const Home: React.FC = () => {
           ]}>
         <Image source={require('../../../assets/ticket.png')} />
       </Pressable>
+
       <RunningStartModal visible={isModalVisible} onClose={onPressModalClose} />
     </View>
   );
