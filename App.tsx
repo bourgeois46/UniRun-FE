@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
   Image,
@@ -18,6 +16,8 @@ import Home from './src/screens/Home/Home';
 import Nft from './src/screens/NFT/Nft';
 import Login from './src/screens/Login/Login';
 import Input from './src/screens/Login/Input';
+import Running from './src/screens/Home/Running';
+import Record from './src/screens/Home/Record';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -29,6 +29,8 @@ type RootStackParamList = {
   Home: undefined; 
   Calendar: undefined; 
   Nft: undefined;
+  Running: undefined;
+  Record: undefined;
 };
 
 type HeaderProps = {
@@ -50,13 +52,34 @@ const Header: React.FC<HeaderProps> = ({ navigation, back }) => {
       <View style={styles.placeholder} />
     </View>
   );
-}
+};
 
+const HomeStack = createNativeStackNavigator();
+
+const HomeStackScreen = () => (
+  <HomeStack.Navigator>
+    <HomeStack.Screen
+      name="Home"
+      component={Home}
+      options={{ headerShown: false }}
+    />
+    <HomeStack.Screen
+      name="Record"
+      component={Record}
+      options={{ headerShown: false }}
+    />
+    <HomeStack.Screen
+      name="Running"
+      component={Running}
+      options={{ headerShown: false }}
+    />
+  </HomeStack.Navigator>
+);
 
 const MainScreen = () => {
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="HomeStack"
       screenOptions={{
         tabBarStyle: {
           height: 80,
@@ -66,8 +89,8 @@ const MainScreen = () => {
         },
       }}>
       <Tab.Screen
-        name="Home"
-        component={Home}
+        name="HomeStack"
+        component={HomeStackScreen}
         options={{
           headerShown: false,
           tabBarLabel: '',
@@ -123,10 +146,10 @@ const MainScreen = () => {
       />
     </Tab.Navigator>
   );
-}
+};
 
 const App = (): React.JSX.Element => {
-  const [isLogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(true);
 
   const handleLoginSuccess = () => {
     setIsLogged(true);
@@ -139,32 +162,11 @@ const App = (): React.JSX.Element => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={isLogged ? "Main" : "Login"}>
-      {isLogged ? (
+        {isLogged ? (
           <>
             <Stack.Screen
               name="Main"
               component={MainScreen}
-              options={({ navigation }) => ({
-                header: () => <Header navigation={navigation} back={true} />,
-              })}
-            />
-             <Stack.Screen
-              name="Home"
-              component={Home}
-              options={({ navigation }) => ({
-                header: () => <Header navigation={navigation} back={true} />,
-              })}
-            />
-            <Stack.Screen
-              name="Calendar"
-              component={Calendar}
-              options={({ navigation }) => ({
-                header: () => <Header navigation={navigation} back={true} />,
-              })}
-            />
-            <Stack.Screen
-              name="Nft"
-              component={Nft}
               options={({ navigation }) => ({
                 header: () => <Header navigation={navigation} back={true} />,
               })}
@@ -182,20 +184,12 @@ const App = (): React.JSX.Element => {
               component={Input}
               options={{ headerShown: false }}
             />
-            {/* 카카오 로그인 연동 후 삭제 */}
-             <Stack.Screen
-              name="Home"
-              component={Home}
-              options={({ navigation }) => ({
-                header: () => <Header navigation={navigation} back={true} />,
-              })}
-            />
           </>
         )}
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
 
 const styles = StyleSheet.create({
   header: {
