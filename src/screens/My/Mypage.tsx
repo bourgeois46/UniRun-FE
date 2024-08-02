@@ -19,8 +19,10 @@ const Mypage: React.FC = () => {
       <Image source={require('../../../assets/myBanner.png')} style={styles.banner} />
       <Text style={styles.name}>러닝덕</Text>
       <Text style={styles.univ}>동덕여자대학교</Text>
-      <Image source={require('../../../assets/fix.png')} style={styles.fix} />
 
+      <TouchableOpacity>
+        <Image source={require('../../../assets/fix.png')} style={styles.fix} />
+      </TouchableOpacity>
 
       <View style={styles.buttonContainer}>   
         <TouchableOpacity onPress={handleButtonClick}>   
@@ -32,11 +34,15 @@ const Mypage: React.FC = () => {
     
         <View style={styles.horizontalLine} />
 
-        <Text style={styles.logout}>로그아웃</Text>
+        <TouchableOpacity>
+          <Text style={styles.logout}>로그아웃</Text>
+        </TouchableOpacity>
 
         <View style={[styles.horizontalLine, {marginTop: -45}]} />
-
-        <Text style={styles.withdrawal}>회원 탈퇴</Text>
+        
+        <TouchableOpacity>
+          <Text style={styles.withdrawal}>회원 탈퇴</Text>
+        </TouchableOpacity>
       </View>
 
     </View>
@@ -110,8 +116,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#D9D9D9',
     top: 20,
-  }
-  ,
+  },
   horizontalLine: {
     position: 'absolute',
     width: '90%',
