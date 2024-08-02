@@ -18,6 +18,7 @@ import Login from './src/screens/Login/Login';
 import Input from './src/screens/Login/Input';
 import Running from './src/screens/Home/Running';
 import Record from './src/screens/Home/Record';
+import MyRunning from './src/screens/My/MyRunning';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -31,6 +32,8 @@ type RootStackParamList = {
   Nft: undefined;
   Running: undefined;
   Record: undefined;
+  Mypage: undefined;
+  MyRunning: undefined;
 };
 
 type HeaderProps = {
@@ -75,6 +78,23 @@ const HomeStackScreen = () => (
     />
   </HomeStack.Navigator>
 );
+
+const MyStack = createNativeStackNavigator();
+
+const MyStackScreen = () => (
+  <MyStack.Navigator>
+    <MyStack.Screen
+      name="Mypage"
+      component={Mypage}
+      options={{ headerShown: false }}
+    />
+    <MyStack.Screen
+      name="MyRunning"
+      component={MyRunning}
+      options={{ headerShown: false }}
+    />
+  </MyStack.Navigator>
+)
 
 const MainScreen = () => {
   return (
@@ -131,8 +151,8 @@ const MainScreen = () => {
         }}
       />
       <Tab.Screen
-        name="Mypage"
-        component={Mypage}
+        name="MyStack"
+        component={MyStackScreen}
         options={{
           headerShown: false,
           tabBarLabel: '',
