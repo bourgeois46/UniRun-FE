@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
-const Calendar: React.FC = () => {
+const CreateRun: React.FC = () => {
   return (
     <View style={styles.container}>
 
@@ -19,4 +19,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default Calendar
+export default CreateRun
