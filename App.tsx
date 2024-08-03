@@ -93,6 +93,11 @@ const MyStackScreen = () => (
       component={MyRunning}
       options={{ headerShown: false }}
     />
+    <MyStack.Screen
+      name="Input"
+      component={Input}
+      options={{ headerShown: false }}
+    />
   </MyStack.Navigator>
 )
 

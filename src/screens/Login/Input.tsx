@@ -10,6 +10,10 @@ type RootStackParamList = {
 const Input: React.FC<{}> = () => {
   const [selectedGender, setSelectedGender] = useState<string | null>(null);
   const signupImage: ImageSourcePropType = require('../../../assets/signup.png');
+  const fixImage: ImageSourcePropType = require('../../../assets/fixbutton.png');
+
+  // 로그인 연동 후 수정
+  const [isLogged, setIsLogged] = useState<boolean>(true); 
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Home'>>();
   
@@ -101,7 +105,9 @@ const Input: React.FC<{}> = () => {
       </View>
 
       <TouchableOpacity style={styles.signupButton} onPress={handleSignup} >
-        <Image style={styles.signupImage} source={signupImage} />  
+      <Image   
+        style={[styles.lastButton, isLogged && styles.fixImageStyle]}  
+        source={isLogged ? fixImage : signupImage} />  
       </TouchableOpacity>
     </View>
   );
@@ -232,9 +238,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  signupImage: {
+  lastButton: {
     position: 'absolute',
     resizeMode: 'contain',
+  },
+  fixImageStyle: {
+    top: -50,
   },
 });
 

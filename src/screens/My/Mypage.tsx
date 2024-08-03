@@ -5,13 +5,21 @@ import { useNavigation } from '@react-navigation/native';
 
 type RootStackParamList = {
   MyRunning: undefined,
+  Input: undefined,
 };
 
+type MypageNavigationProp = StackNavigationProp<RootStackParamList>;
+
 const Mypage: React.FC = () => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'MyRunning'>>();
+ // useNavigation 훅을 MypageNavigationProp 타입으로 사용
+ const navigation = useNavigation<MypageNavigationProp>();
 
   const handleButtonClick = () => {
     navigation.navigate('MyRunning');
+  }
+
+  const handleFixButtonClick = () => {
+    navigation.navigate('Input');
   }
 
   return (
@@ -20,7 +28,7 @@ const Mypage: React.FC = () => {
       <Text style={styles.name}>러닝덕</Text>
       <Text style={styles.univ}>동덕여자대학교</Text>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleFixButtonClick}>
         <Image source={require('../../../assets/fix.png')} style={styles.fix} />
       </TouchableOpacity>
 
