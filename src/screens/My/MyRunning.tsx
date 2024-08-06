@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
+import RunningList from '../../components/RunningList';
 
 const MyRunning: React.FC = () => {
   const [selectedLabel, setSelectedLabel] = useState<string>('기록');
@@ -35,9 +36,9 @@ const MyRunning: React.FC = () => {
             러닝 일정
           </Text>
         </TouchableOpacity>
-
-        <View style={styles.horizontalLine} />
       </View>
+      <View style={styles.horizontalLine} />
+      {selectedLabel === '기록' ? <RunningList /> : <Text>러닝 일정 컴포넌트</Text>}
     </View>
   );
 };
@@ -63,23 +64,21 @@ const styles = StyleSheet.create({
   labelContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingHorizontal: 100, // 요소 사이 공간
-    right: 70,
+    paddingHorizontal: 100, // 요소 사이 공간 조정
+    marginTop: 30,
+    marginBottom: 15,
+    right: 80,
   },
   label: {
     fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 30,  
   },
   horizontalLine: {
-    position: 'absolute',
-    width: '170%',
+    width: '100%',
     height: 1,
     borderWidth: 0.5,
     borderColor: '#D9D9D9',
     marginVertical: 5,
-    left: 100,
-    top: 65,
   },
 });
 
