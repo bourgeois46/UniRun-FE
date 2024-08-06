@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useRoute } from '@react-navigation/native';
 import type { RouteProp } from '@react-navigation/native';
 import RunningDoneModal from '../../modal/RunningDoneModal';
+import CurrentDate from '../../components/CurrentDate';
 
 type RootStackParamList = {
   Running: undefined;
@@ -28,10 +29,8 @@ const Record: React.FC = () => {
     <View style={styles.container}>
     <View style={styles.gridContainer}>
       <View style={styles.gridItem}>
-        <Image source={require('../../../assets/date.png')} style={styles.icon} />
-    
-        <Text style={styles.valueDay}>SAT</Text>
-        <Text style={styles.valueDate}>2024/06/22</Text>
+        <Image source={require('../../../assets/date.png')} style={[styles.icon, {top: 20}]} />
+        <CurrentDate />
       </View>
       <View style={styles.gridItem}>
         <Image source={require('../../../assets/time.png')} style={styles.icon} />

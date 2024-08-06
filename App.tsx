@@ -11,6 +11,8 @@ import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-na
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Calendar from './src/screens/Calendar/Calendar';
+import CheckRun from './src/screens/Calendar/CheckRun';
+import CreateRun from './src/screens/Calendar/CreateRun';
 import Mypage from './src/screens/My/Mypage';
 import Home from './src/screens/Home/Home';
 import Nft from './src/screens/NFT/Nft';
@@ -18,6 +20,7 @@ import Login from './src/screens/Login/Login';
 import Input from './src/screens/Login/Input';
 import Running from './src/screens/Home/Running';
 import Record from './src/screens/Home/Record';
+import MyRunning from './src/screens/My/MyRunning';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -28,9 +31,13 @@ type RootStackParamList = {
   Input: undefined;
   Home: undefined; 
   Calendar: undefined; 
+  CheckRun: undefined; 
+  CreateRun: undefined;
   Nft: undefined;
   Running: undefined;
   Record: undefined;
+  Mypage: undefined;
+  MyRunning: undefined;
 };
 
 type HeaderProps = {
@@ -76,6 +83,51 @@ const HomeStackScreen = () => (
   </HomeStack.Navigator>
 );
 
+const MyStack = createNativeStackNavigator();
+
+const MyStackScreen = () => (
+  <MyStack.Navigator>
+    <MyStack.Screen
+      name="Mypage"
+      component={Mypage}
+      options={{ headerShown: false }}
+    />
+    <MyStack.Screen
+      name="MyRunning"
+      component={MyRunning}
+      options={{ headerShown: false }}
+    />
+    <MyStack.Screen
+      name="Input"
+      component={Input}
+      options={{ headerShown: false }}
+    />
+  </MyStack.Navigator>
+)
+
+const Calstack = createNativeStackNavigator();
+
+const CalStackScreen = () => (
+  <Calstack.Navigator>
+    <Calstack.Screen
+      name="Calendar"
+      component={Calendar}
+      options={{ headerShown: false }}
+    />
+     <Calstack.Screen
+      name="CheckRun"
+      component={CheckRun}
+      options={{ headerShown: false }}
+    />
+     <Calstack.Screen
+      name="CreateRun"
+      component={CreateRun}
+      options={{ headerShown: false }}
+    />
+  </Calstack.Navigator>
+)
+
+
 const MainScreen = () => {
   return (
     <Tab.Navigator
@@ -103,8 +155,8 @@ const MainScreen = () => {
         }}
       />
       <Tab.Screen
-        name="Calendar"
-        component={Calendar}
+        name="CalStack"
+        component={CalStackScreen}
         options={{
           headerShown: false,
           tabBarLabel: '',
@@ -131,8 +183,8 @@ const MainScreen = () => {
         }}
       />
       <Tab.Screen
-        name="Mypage"
-        component={Mypage}
+        name="MyStack"
+        component={MyStackScreen}
         options={{
           headerShown: false,
           tabBarLabel: '',
