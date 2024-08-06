@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import React, { useState } from 'react';
 import RunningList from '../../components/RunningList';
+import ScheduleList from '../../components/ScheduleList';
 
 const MyRunning: React.FC = () => {
   const [selectedLabel, setSelectedLabel] = useState<string>('기록');
@@ -38,7 +39,7 @@ const MyRunning: React.FC = () => {
         </TouchableOpacity>
       </View>
       <View style={styles.horizontalLine} />
-      {selectedLabel === '기록' ? <RunningList /> : <Text>러닝 일정 컴포넌트</Text>}
+      {selectedLabel === '기록' ? <RunningList /> : <ScheduleList />}
     </View>
   );
 };
