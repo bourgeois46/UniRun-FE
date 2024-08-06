@@ -41,9 +41,9 @@ const Running: React.FC = () => {
         <Image source={require('../../../assets/distance.png')} style={[styles.commonMargin, { top: 2 }]} />
       </View>
       <View style={styles.textContainer}>
-        <Text style={styles.secondText}>00:08:58</Text>
+        <Text style={styles.secondText}>00:00:00</Text>
         <View style={styles.kmContainer}>
-          <Text style={styles.timeText}>3.57</Text>
+          <Text style={styles.timeText}>0.00</Text>
           <Text style={styles.distanceText}> km</Text>
         </View>
       </View>
