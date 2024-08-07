@@ -20,7 +20,6 @@ const RunningItem: React.FC<RunningItemProps> = ({ date, title, distance, time }
     setIsModalVisible(false);
   };
 
-
   return (
       <View style={styles.container}>
         <View style={styles.iconContainer}>

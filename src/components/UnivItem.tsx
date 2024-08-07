@@ -1,5 +1,6 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import GetItemModal from '../modal/GetItemModal';
 
 type UnivItemProps = {
   mascot: any;
@@ -9,8 +10,19 @@ type UnivItemProps = {
 };
 
 const UnivItem: React.FC<UnivItemProps> = ({ mascot, logo, name, rd }) => {
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+
+  const onPressModalOpen = () => {
+    setIsModalVisible(true);
+  };
+
+  const onPressModalClose = () => {
+    setIsModalVisible(false);
+  };
+
   return (
-    <View style={styles.container}>    
+    <>
+    <TouchableOpacity style={styles.container} onPress={onPressModalOpen}>    
       <Image source={mascot} style={styles.mascot} />
       
       <View style={styles.univContainer}>      
@@ -18,13 +30,14 @@ const UnivItem: React.FC<UnivItemProps> = ({ mascot, logo, name, rd }) => {
         <Text style={[styles.name, {marginLeft: 10}]}>{name}</Text>
       </View>
 
-
       <Image source={require('../../assets/rd.png')} style={styles.rdImg}/>
       <View style={styles.rdContainer}>
         <Text style={styles.rd}>{rd}</Text>
       </View>
+    </TouchableOpacity>
 
-    </View>
+    <GetItemModal visible={isModalVisible} onClose={onPressModalClose} />
+    </>
   );
 };
 
