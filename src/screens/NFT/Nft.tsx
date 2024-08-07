@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import UnivList from '../../components/UnivList';
+import MyList from '../../components/MyList';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Nft: React.FC = () => {
@@ -42,7 +43,7 @@ const Nft: React.FC = () => {
 
      
       
-      {selectedLabel === '마스코트' ? <UnivList /> : <Text>아직</Text>}
+      {selectedLabel === '마스코트' ? <UnivList /> : <MyList />}
     </SafeAreaView >
     
   );
