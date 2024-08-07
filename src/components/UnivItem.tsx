@@ -10,7 +10,7 @@ type UnivItemProps = {
 
 const UnivItem: React.FC<UnivItemProps> = ({ mascot, logo, name, rd }) => {
   return (
-    <View style={styles.container}>
+    <View style={styles.container}>    
       <Image source={mascot} style={styles.mascot} />
       
       <View style={styles.univContainer}>      
@@ -42,6 +42,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginLeft: 15,
+  },
+  msg: {
+    resizeMode: 'cover',
+    width: '102%',
+    position: 'absolute',
   },
   mascot: {
     resizeMode: 'contain',

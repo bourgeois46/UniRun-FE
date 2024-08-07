@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, FlatList, } from 'react-native';
+import { Image, StyleSheet, FlatList, } from 'react-native';
 import UnivItem from './UnivItem';
 
 const mockData = [
@@ -11,6 +11,8 @@ const mockData = [
 
 const UnivList: React.FC = () => {
   return (
+    <>
+    <Image source={require('../../assets/nftMsg.png')} style={styles.msg} />
     <FlatList
       data={mockData}
       renderItem={({ item }) => (
@@ -24,6 +26,7 @@ const UnivList: React.FC = () => {
       keyExtractor={(item, index) => index.toString()}
       style={styles.list}
     />
+    </>
   );
 };
 
@@ -31,6 +34,11 @@ const styles = StyleSheet.create({
   list: {
     width: '100%',
     top: 70, // UnivList의 시작점을 아래로 내림
+  },
+  msg: {
+    resizeMode: 'cover',
+    width: '102%',
+    position: 'absolute',
   },
 });
 

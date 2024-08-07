@@ -40,7 +40,7 @@ const Nft: React.FC = () => {
         <View style={styles.horizontalLine} />
       </View>
 
-      <Image source={require('../../../assets/nftMsg.png')} style={styles.msg} />
+     
       
       {selectedLabel === '마스코트' ? <UnivList /> : <Text>아직</Text>}
     </SafeAreaView >
