@@ -22,7 +22,6 @@ const RunningItem: React.FC<RunningItemProps> = ({ date, title, distance, time }
 
 
   return (
-    <ScrollView>
       <View style={styles.container}>
         <View style={styles.iconContainer}>
           <Image source={require('../../assets/my1.png')} style={[styles.icon, {left: 7}]}/>
@@ -49,7 +48,6 @@ const RunningItem: React.FC<RunningItemProps> = ({ date, title, distance, time }
 
         <DeleteRecordModal visible={isModalVisible} onClose={onPressModalClose} />
       </View>
-    </ScrollView>
   );
 };
 
