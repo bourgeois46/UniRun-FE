@@ -1,5 +1,6 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, ScrollView } from 'react-native';
+import React, {useState} from 'react';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import DeleteRecordModal from '../modal/DeleteRecordModal';
 
 type RunningItemProps = {
   date: string;
@@ -9,8 +10,17 @@ type RunningItemProps = {
 };
 
 const RunningItem: React.FC<RunningItemProps> = ({ date, title, distance, time }) => {
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+
+  const onPressModalOpen = () => {
+    setIsModalVisible(true);
+  };
+
+  const onPressModalClose = () => {
+    setIsModalVisible(false);
+  };
+
   return (
-    <ScrollView>
       <View style={styles.container}>
         <View style={styles.iconContainer}>
           <Image source={require('../../assets/my1.png')} style={[styles.icon, {left: 7}]}/>
@@ -31,11 +41,12 @@ const RunningItem: React.FC<RunningItemProps> = ({ date, title, distance, time }
         </View>
         <Text style={styles.time}>{time}</Text>
 
-        <View style={styles.iconContainer}>
+        <TouchableOpacity style={styles.iconContainer} onPress={onPressModalOpen}  >
           <Image source={require('../../assets/my4.png')} style={[styles.icon, {left: 6}]}/>
-        </View>
+        </TouchableOpacity>
+
+        <DeleteRecordModal visible={isModalVisible} onClose={onPressModalClose} />
       </View>
-    </ScrollView>
   );
 };
 

@@ -1,5 +1,8 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import UnivList from '../../components/UnivList';
+import MyList from '../../components/MyList';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Nft: React.FC = () => {
   const [selectedLabel, setSelectedLabel] = useState<string>('마스코트');
@@ -9,7 +12,7 @@ const Nft: React.FC = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView  style={styles.container}>
        <Image source={require('../../../assets/nftBanner.png')} style={styles.banner} />
 
        <View style={styles.labelContainer}>
@@ -38,9 +41,10 @@ const Nft: React.FC = () => {
         <View style={styles.horizontalLine} />
       </View>
 
-      <Image source={require('../../../assets/nftMsg.png')} style={styles.msg} />
-
-    </View>
+     
+      
+      {selectedLabel === '마스코트' ? <UnivList /> : <MyList />}
+    </SafeAreaView >
     
   );
 }
@@ -56,7 +60,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     top: 0,
     width: '102%',
-    position: 'absolute',
+    
   },
   msg: {
     resizeMode: 'cover',
@@ -68,7 +72,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 0,
     padding: 20,
-    bottom: 80,
   },
   label: {
     fontSize: 20,
