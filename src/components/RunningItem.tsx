@@ -48,8 +48,6 @@ const RunningItem: React.FC<RunningItemProps> = ({ date, title, distance, time }
         </TouchableOpacity>
 
         <DeleteRecordModal visible={isModalVisible} onClose={onPressModalClose} />
-
-
       </View>
     </ScrollView>
   );
