@@ -1,5 +1,12 @@
-import React,{useState} from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import DeleteScheduleModal from '../modal/DeleteScheduleModal';
 
 type ScheduleItemProps = {
@@ -10,7 +17,13 @@ type ScheduleItemProps = {
   univ: string;
 };
 
-const ScheduleItem: React.FC<ScheduleItemProps> = ({ date, location, univ, title, time }) => {
+const ScheduleItem: React.FC<ScheduleItemProps> = ({
+  date,
+  location,
+  univ,
+  title,
+  time,
+}) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const onPressModalOpen = () => {
@@ -20,35 +33,49 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({ date, location, univ, title
   const onPressModalClose = () => {
     setIsModalVisible(false);
   };
-  
+
   return (
     <ScrollView>
-    <View style={styles.container}>
-      <View style={styles.textContainer}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.univ}>{univ}</Text>
-        <Text style={styles.date}>{date}</Text>
-      </View>
-
-      <View style={styles.infoContainer}>
-        <View style={[styles.iconWrapper, {left: 18}]}>
-          <Image source={require('../../assets/my1.png')} style={styles.icon} />
-          <Text style={styles.location}>{location}</Text>
+      <View style={styles.container}>
+        <View style={styles.textContainer}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.univ}>{univ}</Text>
+          <Text style={styles.date}>{date}</Text>
         </View>
 
-        <View style={styles.iconWrapper}>
-          <Image source={require('../../assets/my3.png')} style={[styles.icon, {left: 32}]} />
-          <Text style={styles.time}>{time}</Text>
-        </View>
-        
-        <TouchableOpacity style={styles.iconWrapper}  onPress={onPressModalOpen}>
-          <Image source={require('../../assets/my4.png')} style={[styles.icon, {left: 32}]} />
-        </TouchableOpacity>
+        <View style={styles.infoContainer}>
+          <View style={[styles.iconWrapper, {left: 18}]}>
+            <Image
+              source={require('../../assets/my1.png')}
+              style={styles.icon}
+            />
+            <Text style={styles.location}>{location}</Text>
+          </View>
 
-        <DeleteScheduleModal visible={isModalVisible} onClose={onPressModalClose} />
+          <View style={styles.iconWrapper}>
+            <Image
+              source={require('../../assets/my3.png')}
+              style={[styles.icon, {left: 32}]}
+            />
+            <Text style={styles.time}>{time}</Text>
+          </View>
+
+          <TouchableOpacity
+            style={styles.iconWrapper}
+            onPress={onPressModalOpen}>
+            <Image
+              source={require('../../assets/my4.png')}
+              style={[styles.icon, {left: 32}]}
+            />
+          </TouchableOpacity>
+
+          <DeleteScheduleModal
+            visible={isModalVisible}
+            onClose={onPressModalClose}
+          />
+        </View>
       </View>
-    </View>
-  </ScrollView>
+    </ScrollView>
   );
 };
 
@@ -97,7 +124,6 @@ const styles = StyleSheet.create({
   location: {
     color: 'black',
     width: 120, // 위치 고정시키 위해 길이 고정
-    
   },
   time: {
     color: 'black',
@@ -106,4 +132,3 @@ const styles = StyleSheet.create({
 });
 
 export default ScheduleItem;
-

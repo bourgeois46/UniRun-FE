@@ -1,5 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  View,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Pressable,
+} from 'react-native';
 import RunningStartModal from '../../modal/RunningStartModal';
 
 const Home: React.FC = () => {
@@ -15,16 +21,19 @@ const Home: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <Image source={require('../../../assets/home_main.png')} style={styles.image} />
-      
-      <Pressable 
-          onPress={onPressModalOpen}  
-          style={({ pressed }) => [
-             styles.ticketPressable,
-            {
-             opacity: pressed ? 0.5 : 1, // 터치 효과
-            },
-          ]}>
+      <Image
+        source={require('../../../assets/home_main.png')}
+        style={styles.image}
+      />
+
+      <Pressable
+        onPress={onPressModalOpen}
+        style={({pressed}) => [
+          styles.ticketPressable,
+          {
+            opacity: pressed ? 0.5 : 1, // 터치 효과
+          },
+        ]}>
         <Image source={require('../../../assets/ticket.png')} />
       </Pressable>
 
@@ -49,10 +58,9 @@ const styles = StyleSheet.create({
   },
   ticketPressable: {
     position: 'absolute',
-    bottom: '8%',   
-    zIndex: 2, 
+    bottom: '8%',
+    zIndex: 2,
   },
 });
 
 export default Home;
-

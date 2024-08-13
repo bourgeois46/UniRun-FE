@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import GetItemModal from '../modal/GetItemModal';
 
 type UnivItemProps = {
@@ -9,7 +9,7 @@ type UnivItemProps = {
   rd: number;
 };
 
-const UnivItem: React.FC<UnivItemProps> = ({ mascot, logo, name, rd }) => {
+const UnivItem: React.FC<UnivItemProps> = ({mascot, logo, name, rd}) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const onPressModalOpen = () => {
@@ -22,21 +22,21 @@ const UnivItem: React.FC<UnivItemProps> = ({ mascot, logo, name, rd }) => {
 
   return (
     <>
-    <TouchableOpacity style={styles.container} onPress={onPressModalOpen}>    
-      <Image source={mascot} style={styles.mascot} />
-      
-      <View style={styles.univContainer}>      
-        <Image source={logo} style={styles.logo} />
-        <Text style={[styles.name, {marginLeft: 10}]}>{name}</Text>
-      </View>
+      <TouchableOpacity style={styles.container} onPress={onPressModalOpen}>
+        <Image source={mascot} style={styles.mascot} />
 
-      <Image source={require('../../assets/rd.png')} style={styles.rdImg}/>
-      <View style={styles.rdContainer}>
-        <Text style={styles.rd}>{rd}</Text>
-      </View>
-    </TouchableOpacity>
+        <View style={styles.univContainer}>
+          <Image source={logo} style={styles.logo} />
+          <Text style={[styles.name, {marginLeft: 10}]}>{name}</Text>
+        </View>
 
-    <GetItemModal visible={isModalVisible} onClose={onPressModalClose} />
+        <Image source={require('../../assets/rd.png')} style={styles.rdImg} />
+        <View style={styles.rdContainer}>
+          <Text style={styles.rd}>{rd}</Text>
+        </View>
+      </TouchableOpacity>
+
+      <GetItemModal visible={isModalVisible} onClose={onPressModalClose} />
     </>
   );
 };
@@ -86,8 +86,7 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     left: 30,
     resizeMode: 'contain',
-  }
+  },
 });
 
 export default UnivItem;
-

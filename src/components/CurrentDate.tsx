@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { format } from 'date-fns';
+import {View, Text, StyleSheet} from 'react-native';
+import {format} from 'date-fns';
 
 const CurrentDate: React.FC = () => {
   const now = new Date();

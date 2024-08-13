@@ -201,7 +201,7 @@ const MainScreen = () => {
 };
 
 const App = (): React.JSX.Element => {
-  const [isLogged, setIsLogged] = useState(true);
+  const [isLogged, setIsLogged] = useState(true);  //true -> 로그인된 상태, false -> 로그인 전 상태
 
   const handleLoginSuccess = () => {
     setIsLogged(true);

@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import type { StackNavigationProp } from '@react-navigation/stack';
+import {View, Image, StyleSheet, TouchableOpacity} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import type {StackNavigationProp} from '@react-navigation/stack';
 
 type RootStackParamList = {
   Login: undefined;
@@ -9,7 +9,8 @@ type RootStackParamList = {
 };
 
 const Login: React.FC<{}> = () => {
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Login'>>();
+  const navigation =
+    useNavigation<StackNavigationProp<RootStackParamList, 'Login'>>();
 
   const handleLogin = () => {
     navigation.navigate('Input');
@@ -23,7 +24,7 @@ const Login: React.FC<{}> = () => {
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

@@ -1,5 +1,5 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
 import RunningList from '../../components/RunningList';
 import ScheduleList from '../../components/ScheduleList';
 
@@ -20,9 +20,8 @@ const MyRunning: React.FC = () => {
           <Text
             style={[
               styles.label,
-              { color: selectedLabel === '기록' ? '#0F2869' : '#CBCBCB' },
-            ]}
-          >
+              {color: selectedLabel === '기록' ? '#0F2869' : '#CBCBCB'},
+            ]}>
             러닝 기록
           </Text>
         </TouchableOpacity>
@@ -31,9 +30,8 @@ const MyRunning: React.FC = () => {
           <Text
             style={[
               styles.label,
-              { color: selectedLabel === '일정' ? '#0F2869' : '#CBCBCB' },
-            ]}
-          >
+              {color: selectedLabel === '일정' ? '#0F2869' : '#CBCBCB'},
+            ]}>
             러닝 일정
           </Text>
         </TouchableOpacity>
