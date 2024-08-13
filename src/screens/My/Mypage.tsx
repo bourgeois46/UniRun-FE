@@ -1,30 +1,33 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import type { StackNavigationProp } from '@react-navigation/stack';
-import { useNavigation } from '@react-navigation/native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import type {StackNavigationProp} from '@react-navigation/stack';
+import {useNavigation} from '@react-navigation/native';
 
 type RootStackParamList = {
-  MyRunning: undefined,
-  Input: undefined,
+  MyRunning: undefined;
+  Input: undefined;
 };
 
 type MypageNavigationProp = StackNavigationProp<RootStackParamList>;
 
 const Mypage: React.FC = () => {
- // useNavigation 훅을 MypageNavigationProp 타입으로 사용
- const navigation = useNavigation<MypageNavigationProp>();
+  // useNavigation 훅을 MypageNavigationProp 타입으로 사용
+  const navigation = useNavigation<MypageNavigationProp>();
 
   const handleButtonClick = () => {
     navigation.navigate('MyRunning');
-  }
+  };
 
   const handleFixButtonClick = () => {
     navigation.navigate('Input');
-  }
+  };
 
   return (
     <View style={styles.container}>
-      <Image source={require('../../../assets/myBanner.png')} style={styles.banner} />
+      <Image
+        source={require('../../../assets/myBanner.png')}
+        style={styles.banner}
+      />
       <Text style={styles.name}>러닝덕</Text>
       <Text style={styles.univ}>동덕여자대학교</Text>
 
@@ -32,14 +35,17 @@ const Mypage: React.FC = () => {
         <Image source={require('../../../assets/fix.png')} style={styles.fix} />
       </TouchableOpacity>
 
-      <View style={styles.buttonContainer}>   
-        <TouchableOpacity onPress={handleButtonClick}>   
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={handleButtonClick}>
           <View style={styles.myRunningContainer}>
             <Text style={styles.myRunning}>나의 러닝</Text>
-            <Image source={require('../../../assets/vector.png')} style={styles.vector} />
+            <Image
+              source={require('../../../assets/vector.png')}
+              style={styles.vector}
+            />
           </View>
-        </TouchableOpacity>  
-    
+        </TouchableOpacity>
+
         <View style={styles.horizontalLine} />
 
         <TouchableOpacity>
@@ -47,15 +53,14 @@ const Mypage: React.FC = () => {
         </TouchableOpacity>
 
         <View style={[styles.horizontalLine, {marginTop: -45}]} />
-        
+
         <TouchableOpacity>
           <Text style={styles.withdrawal}>회원 탈퇴</Text>
         </TouchableOpacity>
       </View>
-
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -97,7 +102,7 @@ const styles = StyleSheet.create({
   },
   myRunningContainer: {
     flexDirection: 'row',
-    justifyContent:'space-between',
+    justifyContent: 'space-between',
     padding: 10,
   },
   myRunning: {
@@ -134,7 +139,6 @@ const styles = StyleSheet.create({
     borderColor: '#D9D9D9',
     marginVertical: 5,
   },
-})
+});
 
-
-export default Mypage
+export default Mypage;

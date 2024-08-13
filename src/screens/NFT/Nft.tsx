@@ -1,8 +1,8 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import UnivList from '../../components/UnivList';
 import MyList from '../../components/MyList';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 const Nft: React.FC = () => {
   const [selectedLabel, setSelectedLabel] = useState<string>('마스코트');
@@ -12,17 +12,19 @@ const Nft: React.FC = () => {
   };
 
   return (
-    <SafeAreaView  style={styles.container}>
-       <Image source={require('../../../assets/nftBanner.png')} style={styles.banner} />
+    <SafeAreaView style={styles.container}>
+      <Image
+        source={require('../../../assets/nftBanner.png')}
+        style={styles.banner}
+      />
 
-       <View style={styles.labelContainer}>
+      <View style={styles.labelContainer}>
         <TouchableOpacity onPress={() => handleLabelPress('마스코트')}>
           <Text
             style={[
               styles.label,
-              { color: selectedLabel === '마스코트' ? '#0F2869' : '#CBCBCB' },
-            ]}
-          >
+              {color: selectedLabel === '마스코트' ? '#0F2869' : '#CBCBCB'},
+            ]}>
             학교 마스코트
           </Text>
         </TouchableOpacity>
@@ -31,9 +33,8 @@ const Nft: React.FC = () => {
           <Text
             style={[
               styles.label,
-              { color: selectedLabel === '아이템' ? '#0F2869' : '#CBCBCB' },
-            ]}
-          >
+              {color: selectedLabel === '아이템' ? '#0F2869' : '#CBCBCB'},
+            ]}>
             나의 아이템
           </Text>
         </TouchableOpacity>
@@ -41,13 +42,10 @@ const Nft: React.FC = () => {
         <View style={styles.horizontalLine} />
       </View>
 
-     
-      
       {selectedLabel === '마스코트' ? <UnivList /> : <MyList />}
-    </SafeAreaView >
-    
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -60,7 +58,6 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     top: 0,
     width: '102%',
-    
   },
   msg: {
     resizeMode: 'cover',
@@ -77,7 +74,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     marginHorizontal: 20,
-    marginTop: 30,  
+    marginTop: 30,
   },
   horizontalLine: {
     position: 'absolute',
@@ -89,8 +86,6 @@ const styles = StyleSheet.create({
     left: -90,
     top: 85,
   },
+});
 
-
-})
-
-export default Nft
+export default Nft;

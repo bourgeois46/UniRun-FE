@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from 'react-native';
 import DeleteRecordModal from '../modal/DeleteRecordModal';
 
 type RunningItemProps = {
@@ -9,7 +16,12 @@ type RunningItemProps = {
   time: string;
 };
 
-const RunningItem: React.FC<RunningItemProps> = ({ date, title, distance, time }) => {
+const RunningItem: React.FC<RunningItemProps> = ({
+  date,
+  title,
+  distance,
+  time,
+}) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const onPressModalOpen = () => {
@@ -21,32 +33,38 @@ const RunningItem: React.FC<RunningItemProps> = ({ date, title, distance, time }
   };
 
   return (
-      <View style={styles.container}>
-        <View style={styles.iconContainer}>
-          <Image source={require('../../assets/my1.png')} style={[styles.icon, {left: 7}]}/>
-        </View>
-
-        <View style={styles.textContainer}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.date}>{date}</Text>
-        </View>
-
-        <View style={styles.iconContainer}>
-          <Image source={require('../../assets/my2.png')} style={styles.icon}/>
-        </View>
-        <Text style={styles.distance}>{distance}</Text>
-
-        <View style={styles.iconContainer}>
-          <Image source={require('../../assets/my3.png')} style={styles.icon}/>
-        </View>
-        <Text style={styles.time}>{time}</Text>
-
-        <TouchableOpacity style={styles.iconContainer} onPress={onPressModalOpen}  >
-          <Image source={require('../../assets/my4.png')} style={[styles.icon, {left: 6}]}/>
-        </TouchableOpacity>
-
-        <DeleteRecordModal visible={isModalVisible} onClose={onPressModalClose} />
+    <View style={styles.container}>
+      <View style={styles.iconContainer}>
+        <Image
+          source={require('../../assets/my1.png')}
+          style={[styles.icon, {left: 7}]}
+        />
       </View>
+
+      <View style={styles.textContainer}>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.date}>{date}</Text>
+      </View>
+
+      <View style={styles.iconContainer}>
+        <Image source={require('../../assets/my2.png')} style={styles.icon} />
+      </View>
+      <Text style={styles.distance}>{distance}</Text>
+
+      <View style={styles.iconContainer}>
+        <Image source={require('../../assets/my3.png')} style={styles.icon} />
+      </View>
+      <Text style={styles.time}>{time}</Text>
+
+      <TouchableOpacity style={styles.iconContainer} onPress={onPressModalOpen}>
+        <Image
+          source={require('../../assets/my4.png')}
+          style={[styles.icon, {left: 6}]}
+        />
+      </TouchableOpacity>
+
+      <DeleteRecordModal visible={isModalVisible} onClose={onPressModalClose} />
+    </View>
   );
 };
 

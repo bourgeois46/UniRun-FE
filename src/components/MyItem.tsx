@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 
 type MyItemProps = {
   item: any;
 };
 
-const UnivItem: React.FC<MyItemProps> = ({ item }) => {
+const UnivItem: React.FC<MyItemProps> = ({item}) => {
   return (
-    <View style={styles.container} >    
+    <View style={styles.container}>
       <Image source={item} style={styles.item} />
     </View>
   );
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
     marginBottom: 30,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   item: {
     resizeMode: 'cover',
