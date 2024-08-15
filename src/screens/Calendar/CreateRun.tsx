@@ -1,57 +1,141 @@
-import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
-import React from 'react';
-
-const data = [
-  {
-    id: '1',
-    title: '한강런',
-    location: '동덕여자대학교 두런두런',
-    time: '17:00 - 19:00',
-    buttonText: '참여',
-  },
-  {
-    id: '2',
-    title: '성북천 가볍게',
-    location: '고려대학교 KUTR',
-    time: '20:00 - 21:00',
-    buttonText: '참여',
-  },
-  {
-    id: '3',
-    title: '어대 한바퀴',
-    location: '건국대학교 RIKU',
-    time: '06:00 - 08:00',
-    buttonText: '참여',
-  },
-  // 필요한 만큼 데이터 추가
-];
-
-const Item = ({title, location, time, buttonText}) => (
-  <View style={styles.itemContainer}>
-    <Text style={styles.title}>{title}</Text>
-    <Text>{location}</Text>
-    <Text>{time}</Text>
-    <TouchableOpacity style={styles.button}>
-      <Text style={styles.buttonText}>{buttonText}</Text>
-    </TouchableOpacity>
-  </View>
-);
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useState} from 'react';
 
 const CreateRun: React.FC = () => {
+  const [selectedType, setSelectedType] = useState<string | null>(null);
+
   return (
     <View style={styles.container}>
-      <FlatList
-        data={data}
-        renderItem={({item}) => (
-          <Item
-            title={item.title}
-            location={item.location}
-            time={item.time}
-            buttonText={item.buttonText}
-          />
-        )}
-        keyExtractor={item => item.id}
-      />
+      <Text style={styles.title}>러닝 일정 생성하기</Text>
+      <Text style={styles.subtitle}>정보를 입력해 일정을 만들어보세요</Text>
+
+      <View style={styles.formRow}>
+        <Text style={styles.label}>유형</Text>
+        <View style={styles.typeContainer}>
+          <TouchableOpacity
+            style={[
+              styles.typeButton,
+              selectedType === '정규' && styles.selectedTypeButton,
+            ]}
+            onPress={() => setSelectedType('정규')}>
+            <Text
+              style={[
+                styles.typeButtonText,
+                selectedType === '정규' && styles.selectedTypeButtonText,
+              ]}>
+              정규
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.typeButton,
+              selectedType === '번개' && styles.selectedTypeButton,
+            ]}
+            onPress={() => setSelectedType('번개')}>
+            <Text
+              style={[
+                styles.typeButtonText,
+                selectedType === '번개' && styles.selectedTypeButtonText,
+              ]}>
+              번개
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View style={styles.formRow}>
+        <Text style={styles.label}>제목</Text>
+        <TextInput
+          style={[styles.inputRow, styles.textInput]}
+          placeholder="ex) 한강런, 00런"
+        />
+      </View>
+
+      <View style={styles.formRow}>
+        <Text style={styles.label}>주최</Text>
+        <TextInput
+          style={[styles.inputRow, styles.textInput]}
+          placeholder="ex) 러닝 크루 이름"
+        />
+      </View>
+
+      <View style={styles.formRow}>
+        <Text style={styles.label}>날짜</Text>
+        <TextInput
+          style={[styles.inputRow, styles.textInput]}
+          placeholder="ex) 2024.07.31"
+        />
+      </View>
+
+      <View style={styles.formRow}>
+        <Text style={styles.label}>시간</Text>
+        <View style={styles.labelcontainer}>
+          <View style={styles.timeContainer}>
+            <TextInput
+              style={[styles.timeInput, styles.textInput]}
+              keyboardType="numeric"
+              placeholder="17:00"
+            />
+          </View>
+          <Text style={styles.coloredlabel}> 부터</Text>
+          <View style={styles.timeContainer}>
+            <TextInput
+              style={[styles.timeInput, styles.textInput]}
+              keyboardType="numeric"
+              placeholder="19:00"
+            />
+          </View>
+          <Text style={styles.coloredlabel}> 까지</Text>
+        </View>
+      </View>
+
+      <View style={styles.formRow}>
+        <Text style={styles.label}>장소</Text>
+        <TextInput
+          style={[styles.inputRow, styles.textInput]}
+          placeholder="ex) 홍대입구역 3번 출구"
+        />
+      </View>
+
+      <View style={styles.formRow}>
+        <Text style={styles.label}>대상</Text>
+        <View style={styles.typeContainer}>
+          <TouchableOpacity
+            style={[
+              styles.typeButton,
+              selectedType === '교내' && styles.selectedTypeButton,
+            ]}
+            onPress={() => setSelectedType('교내')}>
+            <Text
+              style={[
+                styles.typeButtonText,
+                selectedType === '교내' && styles.selectedTypeButtonText,
+              ]}>
+              교내
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.typeButton,
+              selectedType === '전체' && styles.selectedTypeButton,
+            ]}
+            onPress={() => setSelectedType('전체')}>
+            <Text
+              style={[
+                styles.typeButtonText,
+                selectedType === '전체' && styles.selectedTypeButtonText,
+              ]}>
+              전체
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </View>
   );
 };
@@ -61,24 +145,93 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  itemContainer: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
   title: {
-    fontSize: 18,
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  subtitle: {
+    fontSize: 15,
+    color: '#CBCBCB',
+    marginBottom: 20,
+  },
+  formRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 38,
+    justifyContent: 'space-between',
+  },
+  label: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginRight: 15,
+    color: 'black',
+    minWidth: 80,
+  },
+  typeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flex: 1,
+  },
+  typeButton: {
+    flex: 1,
+    alignItems: 'center',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginHorizontal: 5,
+  },
+  selectedTypeButton: {
+    borderColor: '#0F2869',
+  },
+  typeButtonText: {
+    color: 'black',
+  },
+  selectedTypeButtonText: {
+    color: '#0F2869',
     fontWeight: 'bold',
   },
-  button: {
-    marginTop: 10,
-    backgroundColor: '#007BFF',
-    padding: 10,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#fff',
+  inputRow: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#0F2869',
+    paddingVertical: 5,
+    flex: 1,
     textAlign: 'center',
+  },
+  textInput: {
+    color: '#0F2869',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  labelcontainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    flex: 1,
+    left: 54,
+  },
+  timeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  timeInput: {
+    borderWidth: 1,
+    borderColor: '#0F2869',
+    borderRadius: 9,
+    padding: 5,
+    flex: 1,
+    marginLeft: 50,
+    textAlign: 'center',
+  },
+  coloredlabel: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    marginRight: 15,
+    marginTop: 10,
+    color: '#0F2869',
+    minWidth: 80,
   },
 });
 

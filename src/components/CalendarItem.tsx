@@ -1,7 +1,7 @@
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import Toast from 'react-native-toast-message';
+import CalendarModal from '../modal/CalendarModal';
 
 type CalendarItemProps = {
   item: {
@@ -33,13 +33,20 @@ const CalendarItem: React.FC<CalendarItemProps> = ({item}) => {
       ? {backgroundColor: '#FEEFEF', color: '#F57373'}
       : {backgroundColor: '#000', color: '#FFF'};
 
-  //   const navigation = useNavigation();
+  // const navigation = useNavigation();
+
+  const [isParticipated, setIsParticipated] = useState<boolean>(false);
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [modalMessage, setModalMessage] = useState<string>('');
 
   const handleButtonClick = () => {
-    Toast.show({
-      type: 'success',
-      text1: '참여 신청이 완료되었습니다!',
-    });
+    if (isParticipated) {
+      setModalMessage('이미 참여 신청이 완료된 일정입니다.');
+    } else {
+      setModalMessage('참여 신청이 완료되었습니다.');
+      setIsParticipated(true);
+    }
+    setModalVisible(true);
   };
 
   return (
@@ -48,11 +55,13 @@ const CalendarItem: React.FC<CalendarItemProps> = ({item}) => {
         <Text style={[styles.tag, audienceStyle]}>{item.audienceType}</Text>
         <Text style={[styles.tag, typeStyle]}>{item.type}</Text>
       </View>
+
       <View style={styles.textContainer}>
         <View style={styles.leftContainer}>
           <Text style={styles.title}>{item.title}</Text>
           <Text style={styles.details}>{item.crew}</Text>
         </View>
+
         <View style={styles.rightContainer}>
           <View style={styles.iconContainer}>
             <Image
@@ -63,6 +72,7 @@ const CalendarItem: React.FC<CalendarItemProps> = ({item}) => {
               {item.startTime} - {item.endTime}
             </Text>
           </View>
+
           <View style={styles.iconContainer}>
             <Image
               source={require('../../assets/clock.png')}
@@ -71,6 +81,7 @@ const CalendarItem: React.FC<CalendarItemProps> = ({item}) => {
             <Text style={styles.place}>{item.place}</Text>
           </View>
         </View>
+
         <View style={styles.buttonContainer}>
           <TouchableOpacity onPress={handleButtonClick}>
             <Image
@@ -79,6 +90,12 @@ const CalendarItem: React.FC<CalendarItemProps> = ({item}) => {
             />
           </TouchableOpacity>
         </View>
+
+        <CalendarModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          message={modalMessage}
+        />
       </View>
     </View>
   );

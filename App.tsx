@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
+import {StyleSheet, Text, Image, View, TouchableOpacity} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
 import {
-  StyleSheet,
-  Text,
-  Image,
-  View,
-  TouchableOpacity,
-} from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+  createNativeStackNavigator,
+  NativeStackNavigationProp,
+} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import Calendar from './src/screens/Calendar/Calendar';
 import CheckRun from './src/screens/Calendar/CheckRun';
@@ -29,9 +26,9 @@ type RootStackParamList = {
   Main: undefined;
   Login: undefined;
   Input: undefined;
-  Home: undefined; 
-  Calendar: undefined; 
-  CheckRun: undefined; 
+  Home: undefined;
+  Calendar: undefined;
+  CheckRun: undefined;
   CreateRun: undefined;
   Nft: undefined;
   Running: undefined;
@@ -45,12 +42,17 @@ type HeaderProps = {
   back?: boolean;
 };
 
-const Header: React.FC<HeaderProps> = ({ navigation, back }) => {
+const Header: React.FC<HeaderProps> = ({navigation, back}) => {
   return (
     <View style={styles.header}>
       {back && (
-        <TouchableOpacity onPress={() => navigation.pop()} style={styles.backIconContainer}>
-          <Image style={styles.backIcon} source={require('./assets/back.png')} />
+        <TouchableOpacity
+          onPress={() => navigation.pop()}
+          style={styles.backIconContainer}>
+          <Image
+            style={styles.backIcon}
+            source={require('./assets/back.png')}
+          />
         </TouchableOpacity>
       )}
       <View style={styles.logoContainer}>
@@ -68,17 +70,17 @@ const HomeStackScreen = () => (
     <HomeStack.Screen
       name="Home"
       component={Home}
-      options={{ headerShown: false }}
+      options={{headerShown: false}}
     />
     <HomeStack.Screen
       name="Record"
       component={Record}
-      options={{ headerShown: false }}
+      options={{headerShown: false}}
     />
     <HomeStack.Screen
       name="Running"
       component={Running}
-      options={{ headerShown: false }}
+      options={{headerShown: false}}
     />
   </HomeStack.Navigator>
 );
@@ -90,20 +92,20 @@ const MyStackScreen = () => (
     <MyStack.Screen
       name="Mypage"
       component={Mypage}
-      options={{ headerShown: false }}
+      options={{headerShown: false}}
     />
     <MyStack.Screen
       name="MyRunning"
       component={MyRunning}
-      options={{ headerShown: false }}
+      options={{headerShown: false}}
     />
     <MyStack.Screen
       name="Input"
       component={Input}
-      options={{ headerShown: false }}
+      options={{headerShown: false}}
     />
   </MyStack.Navigator>
-)
+);
 
 const Calstack = createNativeStackNavigator();
 
@@ -112,21 +114,20 @@ const CalStackScreen = () => (
     <Calstack.Screen
       name="Calendar"
       component={Calendar}
-      options={{ headerShown: false }}
+      options={{headerShown: false}}
     />
-     <Calstack.Screen
+    <Calstack.Screen
       name="CheckRun"
       component={CheckRun}
-      options={{ headerShown: false }}
+      options={{headerShown: false}}
     />
-     <Calstack.Screen
+    <Calstack.Screen
       name="CreateRun"
       component={CreateRun}
-      options={{ headerShown: false }}
+      options={{headerShown: false}}
     />
   </Calstack.Navigator>
-)
-
+);
 
 const MainScreen = () => {
   return (
@@ -160,7 +161,7 @@ const MainScreen = () => {
         options={{
           headerShown: false,
           tabBarLabel: '',
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({focused}) => (
             <Image
               style={styles.tabIcon}
               source={require('./assets/calendar.png')}
@@ -174,7 +175,7 @@ const MainScreen = () => {
         options={{
           headerShown: false,
           tabBarLabel: '',
-          tabBarIcon: ({ focused }) => (
+          tabBarIcon: ({focused}) => (
             <Image
               style={styles.tabIcon}
               source={require('./assets/nft.png')}
@@ -188,11 +189,8 @@ const MainScreen = () => {
         options={{
           headerShown: false,
           tabBarLabel: '',
-          tabBarIcon: ({ focused }) => (
-            <Image
-              style={styles.tabIcon}
-              source={require('./assets/my.png')}
-            />
+          tabBarIcon: ({focused}) => (
+            <Image style={styles.tabIcon} source={require('./assets/my.png')} />
           ),
         }}
       />
@@ -201,7 +199,7 @@ const MainScreen = () => {
 };
 
 const App = (): React.JSX.Element => {
-  const [isLogged, setIsLogged] = useState(true);  //true -> 로그인된 상태, false -> 로그인 전 상태
+  const [isLogged, setIsLogged] = useState(true); //true -> 로그인된 상태, false -> 로그인 전 상태
 
   const handleLoginSuccess = () => {
     setIsLogged(true);
@@ -213,13 +211,13 @@ const App = (): React.JSX.Element => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={isLogged ? "Main" : "Login"}>
+      <Stack.Navigator initialRouteName={isLogged ? 'Main' : 'Login'}>
         {isLogged ? (
           <>
             <Stack.Screen
               name="Main"
               component={MainScreen}
-              options={({ navigation }) => ({
+              options={({navigation}) => ({
                 header: () => <Header navigation={navigation} back={true} />,
               })}
             />
@@ -229,12 +227,12 @@ const App = (): React.JSX.Element => {
             <Stack.Screen
               name="Login"
               component={Login}
-              options={{ headerShown: false }}
+              options={{headerShown: false}}
             />
             <Stack.Screen
               name="Input"
               component={Input}
-              options={{ headerShown: false }}
+              options={{headerShown: false}}
             />
           </>
         )}
@@ -263,7 +261,7 @@ const styles = StyleSheet.create({
   backIcon: {
     width: 18,
     height: 18,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
   logoContainer: {
     flex: 1,
@@ -273,7 +271,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 35,
     height: 35,
-    resizeMode: "contain",
+    resizeMode: 'contain',
     left: 13,
   },
   placeholder: {
@@ -282,11 +280,8 @@ const styles = StyleSheet.create({
   tabIcon: {
     width: 28,
     height: 28,
-    resizeMode: "contain",
+    resizeMode: 'contain',
   },
 });
 
 export default App;
-
-
-

@@ -3,9 +3,17 @@ import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import CalendarView from '../../components/CalendarView';
 import {useNavigation} from '@react-navigation/native';
 import CalendarList from '../../components/CalendarList';
+import type {StackNavigationProp} from '@react-navigation/stack';
+
+type RootStackParamList = {
+  Calendar: undefined;
+  CreateRun: undefined;
+};
+
+type CalendarNavigationProp = StackNavigationProp<RootStackParamList>;
 
 const Calendar: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<CalendarNavigationProp>();
 
   const handleButtonClick = () => {
     navigation.navigate('CreateRun');
@@ -18,14 +26,16 @@ const Calendar: React.FC = () => {
       <View style={styles.calendarContainer}>
         <CalendarView />
       </View>
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={handleButtonClick}>
           <Image
-            source={require('../../../assets/calendaredit.png')}
+            source={require('../../../assets/addbtn.png')}
             style={styles.vector}
           />
         </TouchableOpacity>
       </View>
+
       <View style={styles.calendarListContainer}>
         <CalendarList />
       </View>
@@ -50,32 +60,22 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500', //medium은 유효하지 않아서 숫자로 설정
     color: '#CBCBCB',
-    marginBottom: 20, //CalendarView와의 여백을 위해 추가
+    marginBottom: 10, //CalendarView와의 여백을 위해 추가
   },
   calendarContainer: {
     width: '100%',
     justifyContent: 'center',
   },
   buttonContainer: {
-    alignItems: 'center',
     justifyContent: 'center',
     margin: 10,
-    borderWidth: 1.5,
-    borderColor: '#0F2869',
-    borderRadius: 30,
-    backgroundColor: '#fff',
-    top: -35, //날짜가 가려서 고민임
-    left: 150,
-    width: 50,
-    height: 50,
-    elevation: 5, //그림자 효과 추가(안드로이드만 적용됨)
   },
   vector: {
-    width: 24,
-    height: 24,
+    width: 350,
+    height: 42,
   },
   calendarListContainer: {
-    top: -135,
+    top: -70,
     width: '100%',
   },
 });
