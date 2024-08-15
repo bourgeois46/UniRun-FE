@@ -2,6 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import CalendarView from '../../components/CalendarView';
 import {useNavigation} from '@react-navigation/native';
+import CalendarList from '../../components/CalendarList';
 
 const Calendar: React.FC = () => {
   const navigation = useNavigation();
@@ -24,6 +25,9 @@ const Calendar: React.FC = () => {
             style={styles.vector}
           />
         </TouchableOpacity>
+      </View>
+      <View style={styles.calendarListContainer}>
+        <CalendarList />
       </View>
     </View>
   );
@@ -60,7 +64,7 @@ const styles = StyleSheet.create({
     borderColor: '#0F2869',
     borderRadius: 30,
     backgroundColor: '#fff',
-    top: -30, //-60이 원하는 위치인데 날짜가 가려서 고민임
+    top: -35, //날짜가 가려서 고민임
     left: 150,
     width: 50,
     height: 50,
@@ -69,6 +73,10 @@ const styles = StyleSheet.create({
   vector: {
     width: 24,
     height: 24,
+  },
+  calendarListContainer: {
+    top: -135,
+    width: '100%',
   },
 });
 

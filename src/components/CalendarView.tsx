@@ -32,7 +32,7 @@ const CalendarView: React.FC = () => {
         selectedDayBackgroundColor: '#0F2869',
         arrowColor: '#0F2869',
         dotColor: '#0F2869',
-        todayTextColor: 'blue',
+        todayTextColor: '#009688',
       }}
     />
   );
