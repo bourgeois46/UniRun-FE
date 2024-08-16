@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {Image, StyleSheet, FlatList} from 'react-native';
 import CalendarItem from './CalendarItem';
+import {useRoute} from '@react-navigation/native';
 
 const mockData = [
   {
@@ -36,9 +37,18 @@ const mockData = [
 ];
 
 const CalendarList: React.FC = () => {
+  const route = useRoute();
+  const [events, setEvents] = useState(mockData);
+
+  useEffect(() => {
+    if (route.params?.newEvent) {
+      setEvents(prevEvents => [...prevEvents, route.params.newEvent]);
+    }
+  }, [route.params?.newEvent]);
+
   return (
     <FlatList
-      data={mockData}
+      data={events}
       renderItem={({item}) => <CalendarItem item={item} />}
       keyExtractor={(item, index) => index.toString()}
       style={styles.list}
@@ -49,7 +59,7 @@ const CalendarList: React.FC = () => {
 const styles = StyleSheet.create({
   list: {
     width: '100%',
-    top: 70, // UnivList의 시작점을 아래로 내림
+    top: 70,
   },
 });
 

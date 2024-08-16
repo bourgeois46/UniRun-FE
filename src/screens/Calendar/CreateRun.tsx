@@ -16,12 +16,33 @@ type RootStackParamList = {
 
 const CreateRun: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [title, setTitle] = useState<string>('');
+  const [crew, setCrew] = useState<string>('');
+  const [date, setDate] = useState<string>('');
+  const [startTime, setStartTime] = useState<string>('');
+  const [endTime, setEndTime] = useState<string>('');
+  const [place, setPlace] = useState<string>('');
+  const [audienceType, setAudienceType] = useState<string | null>(null);
 
   const navigation =
     useNavigation<StackNavigationProp<RootStackParamList, 'Calendar'>>();
 
   const handleSignup = () => {
-    navigation.navigate('Calendar');
+    const newEvent = {
+      type: selectedType,
+      title,
+      crew,
+      date,
+      startTime,
+      endTime,
+      place,
+      audienceType,
+    };
+
+    console.log(newEvent);
+
+    //캘린더 메인으로 새로운 이벤트 데이터 전달
+    navigation.navigate('Calendar', {newEvent});
   };
 
   return (
@@ -68,6 +89,8 @@ const CreateRun: React.FC = () => {
         <TextInput
           style={[styles.inputRow, styles.textInput]}
           placeholder="ex) 한강런, 00런"
+          onChangeText={setTitle}
+          value={title}
         />
       </View>
 
@@ -76,6 +99,8 @@ const CreateRun: React.FC = () => {
         <TextInput
           style={[styles.inputRow, styles.textInput]}
           placeholder="ex) 러닝 크루 이름"
+          onChangeText={setCrew}
+          value={crew}
         />
       </View>
 
@@ -84,6 +109,8 @@ const CreateRun: React.FC = () => {
         <TextInput
           style={[styles.inputRow, styles.textInput]}
           placeholder="ex) 2024.07.31"
+          onChangeText={setDate}
+          value={date}
         />
       </View>
 
@@ -95,6 +122,8 @@ const CreateRun: React.FC = () => {
               style={[styles.timeInput, styles.textInput]}
               keyboardType="numeric"
               placeholder="17:00"
+              onChangeText={setStartTime}
+              value={startTime}
             />
           </View>
           <Text style={styles.coloredlabel}> 부터</Text>
@@ -103,6 +132,8 @@ const CreateRun: React.FC = () => {
               style={[styles.timeInput, styles.textInput]}
               keyboardType="numeric"
               placeholder="19:00"
+              onChangeText={setEndTime}
+              value={endTime}
             />
           </View>
           <Text style={styles.coloredlabel}> 까지</Text>
@@ -114,6 +145,8 @@ const CreateRun: React.FC = () => {
         <TextInput
           style={[styles.inputRow, styles.textInput]}
           placeholder="ex) 홍대입구역 3번 출구"
+          onChangeText={setPlace}
+          value={place}
         />
       </View>
 
@@ -123,13 +156,13 @@ const CreateRun: React.FC = () => {
           <TouchableOpacity
             style={[
               styles.typeButton,
-              selectedType === '교내' && styles.selectedTypeButton,
+              audienceType === '교내' && styles.selectedTypeButton,
             ]}
-            onPress={() => setSelectedType('교내')}>
+            onPress={() => setAudienceType('교내')}>
             <Text
               style={[
                 styles.typeButtonText,
-                selectedType === '교내' && styles.selectedTypeButtonText,
+                audienceType === '교내' && styles.selectedTypeButtonText,
               ]}>
               교내
             </Text>
@@ -137,13 +170,13 @@ const CreateRun: React.FC = () => {
           <TouchableOpacity
             style={[
               styles.typeButton,
-              selectedType === '전체' && styles.selectedTypeButton,
+              audienceType === '전체' && styles.selectedTypeButton,
             ]}
-            onPress={() => setSelectedType('전체')}>
+            onPress={() => setAudienceType('전체')}>
             <Text
               style={[
                 styles.typeButtonText,
-                selectedType === '전체' && styles.selectedTypeButtonText,
+                audienceType === '전체' && styles.selectedTypeButtonText,
               ]}>
               전체
             </Text>

@@ -17,7 +17,6 @@ const Calendar: React.FC = () => {
   // const navigation = useNavigation();
 
   const handleButtonClick = () => {
-    console.log('button');
     navigation.navigate('CreateRun');
   };
 
@@ -29,7 +28,7 @@ const Calendar: React.FC = () => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={handleButtonClick}>
           <Image
-            source={require('../../../assets/addbtn.png')}
+            source={require('../../../assets/addbtn2.png')}
             style={styles.vector}
           />
         </TouchableOpacity>
@@ -74,8 +73,8 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   vector: {
-    width: 350,
-    height: 42,
+    width: 400,
+    height: 50,
   },
   calendarListContainer: {
     top: -70,
