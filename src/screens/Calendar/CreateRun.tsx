@@ -1,14 +1,28 @@
 import {
   View,
   Text,
+  Image,
   StyleSheet,
   TextInput,
   TouchableOpacity,
 } from 'react-native';
 import React, {useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import type {StackNavigationProp} from '@react-navigation/stack';
+
+type RootStackParamList = {
+  Calendar: undefined;
+};
 
 const CreateRun: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
+
+  const navigation =
+    useNavigation<StackNavigationProp<RootStackParamList, 'Calendar'>>();
+
+  const handleSignup = () => {
+    navigation.navigate('Calendar');
+  };
 
   return (
     <View style={styles.container}>
@@ -136,6 +150,13 @@ const CreateRun: React.FC = () => {
           </TouchableOpacity>
         </View>
       </View>
+
+      <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
+        <Image
+          source={require('../../../assets/createbtn.png')}
+          style={styles.vector}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -146,22 +167,28 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   title: {
-    fontSize: 24,
+    top: 28,
+    left: 23,
+    fontSize: 20,
     fontWeight: 'bold',
     color: 'black',
   },
   subtitle: {
-    fontSize: 15,
+    top: 33,
+    left: 23,
+    fontSize: 14,
     color: '#CBCBCB',
     marginBottom: 20,
   },
   formRow: {
+    top: 40,
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 38,
     justifyContent: 'space-between',
   },
   label: {
+    left: 23,
     fontSize: 17,
     fontWeight: 'bold',
     marginRight: 15,
@@ -172,6 +199,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     flex: 1,
+    right: 15,
   },
   typeButton: {
     flex: 1,
@@ -198,10 +226,11 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     flex: 1,
     textAlign: 'center',
+    right: 15,
   },
   textInput: {
     color: '#0F2869',
-    fontWeight: 'bold',
+    fontWeight: '500',
     fontSize: 16,
   },
   labelcontainer: {
@@ -219,19 +248,31 @@ const styles = StyleSheet.create({
   timeInput: {
     borderWidth: 1,
     borderColor: '#0F2869',
-    borderRadius: 9,
-    padding: 5,
+    borderRadius: 6,
+    padding: 10,
     flex: 1,
-    marginLeft: 50,
+    marginLeft: -40,
     textAlign: 'center',
+    width: 87,
+    height: 32,
+    right: 30,
   },
   coloredlabel: {
     fontSize: 17,
     fontWeight: 'bold',
-    marginRight: 15,
-    marginTop: 10,
+    right: 30,
+    marginLeft: 7,
     color: '#0F2869',
     minWidth: 80,
+  },
+  signupButton: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  vector: {
+    top: 20,
+    width: 350,
+    height: 54,
   },
 });
 

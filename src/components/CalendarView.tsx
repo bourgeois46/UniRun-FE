@@ -45,6 +45,8 @@ type Styles = {
 const styles = StyleSheet.create<Styles>({
   calendar: {
     width: '100%',
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#D9D9D9',
   },
 });
 

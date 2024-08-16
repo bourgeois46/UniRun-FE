@@ -6,7 +6,6 @@ import CalendarList from '../../components/CalendarList';
 import type {StackNavigationProp} from '@react-navigation/stack';
 
 type RootStackParamList = {
-  Calendar: undefined;
   CreateRun: undefined;
 };
 
@@ -15,17 +14,17 @@ type CalendarNavigationProp = StackNavigationProp<RootStackParamList>;
 const Calendar: React.FC = () => {
   const navigation = useNavigation<CalendarNavigationProp>();
 
+  // const navigation = useNavigation();
+
   const handleButtonClick = () => {
+    console.log('button');
     navigation.navigate('CreateRun');
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.name}>CALENDAR</Text>
-      <Text style={styles.sub}>날짜를 클릭하여 일정을 추가해보세요!</Text>
-      <View style={styles.calendarContainer}>
-        <CalendarView />
-      </View>
+      <Text style={styles.sub}>날짜를 클릭하여 일정을 확인해보세요!</Text>
 
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={handleButtonClick}>
@@ -34,6 +33,10 @@ const Calendar: React.FC = () => {
             style={styles.vector}
           />
         </TouchableOpacity>
+      </View>
+
+      <View style={styles.calendarContainer}>
+        <CalendarView />
       </View>
 
       <View style={styles.calendarListContainer}>
