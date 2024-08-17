@@ -9,6 +9,7 @@ import {
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 type RootStackParamList = {
   Calendar: undefined;
@@ -18,28 +19,76 @@ const CreateRun: React.FC = () => {
   const [selectedType, setSelectedType] = useState<string | null>(null);
   const [title, setTitle] = useState<string>('');
   const [crew, setCrew] = useState<string>('');
-  const [date, setDate] = useState<string>('');
-  const [startTime, setStartTime] = useState<string>('');
-  const [endTime, setEndTime] = useState<string>('');
+  const [date, setDate] = useState<Date | null>(null);
+  const [startTime, setStartTime] = useState<Date | null>(null);
+  const [endTime, setEndTime] = useState<Date | null>(null);
   const [place, setPlace] = useState<string>('');
   const [audienceType, setAudienceType] = useState<string | null>(null);
 
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isStartTimePickerVisible, setStartTimePickerVisibility] =
+    useState(false);
+  const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
+
   const navigation =
     useNavigation<StackNavigationProp<RootStackParamList, 'Calendar'>>();
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true); //모달 열기
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false); //모달 닫기
+  };
+
+  const handleConfirmDate = (selectedDate: Date) => {
+    setDate(selectedDate);
+    hideDatePicker(); //모달 닫기
+  };
+
+  const showStartTimePicker = () => {
+    setStartTimePickerVisibility(true); //모달 열기
+  };
+
+  const hideStartTimePicker = () => {
+    setStartTimePickerVisibility(false); //모달 닫기
+  };
+
+  const handleConfirmStartTime = (selectedTime: Date) => {
+    setStartTime(selectedTime);
+    hideStartTimePicker(); //모달 닫기
+  };
+
+  const showEndTimePicker = () => {
+    setEndTimePickerVisibility(true); //모달 열기
+  };
+
+  const hideEndTimePicker = () => {
+    setEndTimePickerVisibility(false); //모달 닫기
+  };
+
+  const handleConfirmEndTime = (selectedTime: Date) => {
+    setEndTime(selectedTime);
+    hideEndTimePicker(); //모달 닫기
+  };
 
   const handleSignup = () => {
     const newEvent = {
       type: selectedType,
       title,
       crew,
-      date,
-      startTime,
-      endTime,
+      date: date?.toISOString().split('T')[0], // 날짜는 'YYYY-MM-DD' 형식으로 저장
+      startTime: startTime?.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      }), // 시간은 'HH:MM' 형식으로 저장
+      endTime: endTime?.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
       place,
       audienceType,
     };
-
-    console.log(newEvent);
 
     //캘린더 메인으로 새로운 이벤트 데이터 전달
     navigation.navigate('Calendar', {newEvent});
@@ -106,38 +155,95 @@ const CreateRun: React.FC = () => {
 
       <View style={styles.formRow}>
         <Text style={styles.label}>날짜</Text>
-        <TextInput
-          style={[styles.inputRow, styles.textInput]}
-          placeholder="ex) 2024.07.31"
-          onChangeText={setDate}
-          value={date}
+        <View style={styles.rowlabel}>
+          <TouchableOpacity onPress={showDatePicker}>
+            <TextInput
+              style={[styles.inputRow, styles.textInput]}
+              placeholder="날짜를 선택하세요"
+              value={date ? date.toISOString().split('T')[0] : ''}
+              editable={false}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={showDatePicker}>
+            <Image
+              source={require('../../../assets/calmodal.png')}
+              style={styles.modalicon}
+            />
+          </TouchableOpacity>
+        </View>
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={handleConfirmDate}
+          onCancel={hideDatePicker}
         />
       </View>
 
       <View style={styles.formRow}>
         <Text style={styles.label}>시간</Text>
-        <View style={styles.labelcontainer}>
-          <View style={styles.timeContainer}>
-            <TextInput
-              style={[styles.timeInput, styles.textInput]}
-              keyboardType="numeric"
-              placeholder="17:00"
-              onChangeText={setStartTime}
-              value={startTime}
-            />
+        <View style={styles.timecolumn}>
+          <View style={styles.labelcontainer}>
+            <Text style={styles.coloredlabel}>시작 시간</Text>
+            <TouchableOpacity onPress={showStartTimePicker}>
+              <TextInput
+                style={[styles.inputRow, styles.textInput]}
+                placeholder="시작 시간"
+                value={
+                  startTime
+                    ? startTime.toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })
+                    : ''
+                }
+                editable={false}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={showStartTimePicker}>
+              <Image
+                source={require('../../../assets/startclock.png')}
+                style={styles.timeicon}
+              />
+            </TouchableOpacity>
           </View>
-          <Text style={styles.coloredlabel}> 부터</Text>
-          <View style={styles.timeContainer}>
-            <TextInput
-              style={[styles.timeInput, styles.textInput]}
-              keyboardType="numeric"
-              placeholder="19:00"
-              onChangeText={setEndTime}
-              value={endTime}
-            />
+          <View style={styles.labelcontainer}>
+            <Text style={styles.coloredlabel}>종료 시간</Text>
+            <TouchableOpacity onPress={showEndTimePicker}>
+              <TextInput
+                style={[styles.inputRow, styles.textInput]}
+                placeholder="종료 시간"
+                value={
+                  endTime
+                    ? endTime.toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })
+                    : ''
+                }
+                editable={false}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={showEndTimePicker}>
+              <Image
+                source={require('../../../assets/endclock.png')}
+                style={styles.timeicon}
+              />
+            </TouchableOpacity>
           </View>
-          <Text style={styles.coloredlabel}> 까지</Text>
         </View>
+
+        <DateTimePickerModal
+          isVisible={isStartTimePickerVisible}
+          mode="time"
+          onConfirm={handleConfirmStartTime}
+          onCancel={hideStartTimePicker}
+        />
+        <DateTimePickerModal
+          isVisible={isEndTimePickerVisible}
+          mode="time"
+          onConfirm={handleConfirmEndTime}
+          onCancel={hideEndTimePicker}
+        />
       </View>
 
       <View style={styles.formRow}>
@@ -222,7 +328,7 @@ const styles = StyleSheet.create({
   },
   label: {
     left: 23,
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: 'bold',
     marginRight: 15,
     color: 'black',
@@ -257,6 +363,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#0F2869',
     paddingVertical: 5,
+    paddingHorizontal: 10,
     flex: 1,
     textAlign: 'center',
     right: 15,
@@ -265,6 +372,11 @@ const styles = StyleSheet.create({
     color: '#0F2869',
     fontWeight: '500',
     fontSize: 16,
+  },
+  timecolumn: {
+    flexDirection: 'column',
+    height: 50,
+    left: -100,
   },
   labelcontainer: {
     flexDirection: 'row',
@@ -278,22 +390,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
-  timeInput: {
-    borderWidth: 1,
-    borderColor: '#0F2869',
-    borderRadius: 6,
-    padding: 10,
-    flex: 1,
-    marginLeft: -40,
-    textAlign: 'center',
-    width: 87,
-    height: 32,
-    right: 30,
-  },
   coloredlabel: {
     fontSize: 17,
     fontWeight: 'bold',
-    right: 30,
+    left: -50,
     marginLeft: 7,
     color: '#0F2869',
     minWidth: 80,
@@ -306,6 +406,21 @@ const styles = StyleSheet.create({
     top: 20,
     width: 350,
     height: 54,
+  },
+  modalicon: {
+    width: 18,
+    height: 20,
+  },
+  rowlabel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 25,
+  },
+  timeicon: {
+    width: 18,
+    height: 20,
+    marginRight: -20,
   },
 });
 
