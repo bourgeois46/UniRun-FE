@@ -1,24 +1,39 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 import CalendarView from '../../components/CalendarView';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 import CalendarList from '../../components/CalendarList';
 import type {StackNavigationProp} from '@react-navigation/stack';
 
 type RootStackParamList = {
   CreateRun: undefined;
+  Calendar: {newEvent?: any};
 };
 
 type CalendarNavigationProp = StackNavigationProp<RootStackParamList>;
 
 const Calendar: React.FC = () => {
   const navigation = useNavigation<CalendarNavigationProp>();
+  const route = useRoute<RouteProp<RootStackParamList, 'Calendar'>>();
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [events, setEvents] = useState<any[]>([]);
 
-  // const navigation = useNavigation();
+  useEffect(() => {
+    if (route.params?.newEvent) {
+      setEvents(prevEvents => [...prevEvents, route.params.newEvent]);
+    }
+  }, [route.params?.newEvent]);
 
   const handleButtonClick = () => {
     navigation.navigate('CreateRun');
   };
+
+  // 캘린더에서 날짜를 클릭했을 때 호출될 함수
+  const handleDateSelect = (date: string) => {
+    setSelectedDate(date); // 선택한 날짜를 상태로 설정
+  };
+
+  const filteredEvents = events.filter(event => event.date === selectedDate);
 
   return (
     <View style={styles.container}>
@@ -35,11 +50,11 @@ const Calendar: React.FC = () => {
       </View>
 
       <View style={styles.calendarContainer}>
-        <CalendarView />
+        <CalendarView onDateSelect={handleDateSelect} />
       </View>
 
       <View style={styles.calendarListContainer}>
-        <CalendarList />
+        <CalendarList selectedDate={selectedDate} events={filteredEvents} />
       </View>
     </View>
   );

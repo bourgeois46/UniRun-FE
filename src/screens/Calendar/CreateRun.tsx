@@ -187,7 +187,7 @@ const CreateRun: React.FC = () => {
             <TouchableOpacity onPress={showStartTimePicker}>
               <TextInput
                 style={[styles.inputRow, styles.textInput]}
-                placeholder="시작 시간"
+                placeholder="시작 시간 선택 → "
                 value={
                   startTime
                     ? startTime.toLocaleTimeString([], {
@@ -211,7 +211,7 @@ const CreateRun: React.FC = () => {
             <TouchableOpacity onPress={showEndTimePicker}>
               <TextInput
                 style={[styles.inputRow, styles.textInput]}
-                placeholder="종료 시간"
+                placeholder="종료 시간 선택 → "
                 value={
                   endTime
                     ? endTime.toLocaleTimeString([], {
@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
   coloredlabel: {
     fontSize: 17,
     fontWeight: 'bold',
-    left: -50,
+    left: -20,
     marginLeft: 7,
     color: '#0F2869',
     minWidth: 80,
