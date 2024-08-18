@@ -50,7 +50,7 @@ const Calendar: React.FC = () => {
       </View>
 
       <View style={styles.calendarContainer}>
-        <CalendarView onDateSelect={handleDateSelect} />
+        <CalendarView onDateSelect={handleDateSelect} events={events} />
       </View>
 
       <View style={styles.calendarListContainer}>

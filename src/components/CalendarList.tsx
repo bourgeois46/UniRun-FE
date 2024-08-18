@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {StyleSheet, FlatList} from 'react-native';
 import CalendarItem from './CalendarItem';
 
