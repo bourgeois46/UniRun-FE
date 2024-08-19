@@ -1,39 +1,45 @@
 import {StyleSheet, ViewStyle} from 'react-native';
-import React from 'react';
+import React, {useState, useMemo} from 'react';
 import {Calendar} from 'react-native-calendars';
 
-//타입 정의
-interface MarkedDates {
-  [date: string]: {
-    selected?: boolean;
-    marked: boolean;
-  };
+interface CalendarViewProps {
+  onDateSelect: (date: string) => void;
+  events?: {date: string}[];
 }
 
-const markedDates: MarkedDates = {
-  '2024-08-20': {
-    marked: true,
-  },
-  '2024-08-03': {
-    marked: true,
-    selected: true,
-  },
-  '2024-09-14': {
-    marked: true,
-  },
-};
+const CalendarView: React.FC<CalendarViewProps> = ({
+  onDateSelect,
+  events = [],
+}) => {
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
 
-const CalendarView: React.FC = () => {
+  const markedDates = useMemo(() => {
+    const dates: {[key: string]: any} = {};
+    events.forEach(event => {
+      dates[event.date] = {marked: true};
+    });
+    return dates;
+  }, [events]);
+
+  const onDayPress = (day: {dateString: string}) => {
+    setSelectedDate(day.dateString);
+    onDateSelect(day.dateString); // 날짜 선택 시 상위 컴포넌트로 전달
+  };
+
   return (
     <Calendar
       style={styles.calendar}
-      markedDates={markedDates}
+      markedDates={{
+        ...markedDates,
+        [selectedDate || '']: {selected: true},
+      }}
       theme={{
         selectedDayBackgroundColor: '#0F2869',
         arrowColor: '#0F2869',
         dotColor: '#0F2869',
-        todayTextColor: 'blue',
+        todayTextColor: '#009688',
       }}
+      onDayPress={onDayPress}
     />
   );
 };
@@ -46,7 +52,7 @@ const styles = StyleSheet.create<Styles>({
   calendar: {
     width: '100%',
     borderBottomWidth: 0.5,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: '#D9D9D9',
   },
 });
 

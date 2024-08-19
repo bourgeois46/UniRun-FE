@@ -1,57 +1,301 @@
-import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
-import React from 'react';
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import type {StackNavigationProp} from '@react-navigation/stack';
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
-const data = [
-  {
-    id: '1',
-    title: '한강런',
-    location: '동덕여자대학교 두런두런',
-    time: '17:00 - 19:00',
-    buttonText: '참여',
-  },
-  {
-    id: '2',
-    title: '성북천 가볍게',
-    location: '고려대학교 KUTR',
-    time: '20:00 - 21:00',
-    buttonText: '참여',
-  },
-  {
-    id: '3',
-    title: '어대 한바퀴',
-    location: '건국대학교 RIKU',
-    time: '06:00 - 08:00',
-    buttonText: '참여',
-  },
-  // 필요한 만큼 데이터 추가
-];
-
-const Item = ({title, location, time, buttonText}) => (
-  <View style={styles.itemContainer}>
-    <Text style={styles.title}>{title}</Text>
-    <Text>{location}</Text>
-    <Text>{time}</Text>
-    <TouchableOpacity style={styles.button}>
-      <Text style={styles.buttonText}>{buttonText}</Text>
-    </TouchableOpacity>
-  </View>
-);
+type RootStackParamList = {
+  Calendar: undefined;
+};
 
 const CreateRun: React.FC = () => {
+  const [selectedType, setSelectedType] = useState<string | null>(null);
+  const [title, setTitle] = useState<string>('');
+  const [crew, setCrew] = useState<string>('');
+  const [date, setDate] = useState<Date | null>(null);
+  const [startTime, setStartTime] = useState<Date | null>(null);
+  const [endTime, setEndTime] = useState<Date | null>(null);
+  const [place, setPlace] = useState<string>('');
+  const [audienceType, setAudienceType] = useState<string | null>(null);
+
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isStartTimePickerVisible, setStartTimePickerVisibility] =
+    useState(false);
+  const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
+
+  const navigation =
+    useNavigation<StackNavigationProp<RootStackParamList, 'Calendar'>>();
+
+  const showDatePicker = () => {
+    setDatePickerVisibility(true); //모달 열기
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false); //모달 닫기
+  };
+
+  const handleConfirmDate = (selectedDate: Date) => {
+    setDate(selectedDate);
+    hideDatePicker(); //모달 닫기
+  };
+
+  const showStartTimePicker = () => {
+    setStartTimePickerVisibility(true); //모달 열기
+  };
+
+  const hideStartTimePicker = () => {
+    setStartTimePickerVisibility(false); //모달 닫기
+  };
+
+  const handleConfirmStartTime = (selectedTime: Date) => {
+    setStartTime(selectedTime);
+    hideStartTimePicker(); //모달 닫기
+  };
+
+  const showEndTimePicker = () => {
+    setEndTimePickerVisibility(true); //모달 열기
+  };
+
+  const hideEndTimePicker = () => {
+    setEndTimePickerVisibility(false); //모달 닫기
+  };
+
+  const handleConfirmEndTime = (selectedTime: Date) => {
+    setEndTime(selectedTime);
+    hideEndTimePicker(); //모달 닫기
+  };
+
+  const handleSignup = () => {
+    const newEvent = {
+      type: selectedType,
+      title,
+      crew,
+      date: date?.toISOString().split('T')[0], // 날짜는 'YYYY-MM-DD' 형식으로 저장
+      startTime: startTime?.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      }), // 시간은 'HH:MM' 형식으로 저장
+      endTime: endTime?.toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      }),
+      place,
+      audienceType,
+    };
+
+    //캘린더 메인으로 새로운 이벤트 데이터 전달
+    navigation.navigate('Calendar', {newEvent});
+  };
+
   return (
     <View style={styles.container}>
-      <FlatList
-        data={data}
-        renderItem={({item}) => (
-          <Item
-            title={item.title}
-            location={item.location}
-            time={item.time}
-            buttonText={item.buttonText}
-          />
-        )}
-        keyExtractor={item => item.id}
-      />
+      <Text style={styles.title}>러닝 일정 생성하기</Text>
+      <Text style={styles.subtitle}>정보를 입력해 일정을 만들어보세요</Text>
+
+      <View style={styles.formRow}>
+        <Text style={styles.label}>유형</Text>
+        <View style={styles.typeContainer}>
+          <TouchableOpacity
+            style={[
+              styles.typeButton,
+              selectedType === '정규' && styles.selectedTypeButton,
+            ]}
+            onPress={() => setSelectedType('정규')}>
+            <Text
+              style={[
+                styles.typeButtonText,
+                selectedType === '정규' && styles.selectedTypeButtonText,
+              ]}>
+              정규
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.typeButton,
+              selectedType === '번개' && styles.selectedTypeButton,
+            ]}
+            onPress={() => setSelectedType('번개')}>
+            <Text
+              style={[
+                styles.typeButtonText,
+                selectedType === '번개' && styles.selectedTypeButtonText,
+              ]}>
+              번개
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View style={styles.formRow}>
+        <Text style={styles.label}>제목</Text>
+        <TextInput
+          style={[styles.inputRow, styles.textInput]}
+          placeholder="ex) 한강런, 00런"
+          onChangeText={setTitle}
+          value={title}
+        />
+      </View>
+
+      <View style={styles.formRow}>
+        <Text style={styles.label}>주최</Text>
+        <TextInput
+          style={[styles.inputRow, styles.textInput]}
+          placeholder="ex) 러닝 크루 이름"
+          onChangeText={setCrew}
+          value={crew}
+        />
+      </View>
+
+      <View style={styles.formRow}>
+        <Text style={styles.label}>날짜</Text>
+        <View style={styles.rowlabel}>
+          <TouchableOpacity onPress={showDatePicker}>
+            <TextInput
+              style={[styles.inputRow, styles.textInput]}
+              placeholder="날짜를 선택하세요"
+              value={date ? date.toISOString().split('T')[0] : ''}
+              editable={false}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={showDatePicker}>
+            <Image
+              source={require('../../../assets/calmodal.png')}
+              style={styles.modalicon}
+            />
+          </TouchableOpacity>
+        </View>
+        <DateTimePickerModal
+          isVisible={isDatePickerVisible}
+          mode="date"
+          onConfirm={handleConfirmDate}
+          onCancel={hideDatePicker}
+        />
+      </View>
+
+      <View style={styles.formRow}>
+        <Text style={styles.label}>시간</Text>
+        <View style={styles.timecolumn}>
+          <View style={styles.labelcontainer}>
+            <Text style={styles.coloredlabel}>시작 시간</Text>
+            <TouchableOpacity onPress={showStartTimePicker}>
+              <TextInput
+                style={[styles.inputRow, styles.textInput]}
+                placeholder="시작 시간 선택 → "
+                value={
+                  startTime
+                    ? startTime.toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })
+                    : ''
+                }
+                editable={false}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={showStartTimePicker}>
+              <Image
+                source={require('../../../assets/startclock.png')}
+                style={styles.timeicon}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.labelcontainer}>
+            <Text style={styles.coloredlabel}>종료 시간</Text>
+            <TouchableOpacity onPress={showEndTimePicker}>
+              <TextInput
+                style={[styles.inputRow, styles.textInput]}
+                placeholder="종료 시간 선택 → "
+                value={
+                  endTime
+                    ? endTime.toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })
+                    : ''
+                }
+                editable={false}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={showEndTimePicker}>
+              <Image
+                source={require('../../../assets/endclock.png')}
+                style={styles.timeicon}
+              />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <DateTimePickerModal
+          isVisible={isStartTimePickerVisible}
+          mode="time"
+          onConfirm={handleConfirmStartTime}
+          onCancel={hideStartTimePicker}
+        />
+        <DateTimePickerModal
+          isVisible={isEndTimePickerVisible}
+          mode="time"
+          onConfirm={handleConfirmEndTime}
+          onCancel={hideEndTimePicker}
+        />
+      </View>
+
+      <View style={styles.formRow}>
+        <Text style={styles.label}>장소</Text>
+        <TextInput
+          style={[styles.inputRow, styles.textInput]}
+          placeholder="ex) 홍대입구역 3번 출구"
+          onChangeText={setPlace}
+          value={place}
+        />
+      </View>
+
+      <View style={styles.formRow}>
+        <Text style={styles.label}>대상</Text>
+        <View style={styles.typeContainer}>
+          <TouchableOpacity
+            style={[
+              styles.typeButton,
+              audienceType === '교내' && styles.selectedTypeButton,
+            ]}
+            onPress={() => setAudienceType('교내')}>
+            <Text
+              style={[
+                styles.typeButtonText,
+                audienceType === '교내' && styles.selectedTypeButtonText,
+              ]}>
+              교내
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.typeButton,
+              audienceType === '전체' && styles.selectedTypeButton,
+            ]}
+            onPress={() => setAudienceType('전체')}>
+            <Text
+              style={[
+                styles.typeButtonText,
+                audienceType === '전체' && styles.selectedTypeButtonText,
+              ]}>
+              전체
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
+        <Image
+          source={require('../../../assets/createbtn.png')}
+          style={styles.vector}
+        />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -61,24 +305,122 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  itemContainer: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
   title: {
-    fontSize: 18,
+    top: 28,
+    left: 23,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black',
+  },
+  subtitle: {
+    top: 33,
+    left: 23,
+    fontSize: 14,
+    color: '#CBCBCB',
+    marginBottom: 20,
+  },
+  formRow: {
+    top: 40,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 38,
+    justifyContent: 'space-between',
+  },
+  label: {
+    left: 23,
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginRight: 15,
+    color: 'black',
+    minWidth: 80,
+  },
+  typeContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flex: 1,
+    right: 15,
+  },
+  typeButton: {
+    flex: 1,
+    alignItems: 'center',
+    padding: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5,
+    marginHorizontal: 5,
+  },
+  selectedTypeButton: {
+    borderColor: '#0F2869',
+  },
+  typeButtonText: {
+    color: 'black',
+  },
+  selectedTypeButtonText: {
+    color: '#0F2869',
     fontWeight: 'bold',
   },
-  button: {
-    marginTop: 10,
-    backgroundColor: '#007BFF',
-    padding: 10,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#fff',
+  inputRow: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#0F2869',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    flex: 1,
     textAlign: 'center',
+    right: 15,
+  },
+  textInput: {
+    color: '#0F2869',
+    fontWeight: '500',
+    fontSize: 16,
+  },
+  timecolumn: {
+    flexDirection: 'column',
+    height: 50,
+    left: -100,
+  },
+  labelcontainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    flex: 1,
+    left: 54,
+  },
+  timeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flex: 1,
+  },
+  coloredlabel: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    left: -20,
+    marginLeft: 7,
+    color: '#0F2869',
+    minWidth: 80,
+  },
+  signupButton: {
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  vector: {
+    top: 20,
+    width: 350,
+    height: 54,
+  },
+  modalicon: {
+    width: 18,
+    height: 20,
+  },
+  rowlabel: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    right: 25,
+  },
+  timeicon: {
+    width: 18,
+    height: 20,
+    marginRight: -20,
   },
 });
 

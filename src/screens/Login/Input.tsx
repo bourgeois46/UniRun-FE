@@ -1,7 +1,15 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import type { StackNavigationProp } from '@react-navigation/stack';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, Image, ImageSourcePropType  } from 'react-native';
+import type {StackNavigationProp} from '@react-navigation/stack';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  ImageSourcePropType,
+} from 'react-native';
 
 type RootStackParamList = {
   Home: undefined;
@@ -13,10 +21,11 @@ const Input: React.FC<{}> = () => {
   const fixImage: ImageSourcePropType = require('../../../assets/fixbutton.png');
 
   // 로그인 연동 후 수정
-  const [isLogged, setIsLogged] = useState<boolean>(true); 
+  const [isLogged, setIsLogged] = useState<boolean>(true);
 
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Home'>>();
-  
+  const navigation =
+    useNavigation<StackNavigationProp<RootStackParamList, 'Home'>>();
+
   const handleSignup = () => {
     navigation.navigate('Home');
   };
@@ -28,12 +37,18 @@ const Input: React.FC<{}> = () => {
 
       <View style={styles.formRow}>
         <Text style={styles.label}>닉네임</Text>
-        <TextInput style={[styles.inputRow, styles.textInput]} placeholder="ex) 러닝덕, 단비" />
+        <TextInput
+          style={[styles.inputRow, styles.textInput]}
+          placeholder="ex) 러닝덕, 단비"
+        />
       </View>
 
       <View style={styles.formRow}>
         <Text style={styles.label}>학교</Text>
-        <TextInput style={[styles.inputRow, styles.textInput]} placeholder="ex) 동덕여자대학교" />
+        <TextInput
+          style={[styles.inputRow, styles.textInput]}
+          placeholder="ex) 동덕여자대학교"
+        />
       </View>
 
       <View style={styles.formRow}>
@@ -44,24 +59,28 @@ const Input: React.FC<{}> = () => {
               styles.genderButton,
               selectedGender === '여성' && styles.selectedGenderButton,
             ]}
-            onPress={() => setSelectedGender('여성')}
-          >
-            <Text style={[
-              styles.genderButtonText,
-              selectedGender === '여성' && styles.selectedGenderButtonText,
-            ]}>여성</Text>
+            onPress={() => setSelectedGender('여성')}>
+            <Text
+              style={[
+                styles.genderButtonText,
+                selectedGender === '여성' && styles.selectedGenderButtonText,
+              ]}>
+              여성
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
               styles.genderButton,
               selectedGender === '남성' && styles.selectedGenderButton,
             ]}
-            onPress={() => setSelectedGender('남성')}
-          >
-            <Text style={[
-              styles.genderButtonText,
-              selectedGender === '남성' && styles.selectedGenderButtonText,
-            ]}>남성</Text>
+            onPress={() => setSelectedGender('남성')}>
+            <Text
+              style={[
+                styles.genderButtonText,
+                selectedGender === '남성' && styles.selectedGenderButtonText,
+              ]}>
+              남성
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -70,9 +89,12 @@ const Input: React.FC<{}> = () => {
         <Text style={styles.label}>출생연도</Text>
         <View style={styles.labelcontainer}>
           <View style={styles.birthYearContainer}>
-            <TextInput style={[styles.birthYearInput, styles.textInput]} keyboardType="numeric" />
+            <TextInput
+              style={[styles.birthYearInput, styles.textInput]}
+              keyboardType="numeric"
+            />
           </View>
-          <Text style={styles.coloredlabel}>   년도</Text>
+          <Text style={styles.coloredlabel}> 년도</Text>
         </View>
       </View>
 
@@ -80,9 +102,12 @@ const Input: React.FC<{}> = () => {
         <Text style={styles.label}>키</Text>
         <View style={styles.labelcontainer}>
           <View style={styles.unitContainer}>
-            <TextInput style={[styles.inputRow, styles.textInput]} keyboardType="numeric" />
+            <TextInput
+              style={[styles.inputRow, styles.textInput]}
+              keyboardType="numeric"
+            />
           </View>
-          <Text style={styles.coloredlabel}>   CM</Text>
+          <Text style={styles.coloredlabel}> CM</Text>
         </View>
       </View>
 
@@ -90,28 +115,32 @@ const Input: React.FC<{}> = () => {
         <Text style={styles.label}>체중</Text>
         <View style={styles.labelcontainer}>
           <View style={styles.unitContainer}>
-            <TextInput style={[styles.inputRow, styles.textInput]} keyboardType="numeric" />
+            <TextInput
+              style={[styles.inputRow, styles.textInput]}
+              keyboardType="numeric"
+            />
           </View>
-          <Text style={styles.coloredlabel}>   KG</Text>
+          <Text style={styles.coloredlabel}> KG</Text>
         </View>
       </View>
 
       <View style={styles.formCol}>
         <Text style={styles.label}>목표 설정</Text>
         <TextInput
-          style={[styles.textInput, styles.inputGoal]} 
+          style={[styles.textInput, styles.inputGoal]}
           placeholder="ex) 포기하지말고 꾸준히!"
         />
       </View>
 
-      <TouchableOpacity style={styles.signupButton} onPress={handleSignup} >
-      <Image   
-        style={[styles.lastButton, isLogged && styles.fixImageStyle]}  
-        source={isLogged ? fixImage : signupImage} />  
+      <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
+        <Image
+          style={[styles.lastButton, isLogged && styles.fixImageStyle]}
+          source={isLogged ? fixImage : signupImage}
+        />
       </TouchableOpacity>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -137,7 +166,7 @@ const styles = StyleSheet.create({
   },
   formCol: {
     flexDirection: 'column',
-    marginBottom: 38, 
+    marginBottom: 38,
   },
   label: {
     fontSize: 17,
@@ -168,14 +197,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   inputGoal: {
-    borderBottomWidth: 1, 
+    borderBottomWidth: 1,
     borderBottomColor: '#0F2869',
     paddingVertical: 5,
     textAlign: 'center',
-    marginTop: 8, 
+    marginTop: 8,
   },
   textInput: {
-    color: '#0F2869', 
+    color: '#0F2869',
     fontWeight: 'bold',
     fontSize: 16,
   },
@@ -225,7 +254,7 @@ const styles = StyleSheet.create({
   labelcontainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-end', 
+    justifyContent: 'flex-end',
     flex: 1,
     left: 54,
   },
@@ -248,5 +277,3 @@ const styles = StyleSheet.create({
 });
 
 export default Input;
-
-
