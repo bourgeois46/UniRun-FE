@@ -21,7 +21,7 @@ const Input: React.FC<{}> = () => {
   const fixImage: ImageSourcePropType = require('../../../assets/fixbutton.png');
 
   // 로그인 연동 후 수정
-  const [isLogged, setIsLogged] = useState<boolean>(true);
+  const [isLogged, setIsLogged] = useState<boolean>(false);
 
   const navigation =
     useNavigation<StackNavigationProp<RootStackParamList, 'Home'>>();

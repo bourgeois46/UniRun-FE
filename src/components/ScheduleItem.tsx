@@ -10,19 +10,23 @@ import {
 import DeleteScheduleModal from '../modal/DeleteScheduleModal';
 
 type ScheduleItemProps = {
+  id: number;
   date: string;
   title: string;
   time: string;
   location: string;
   univ: string;
+  onDelete: (id: number) => void;
 };
 
 const ScheduleItem: React.FC<ScheduleItemProps> = ({
+  id,
   date,
   location,
   univ,
   title,
   time,
+  onDelete,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
@@ -32,6 +36,11 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({
 
   const onPressModalClose = () => {
     setIsModalVisible(false);
+  };
+
+  const handleDelete = () => {
+    onDelete(id); // id를 사용하여 삭제
+    onPressModalClose(); // 모달 닫기
   };
 
   return (
@@ -72,6 +81,7 @@ const ScheduleItem: React.FC<ScheduleItemProps> = ({
           <DeleteScheduleModal
             visible={isModalVisible}
             onClose={onPressModalClose}
+            onDelete={handleDelete}
           />
         </View>
       </View>
@@ -104,22 +114,25 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 10, // 아이콘과 텍스트 사이의 간격 설정
+    marginRight: 5, // 아이콘과 텍스트 사이의 간격 설정
   },
   icon: {
     resizeMode: 'contain',
     marginRight: 5, // 아이콘과 텍스트 사이의 간격 설정
   },
   title: {
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 15,
+    fontWeight: '500',
     color: 'black',
   },
   univ: {
-    color: '#D9D9D9',
+    color: '#b3b3b3',
+    fontSize: 11,
   },
   date: {
     color: '#D9D9D9',
+    fontSize: 11,
+    fontWeight: '500',
   },
   location: {
     color: 'black',

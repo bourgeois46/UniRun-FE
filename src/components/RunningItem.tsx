@@ -10,17 +10,21 @@ import {
 import DeleteRecordModal from '../modal/DeleteRecordModal';
 
 type RunningItemProps = {
+  id: number;
   date: string;
   title: string;
   distance: string;
   time: string;
+  onDelete: (id: number) => void;
 };
 
 const RunningItem: React.FC<RunningItemProps> = ({
+  id,
   date,
   title,
   distance,
   time,
+  onDelete,
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
@@ -30,6 +34,11 @@ const RunningItem: React.FC<RunningItemProps> = ({
 
   const onPressModalClose = () => {
     setIsModalVisible(false);
+  };
+
+  const handleDelete = () => {
+    onDelete(id); // id를 사용하여 삭제
+    onPressModalClose(); // 모달 닫기
   };
 
   return (
@@ -63,7 +72,11 @@ const RunningItem: React.FC<RunningItemProps> = ({
         />
       </TouchableOpacity>
 
-      <DeleteRecordModal visible={isModalVisible} onClose={onPressModalClose} />
+      <DeleteRecordModal
+        visible={isModalVisible}
+        onClose={onPressModalClose}
+        onDelete={handleDelete}
+      />
     </View>
   );
 };
@@ -91,11 +104,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '500',
     color: 'black',
   },
   date: {
     color: '#D9D9D9',
+    fontWeight: '500',
   },
   distance: {
     color: 'black',

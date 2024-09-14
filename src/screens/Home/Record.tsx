@@ -1,13 +1,13 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import React, { useEffect, useState } from 'react';
-import { useRoute } from '@react-navigation/native';
-import type { RouteProp } from '@react-navigation/native';
+import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {useRoute} from '@react-navigation/native';
+import type {RouteProp} from '@react-navigation/native';
 import RunningDoneModal from '../../modal/RunningDoneModal';
 import CurrentDate from '../../components/CurrentDate';
 
 type RootStackParamList = {
   Running: undefined;
-  Record: { showModal: boolean };
+  Record: {showModal: boolean};
 };
 
 const Record: React.FC = () => {
@@ -27,28 +27,44 @@ const Record: React.FC = () => {
 
   return (
     <View style={styles.container}>
-    <View style={styles.gridContainer}>
-      <View style={styles.gridItem}>
-        <Image source={require('../../../assets/date.png')} style={[styles.icon, {top: 20}]} />
-        <CurrentDate />
-      </View>
-      <View style={styles.gridItem}>
-        <Image source={require('../../../assets/time.png')} style={styles.icon} />
-        <Text style={styles.valueNumber}>00:08:58</Text>
-      </View>
+      <Image
+        source={require('../../../assets/runmap.png')}
+        style={styles.mapimage}
+      />
+      <View style={styles.gridContainer}>
+        <View style={styles.gridItem}>
+          <Image
+            source={require('../../../assets/date.png')}
+            style={[styles.icon, {top: 20}]}
+          />
+          <CurrentDate />
+        </View>
+        <View style={styles.gridItem}>
+          <Image
+            source={require('../../../assets/time.png')}
+            style={styles.icon}
+          />
+          <Text style={styles.valueNumber}>00:08:58</Text>
+        </View>
 
-      {/* 가로 점선 */}
-      <View style={styles.horizontalLine} />
+        {/* 가로 점선 */}
+        <View style={styles.horizontalLine} />
 
-      <View style={styles.gridItem}>
-        <Image source={require('../../../assets/distance.png')} style={styles.icon} />
-        <View style={styles.valueContainer}>
+        <View style={styles.gridItem}>
+          <Image
+            source={require('../../../assets/distance.png')}
+            style={styles.icon}
+          />
+          <View style={styles.valueContainer}>
             <Text style={styles.valueNumber}>3.75</Text>
             <Text style={styles.valueUnit}>km</Text>
           </View>
         </View>
         <View style={styles.gridItem}>
-          <Image source={require('../../../assets/cal.png')} style={styles.icon} />
+          <Image
+            source={require('../../../assets/cal.png')}
+            style={styles.icon}
+          />
           <View style={styles.valueContainer}>
             <Text style={styles.valueNumber}>20</Text>
             <Text style={styles.valueUnit}>m</Text>
@@ -56,12 +72,12 @@ const Record: React.FC = () => {
         </View>
       </View>
 
-       {/* 세로 점선 */}
+      {/* 세로 점선 */}
       <View style={styles.verticalLine} />
 
-    <RunningDoneModal visible={isModalVisible} onClose={onPressModalClose} />
-  </View>
-);
+      <RunningDoneModal visible={isModalVisible} onClose={onPressModalClose} />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -70,6 +86,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
+  },
+  mapimage: {
+    width: 392,
+    height: 370,
   },
   modalContainer: {
     flex: 1,
@@ -84,7 +104,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
@@ -108,8 +128,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     justifyContent: 'space-between',
     width: '90%',
-    height: '40%',
-    marginTop: 385,
+    height: 300,
+    marginTop: 20,
     //borderWidth: 1,
   },
   gridItem: {
@@ -121,7 +141,7 @@ const styles = StyleSheet.create({
     margin: '2.5%',
   },
   icon: {
-    resizeMode: "cover",
+    resizeMode: 'cover',
     right: '25%',
   },
   label: {
