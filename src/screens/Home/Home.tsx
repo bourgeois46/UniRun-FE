@@ -34,7 +34,10 @@ const Home: React.FC = () => {
             opacity: pressed ? 0.5 : 1, // 터치 효과
           },
         ]}>
-        <Image source={require('../../../assets/ticket.png')} />
+        <Image
+          source={require('../../../assets/ticket.png')}
+          style={styles.ticketimage}
+        />
       </Pressable>
 
       <RunningStartModal visible={isModalVisible} onClose={onPressModalClose} />
@@ -60,6 +63,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: '8%',
     zIndex: 2,
+  },
+  ticketimage: {
+    //ios여서 끌어내림
+    top: 30,
   },
 });
 

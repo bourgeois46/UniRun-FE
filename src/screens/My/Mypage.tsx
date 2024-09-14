@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#0F2869',
     borderRadius: 10,
-    top: 100,
+    top: 50,
     width: 340,
     height: 170,
   },
@@ -93,12 +93,13 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 20,
     fontWeight: 'bold',
-    marginTop: 30,
+    marginTop: 100,
   },
   univ: {
     fontSize: 18,
     fontWeight: 'bold',
     color: '#8591B3',
+    marginTop: 8,
   },
   myRunningContainer: {
     flexDirection: 'row',

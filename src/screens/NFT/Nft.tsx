@@ -55,9 +55,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   banner: {
-    resizeMode: 'cover',
+    // resizeMode: 'cover',
     top: 0,
-    width: '102%',
+    width: 393,
+    height: 220,
   },
   msg: {
     resizeMode: 'cover',
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     paddingHorizontal: 0,
-    padding: 20,
+    padding: 0,
   },
   label: {
     fontSize: 20,
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     borderColor: '#D9D9D9',
     marginVertical: 5,
     left: -90,
-    top: 85,
+    top: 60,
   },
 });
 

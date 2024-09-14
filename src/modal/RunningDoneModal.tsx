@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, TextInput, Image } from 'react-native';
-import DropDownPicker, { ItemType } from 'react-native-dropdown-picker';
-import { TouchableOpacity } from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, Modal, TextInput, Image} from 'react-native';
+import DropDownPicker, {ItemType} from 'react-native-dropdown-picker';
+import {TouchableOpacity} from 'react-native';
 
-const RunningDoneModal: React.FC<{ visible: boolean; onClose: () => void }> = ({ visible, onClose }) => {
+const RunningDoneModal: React.FC<{visible: boolean; onClose: () => void}> = ({
+  visible,
+  onClose,
+}) => {
   // 드롭다운 열고 닫기
   const [open, setOpen] = useState(false);
 
@@ -18,10 +21,16 @@ const RunningDoneModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
   ]);
 
   return (
-    <Modal visible={visible} animationType="fade" transparent={true} onRequestClose={onClose}>
+    <Modal
+      visible={visible}
+      animationType="fade"
+      transparent={true}
+      onRequestClose={onClose}>
       <View style={styles.modalContainer}>
         <View style={styles.modalView}>
-          <Text style={styles.closeText} onPress={onClose}>X</Text>
+          <Text style={styles.closeText} onPress={onClose}>
+            X
+          </Text>
           <Text style={styles.title}>러닝 완료 알림</Text>
           <View style={styles.formRow}>
             <Text style={styles.label}>러닝 타입</Text>
@@ -36,15 +45,16 @@ const RunningDoneModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
               containerStyle={styles.dropdownContainer}
               style={styles.dropdown}
               dropDownContainerStyle={styles.dropdownList}
+              zIndex={100} //ios에서 드롭다운이 다른 요소 위에 보이게 함 -> 실패
             />
-        </View>
-        <View style={styles.formRow}>
-          <Text style={styles.label}>직접 입력</Text>
-          <TextInput style={styles.inputText} placeholder="직접 입력"/>
-        </View>
-        <TouchableOpacity onPress={onClose} style={styles.imageWrapper}>
-           <Image source={require('../../assets/done.png')}  />
-        </TouchableOpacity>
+          </View>
+          <View style={styles.formRow}>
+            <Text style={styles.label}>직접 입력</Text>
+            <TextInput style={styles.inputText} placeholder="직접 입력" />
+          </View>
+          <TouchableOpacity onPress={onClose} style={styles.imageWrapper}>
+            <Image source={require('../../assets/done.png')} />
+          </TouchableOpacity>
         </View>
       </View>
     </Modal>
@@ -66,7 +76,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
@@ -98,6 +108,7 @@ const styles = StyleSheet.create({
   },
   dropdownList: {
     backgroundColor: '#fff',
+    zIndex: 1000, //ios에서 드롭다운이 다른 요소 위에 보이게 함 -> 실패
   },
   formRow: {
     flexDirection: 'row',

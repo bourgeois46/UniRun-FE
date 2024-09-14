@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, Image, View, TouchableOpacity} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  Image,
+  View,
+  TouchableOpacity,
+  SafeAreaView,
+} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {
   createNativeStackNavigator,
@@ -211,37 +218,44 @@ const App = (): React.JSX.Element => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={isLogged ? 'Main' : 'Login'}>
-        {isLogged ? (
-          <>
-            <Stack.Screen
-              name="Main"
-              component={MainScreen}
-              options={({navigation}) => ({
-                header: () => <Header navigation={navigation} back={true} />,
-              })}
-            />
-          </>
-        ) : (
-          <>
-            <Stack.Screen
-              name="Login"
-              component={Login}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="Input"
-              component={Input}
-              options={{headerShown: false}}
-            />
-          </>
-        )}
-      </Stack.Navigator>
+      <SafeAreaView style={styles.safeAreaView}>
+        <Stack.Navigator initialRouteName={isLogged ? 'Main' : 'Login'}>
+          {isLogged ? (
+            <>
+              <Stack.Screen
+                name="Main"
+                component={MainScreen}
+                options={({navigation}) => ({
+                  header: () => <Header navigation={navigation} back={true} />,
+                })}
+              />
+            </>
+          ) : (
+            <>
+              <Stack.Screen
+                name="Login"
+                component={Login}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Input"
+                component={Input}
+                options={{headerShown: false}}
+              />
+            </>
+          )}
+        </Stack.Navigator>
+      </SafeAreaView>
     </NavigationContainer>
   );
 };
 
 const styles = StyleSheet.create({
+  safeAreaView: {
+    //ios여서 끌어내림
+    flex: 1,
+    marginTop: -15,
+  },
   header: {
     height: 50,
     flexDirection: 'row',
