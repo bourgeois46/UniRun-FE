@@ -7,7 +7,7 @@ import CurrentDate from '../../components/CurrentDate';
 
 type RootStackParamList = {
   Running: undefined;
-  Record: {showModal: boolean};
+  Record: {showModal: boolean; time: string};
 };
 
 const Record: React.FC = () => {
@@ -44,7 +44,7 @@ const Record: React.FC = () => {
             source={require('../../../assets/time.png')}
             style={styles.icon}
           />
-          <Text style={styles.valueNumber}>00:08:58</Text>
+          <Text style={styles.valueNumber}>{route.params?.time || '00:00:00'}</Text>
         </View>
 
         {/* 가로 점선 */}
