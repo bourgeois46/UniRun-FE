@@ -53,12 +53,13 @@ const UnivList: React.FC = () => {
 const styles = StyleSheet.create({
   list: {
     width: '100%',
-    top: 70, // UnivList의 시작점을 아래로 내림
+    top: 30, 
   },
   msg: {
     resizeMode: 'cover',
     width: '102%',
     position: 'absolute',
+    top: 290,
   },
 });
 

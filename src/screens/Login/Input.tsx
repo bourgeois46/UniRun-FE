@@ -132,6 +132,13 @@ const Input: React.FC<{}> = () => {
         />
       </View>
 
+      <View style={styles.formCol}>
+        <Text style={styles.label}>지갑 주소</Text>
+        <TextInput
+          style={[styles.textInput, styles.inputGoal]}
+        />
+      </View>
+
       <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
         <Image
           style={[styles.lastButton, isLogged && styles.fixImageStyle]}
@@ -260,7 +267,7 @@ const styles = StyleSheet.create({
   },
   signupButton: {
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: -10,
   },
   signupButtonText: {
     color: 'white',

@@ -18,6 +18,11 @@ const Nft: React.FC = () => {
         style={styles.banner}
       />
 
+      <Image
+        source={require('../../../assets/addressButton.png')}
+        style={styles.addressButton}
+      />
+
       <View style={styles.labelContainer}>
         <TouchableOpacity onPress={() => handleLabelPress('마스코트')}>
           <Text
@@ -60,6 +65,11 @@ const styles = StyleSheet.create({
     width: 393,
     height: 220,
   },
+  addressButton: {
+    top: -100,
+    width: 45,
+    height: 45,
+  },
   msg: {
     resizeMode: 'cover',
     width: '102%',
@@ -70,6 +80,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 0,
     padding: 0,
+    top: -40
   },
   label: {
     fontSize: 20,
