@@ -5,7 +5,6 @@ import CheckScheduleModal from './CheckScheduleModal';
 const DeleteScheduleModal: React.FC<{ visible: boolean; onClose: () => void; onDelete: () => void }> = ({ visible, onClose, onDelete }) => {
     const [isCheckDeleteVisible, setIsCheckDeleteVisible] = useState(false);
 
-    // onPress에서 2가지 동작 수행
     const handleDeletePress = () => {
       onDelete();
       onClose(); // 기존 모달 닫기

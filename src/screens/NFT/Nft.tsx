@@ -3,12 +3,22 @@ import React, {useEffect, useState} from 'react';
 import UnivList from '../../components/UnivList';
 import MyList from '../../components/MyList';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import AddressModal from '../../modal/AddressModal';
 
 const Nft: React.FC = () => {
   const [selectedLabel, setSelectedLabel] = useState<string>('마스코트');
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const handleLabelPress = (label: string) => {
     setSelectedLabel(label);
+  };
+
+  const onPressModalOpen = () => {
+    setIsModalVisible(true);
+  };
+
+  const onPressModalClose = () => {
+    setIsModalVisible(false);
   };
 
   return (
@@ -18,10 +28,12 @@ const Nft: React.FC = () => {
         style={styles.banner}
       />
 
-      <Image
-        source={require('../../../assets/addressButton.png')}
-        style={styles.addressButton}
-      />
+      <TouchableOpacity onPress={onPressModalOpen}>
+          <Image
+            source={require('../../../assets/addressButton.png')}
+            style={styles.addressButton}
+          />
+      </TouchableOpacity>
 
       <View style={styles.labelContainer}>
         <TouchableOpacity onPress={() => handleLabelPress('마스코트')}>
@@ -48,6 +60,11 @@ const Nft: React.FC = () => {
       </View>
 
       {selectedLabel === '마스코트' ? <UnivList /> : <MyList />}
+
+      <AddressModal
+        visible={isModalVisible}
+        onClose={onPressModalClose}
+      />
     </SafeAreaView>
   );
 };
