@@ -11,6 +11,7 @@ const RunningStartModal: React.FC<{ visible: boolean; onClose: () => void }> = (
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Running'>>();
 
   const handleRunning = () => {
+    onClose(); // 모달을 닫고 화면 전환됨
     navigation.navigate('Running');
   };
 

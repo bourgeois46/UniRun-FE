@@ -4,7 +4,6 @@ import {
   Text,
   Image,
   StyleSheet,
-  ScrollView,
   TouchableOpacity,
 } from 'react-native';
 import DeleteRecordModal from '../modal/DeleteRecordModal';
@@ -92,14 +91,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   iconContainer: {
-    width: 40, // 아이콘의 고정된 위치를 위해 너비 설정
+    width: 40, 
     alignItems: 'center',
   },
   icon: {
     resizeMode: 'contain',
   },
   textContainer: {
-    flex: 1, // 텍스트 컨테이너가 가변적으로 공간 차지
+    flex: 1, 
     marginLeft: 20,
   },
   title: {

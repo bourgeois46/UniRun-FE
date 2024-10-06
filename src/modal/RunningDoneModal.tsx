@@ -1,9 +1,8 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, Modal, TextInput, Image} from 'react-native';
-import DropDownPicker, {ItemType} from 'react-native-dropdown-picker';
-import {TouchableOpacity} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Modal, TextInput, Image, TouchableOpacity } from 'react-native';
+import DropDownPicker, { ItemType } from 'react-native-dropdown-picker';
 
-const RunningDoneModal: React.FC<{visible: boolean; onClose: () => void}> = ({
+const RunningDoneModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
   visible,
   onClose,
 }) => {
@@ -15,9 +14,9 @@ const RunningDoneModal: React.FC<{visible: boolean; onClose: () => void}> = ({
 
   // 드롭다운 항목
   const [items, setItems] = useState<ItemType<string | number>[]>([
-    {label: '[정규] 두런두런 - 한강런', value: 1},
-    {label: '[번개] KUTR - 성북천 가볍게', value: 2},
-    {label: '[번개] RIKU - 어대 한바퀴', value: 3},
+    { label: '[정규] 두런두런 - 한강런', value: 1 },
+    { label: '[번개] KUTR - 성북천 가볍게', value: 2 },
+    { label: '[번개] RIKU - 어대 한바퀴', value: 3 },
   ]);
 
   return (
@@ -32,26 +31,31 @@ const RunningDoneModal: React.FC<{visible: boolean; onClose: () => void}> = ({
             X
           </Text>
           <Text style={styles.title}>러닝 완료 알림</Text>
-          <View style={styles.formRow}>
-            <Text style={styles.label}>러닝 타입</Text>
-            <DropDownPicker
-              open={open}
-              value={value}
-              items={items}
-              setOpen={setOpen}
-              setValue={setValue}
-              setItems={setItems}
-              placeholder="러닝 타입 선택"
-              containerStyle={styles.dropdownContainer}
-              style={styles.dropdown}
-              dropDownContainerStyle={styles.dropdownList}
-              zIndex={100} //ios에서 드롭다운이 다른 요소 위에 보이게 함 -> 실패
-            />
+
+          {/* 부모 요소에 각각 zIndex 설정해서 배경색 투명한 문제 해결 */}
+          <View style={{ zIndex: 2 }}>
+            <View style={styles.formRow}>
+              <Text style={styles.label}>러닝 타입</Text>
+              <DropDownPicker
+                open={open}
+                value={value}
+                items={items}
+                setOpen={setOpen}
+                setValue={setValue}
+                setItems={setItems}
+                placeholder="러닝 타입 선택"
+                containerStyle={[styles.dropdownContainer, { zIndex: 2 }]}  
+                style={styles.dropdown}
+                dropDownContainerStyle={[styles.dropdownList, { zIndex: 3 }]}  
+              />
+            </View>
           </View>
+
           <View style={styles.formRow}>
             <Text style={styles.label}>직접 입력</Text>
             <TextInput style={styles.inputText} placeholder="직접 입력" />
           </View>
+
           <TouchableOpacity onPress={onClose} style={styles.imageWrapper}>
             <Image source={require('../../assets/done.png')} />
           </TouchableOpacity>
@@ -76,10 +80,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     shadowColor: '#000',
-    shadowOffset: {width: 0, height: 2},
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    zIndex: 1, 
   },
   title: {
     fontSize: 18,
@@ -97,18 +102,18 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   dropdownContainer: {
-    width: '75%',
-    left: 10,
+    width: 195,
+    left: 9,
     marginVertical: 10,
   },
   dropdown: {
     backgroundColor: '#fff',
     maxHeight: 45,
-    minHeight: 40, // 세로 길이 조절
+    minHeight: 40,
   },
   dropdownList: {
     backgroundColor: '#fff',
-    zIndex: 1000, //ios에서 드롭다운이 다른 요소 위에 보이게 함 -> 실패
+    zIndex: 3, 
   },
   formRow: {
     flexDirection: 'row',
@@ -132,3 +137,4 @@ const styles = StyleSheet.create({
 });
 
 export default RunningDoneModal;
+

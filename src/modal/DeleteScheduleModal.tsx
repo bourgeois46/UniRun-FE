@@ -2,11 +2,11 @@ import React, {useState} from 'react';
 import { View, Modal , StyleSheet, Text, TouchableOpacity, Pressable } from 'react-native';
 import CheckScheduleModal from './CheckScheduleModal';
 
-const DeleteScheduleModal: React.FC<{ visible: boolean; onClose: () => void }> = ({ visible, onClose }) => {
+const DeleteScheduleModal: React.FC<{ visible: boolean; onClose: () => void; onDelete: () => void }> = ({ visible, onClose, onDelete }) => {
     const [isCheckDeleteVisible, setIsCheckDeleteVisible] = useState(false);
 
-    // onPress에서 2가지 동작 수행
     const handleDeletePress = () => {
+      onDelete();
       onClose(); // 기존 모달 닫기
       setIsCheckDeleteVisible(true); // 새로운 모달 열기
     };
