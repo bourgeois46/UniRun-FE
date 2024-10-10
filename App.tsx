@@ -24,6 +24,8 @@ import Input from './src/screens/Login/Input';
 import Running from './src/screens/Home/Running';
 import Record from './src/screens/Home/Record';
 import MyRunning from './src/screens/My/MyRunning';
+import LoginWebview from './src/components/LoginWebview';
+import LoginRedirect from './src/components/LoginRedirect';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -31,6 +33,8 @@ const Tab = createBottomTabNavigator();
 type RootStackParamList = {
   Main: undefined;
   Login: undefined;
+  LoginWebview: undefined;
+  LoginRedirect: undefined;
   Input: undefined;
   Home: undefined;
   Calendar: undefined;
@@ -205,7 +209,7 @@ const MainScreen = () => {
 };
 
 const App = (): React.JSX.Element => {
-  const [isLogged, setIsLogged] = useState(true); //true -> 로그인된 상태, false -> 로그인 전 상태
+  const [isLogged, setIsLogged] = useState(false); //true -> 로그인된 상태, false -> 로그인 전 상태
 
   const handleLoginSuccess = () => {
     setIsLogged(true);
@@ -236,6 +240,18 @@ const App = (): React.JSX.Element => {
                 component={Login}
                 options={{headerShown: false}}
               />
+             <Stack.Screen
+                name="LoginWebview"
+                options={{ headerShown: false }}
+                component={LoginWebview}
+              >
+              </Stack.Screen>
+              <Stack.Screen
+                name="LoginRedirect"
+                options={{ headerShown: false }}
+              >
+                {(props) => (<LoginRedirect {...props} handleLoginSuccess={handleLoginSuccess} />)}
+              </Stack.Screen>
               <Stack.Screen
                 name="Input"
                 component={Input}
@@ -251,7 +267,6 @@ const App = (): React.JSX.Element => {
 
 const styles = StyleSheet.create({
   safeAreaView: {
-    //ios여서 끌어내림
     flex: 1,
     marginTop: -15,
   },

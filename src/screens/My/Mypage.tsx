@@ -2,16 +2,19 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import type {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation} from '@react-navigation/native';
+import { logoutKakao } from '../../api/memberAPI';
+import { withdrawal } from '../../api/memberAPI';
+import {Alert} from 'react-native';
 
 type RootStackParamList = {
   MyRunning: undefined;
   Input: undefined;
+  Login: undefined;
 };
 
 type MypageNavigationProp = StackNavigationProp<RootStackParamList>;
 
 const Mypage: React.FC = () => {
-  // useNavigation 훅을 MypageNavigationProp 타입으로 사용
   const navigation = useNavigation<MypageNavigationProp>();
 
   const handleButtonClick = () => {
@@ -20,6 +23,24 @@ const Mypage: React.FC = () => {
 
   const handleFixButtonClick = () => {
     navigation.navigate('Input');
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logoutKakao();
+      navigation.navigate('Login');
+    } catch (error) {
+      Alert.alert('로그아웃 오류', '로그아웃 중 문제가 발생했습니다.');
+    }
+  };
+
+  const handleWithdrawal = async () => {
+    try {
+      await withdrawal();
+      navigation.navigate('Login');
+    } catch (error) {
+      Alert.alert('회원탈퇴 오류', '회원 탈퇴 중 문제가 발생했습니다.');
+    }
   };
 
   return (
@@ -48,13 +69,13 @@ const Mypage: React.FC = () => {
 
         <View style={styles.horizontalLine} />
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleLogout}>
           <Text style={styles.logout}>로그아웃</Text>
         </TouchableOpacity>
 
         <View style={[styles.horizontalLine, {marginTop: -45}]} />
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={handleWithdrawal}>
           <Text style={styles.withdrawal}>회원 탈퇴</Text>
         </TouchableOpacity>
       </View>
