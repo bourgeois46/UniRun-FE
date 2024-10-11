@@ -9,6 +9,7 @@ type RootStackParamList = {
   Login: undefined;
   handleLoginSuccess: any;
   Home: undefined;
+  Input: undefined;
 };
 type LoginRedirectProps = {
     handleLoginSuccess: () => void;
@@ -33,7 +34,20 @@ const KakaoLoginRedirect: React.FC<LoginRedirectProps> = ({ handleLoginSuccess }
             
             handleLoginSuccess();
           } else {
-            throw new Error('백엔드 서버에서 인증에 실패했습니다.');
+            if (loginData.statusCode === 401){
+             Alert.alert(
+              '회원가입 필요',
+              '회원가입을 먼저 진행해주세요.',
+             );
+             navigation.navigate('Input');
+            } else if (loginData.statusCode === 500){
+              Alert.alert(
+                '서버 오류',
+                '서버에 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
+              );
+            } else {
+              throw new Error('백엔드 서버에서 인증에 실패했습니다.');
+            }
           }
         } catch (error) {
           const err = error as Error; 
