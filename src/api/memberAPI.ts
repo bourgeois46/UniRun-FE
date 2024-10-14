@@ -25,7 +25,7 @@ export const loginKakao = async (code: string): Promise<any> => {
   }): Promise<any> => {
     try {
       console.log('Sending user info to backend:', userInfo);
-      const response = await instance.post('/user/register', userInfo);
+      const response = await instance.patch('/user/register', userInfo);
       console.log('Received response from backend:', response.data);
       return response.data;
     } catch (error) {

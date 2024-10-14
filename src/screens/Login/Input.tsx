@@ -14,9 +14,10 @@ import {registerUserInfo} from '../../api/memberAPI.ts';
 import {Alert} from 'react-native';
 
 type RootStackParamList = {
+  HomeStack: undefined;
   Home: undefined;
+  Main: undefined;
 };
-
 
 const Input: React.FC<{}> = () => {
   const [selectedGender, setSelectedGender] = useState<string | null>(null);
@@ -31,7 +32,7 @@ const Input: React.FC<{}> = () => {
   const fixImage: ImageSourcePropType = require('../../../assets/fixbutton.png');
   const [isLogged, setIsLogged] = useState<boolean>(false);
 
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Home'>>();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Main'>>();
 
   const handleSignup = async () => {
     if (!nickname || !userUniName || !selectedGender || !birthYear || !height || !weight || !goal || !walletAddress) {
@@ -55,7 +56,7 @@ const Input: React.FC<{}> = () => {
 
       if (response.statusCode === 201) {
         Alert.alert('회원가입 성공', '회원 정보가 성공적으로 등록되었습니다.');
-        navigation.navigate('Home');
+        navigation.navigate('Main');    
       } else if (response.statusCode === 400) {
         Alert.alert('회원가입 실패', '회원가입에 실패하였습니다. 다시 시도해주세요.');
       }

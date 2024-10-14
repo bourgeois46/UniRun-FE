@@ -12,7 +12,18 @@ import type {StackNavigationProp} from '@react-navigation/stack';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 
 type RootStackParamList = {
-  Calendar: undefined;
+  Calendar: {
+    newEvent: {
+      type: string | null;
+      title: string;
+      crew: string;
+      date: string | undefined;
+      startTime: string | undefined;
+      endTime: string | undefined;
+      place: string;
+      audienceType: string | null;
+    };
+  };
 };
 
 const CreateRun: React.FC = () => {
