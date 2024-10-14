@@ -10,24 +10,58 @@ import {
   Image,
   ImageSourcePropType,
 } from 'react-native';
+import {registerUserInfo} from '../../api/memberAPI.ts';
+import {Alert} from 'react-native';
 
 type RootStackParamList = {
   Home: undefined;
 };
 
+
 const Input: React.FC<{}> = () => {
   const [selectedGender, setSelectedGender] = useState<string | null>(null);
+  const [nickname, setNickname] = useState<string>('');
+  const [userUniName, setUserUniName] = useState<string>('');
+  const [birthYear, setBirthYear] = useState<string>('');
+  const [height, setHeight] = useState<string>('');
+  const [weight, setWeight] = useState<string>('');
+  const [goal, setGoal] = useState<string>('');
+  const [walletAddress, setWalletAddress] = useState<string>('');
   const signupImage: ImageSourcePropType = require('../../../assets/signup.png');
   const fixImage: ImageSourcePropType = require('../../../assets/fixbutton.png');
-
-  // 로그인 연동 후 수정
   const [isLogged, setIsLogged] = useState<boolean>(false);
 
-  const navigation =
-    useNavigation<StackNavigationProp<RootStackParamList, 'Home'>>();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Home'>>();
 
-  const handleSignup = () => {
-    navigation.navigate('Home');
+  const handleSignup = async () => {
+    if (!nickname || !userUniName || !selectedGender || !birthYear || !height || !weight || !goal || !walletAddress) {
+      Alert.alert('모두 입력해주세요');
+      return;
+    }
+
+    const userInfo = {
+      nickname,
+      userUniName,
+      gender: selectedGender,
+      birthYear,
+      height: parseInt(height, 10),
+      weight: parseInt(weight, 10),
+      goal,
+      walletAddress,
+    };
+
+    try {
+      const response = await registerUserInfo(userInfo);
+
+      if (response.statusCode === 201) {
+        Alert.alert('회원가입 성공', '회원 정보가 성공적으로 등록되었습니다.');
+        navigation.navigate('Home');
+      } else if (response.statusCode === 400) {
+        Alert.alert('회원가입 실패', '회원가입에 실패하였습니다. 다시 시도해주세요.');
+      }
+    } catch (error) {
+      Alert.alert('회원가입 오류', '서버와 통신하는 중 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -40,6 +74,8 @@ const Input: React.FC<{}> = () => {
         <TextInput
           style={[styles.inputRow, styles.textInput]}
           placeholder="ex) 러닝덕, 단비"
+          value={nickname}
+          onChangeText={setNickname}
         />
       </View>
 
@@ -48,6 +84,8 @@ const Input: React.FC<{}> = () => {
         <TextInput
           style={[styles.inputRow, styles.textInput]}
           placeholder="ex) 동덕여자대학교"
+          value={userUniName}
+          onChangeText={setUserUniName}
         />
       </View>
 
@@ -57,13 +95,13 @@ const Input: React.FC<{}> = () => {
           <TouchableOpacity
             style={[
               styles.genderButton,
-              selectedGender === '여성' && styles.selectedGenderButton,
+              selectedGender === 'F' && styles.selectedGenderButton,
             ]}
-            onPress={() => setSelectedGender('여성')}>
+            onPress={() => setSelectedGender('F')}>
             <Text
               style={[
                 styles.genderButtonText,
-                selectedGender === '여성' && styles.selectedGenderButtonText,
+                selectedGender === 'F' && styles.selectedGenderButtonText,
               ]}>
               여성
             </Text>
@@ -71,13 +109,13 @@ const Input: React.FC<{}> = () => {
           <TouchableOpacity
             style={[
               styles.genderButton,
-              selectedGender === '남성' && styles.selectedGenderButton,
+              selectedGender === 'M' && styles.selectedGenderButton,
             ]}
-            onPress={() => setSelectedGender('남성')}>
+            onPress={() => setSelectedGender('M')}>
             <Text
               style={[
                 styles.genderButtonText,
-                selectedGender === '남성' && styles.selectedGenderButtonText,
+                selectedGender === 'M' && styles.selectedGenderButtonText,
               ]}>
               남성
             </Text>
@@ -92,6 +130,8 @@ const Input: React.FC<{}> = () => {
             <TextInput
               style={[styles.birthYearInput, styles.textInput]}
               keyboardType="numeric"
+              value={birthYear}
+              onChangeText={setBirthYear}
             />
           </View>
           <Text style={styles.coloredlabel}> 년도</Text>
@@ -105,6 +145,8 @@ const Input: React.FC<{}> = () => {
             <TextInput
               style={[styles.inputRow, styles.textInput]}
               keyboardType="numeric"
+              value={height}
+              onChangeText={setHeight}
             />
           </View>
           <Text style={styles.coloredlabel}> CM</Text>
@@ -118,6 +160,8 @@ const Input: React.FC<{}> = () => {
             <TextInput
               style={[styles.inputRow, styles.textInput]}
               keyboardType="numeric"
+              value={weight}
+              onChangeText={setWeight}
             />
           </View>
           <Text style={styles.coloredlabel}> KG</Text>
@@ -129,6 +173,8 @@ const Input: React.FC<{}> = () => {
         <TextInput
           style={[styles.textInput, styles.inputGoal]}
           placeholder="ex) 포기하지말고 꾸준히!"
+          value={goal}
+          onChangeText={setGoal}
         />
       </View>
 
@@ -136,6 +182,8 @@ const Input: React.FC<{}> = () => {
         <Text style={styles.label}>지갑 주소</Text>
         <TextInput
           style={[styles.textInput, styles.inputGoal]}
+          value={walletAddress}
+          onChangeText={setWalletAddress}
         />
       </View>
 

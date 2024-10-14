@@ -13,6 +13,27 @@ export const loginKakao = async (code: string): Promise<any> => {
     }
   };
 
+  export const registerUserInfo = async (userInfo: {
+    nickname: string;
+    userUniName: string;
+    gender: string;
+    birthYear: string;
+    height: number;
+    weight: number;
+    goal: string;
+    walletAddress: string;
+  }): Promise<any> => {
+    try {
+      console.log('Sending user info to backend:', userInfo);
+      const response = await instance.post('/user/register', userInfo);
+      console.log('Received response from backend:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('회원 정보 제출 에러:', error);
+      throw error;
+    }
+  };
+
 
 export const logoutKakao = async () => {
   try {

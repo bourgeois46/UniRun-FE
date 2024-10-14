@@ -16,7 +16,7 @@ type LoginRedirectProps = {
   };
 type LoginWebviewRouteProp = RouteProp<RootStackParamList, 'LoginWebview'>;
 
-const KakaoLoginRedirect: React.FC<LoginRedirectProps> = ({ handleLoginSuccess }) => {
+const LoginRedirect: React.FC<LoginRedirectProps> = ({ handleLoginSuccess }) => {
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     const route = useRoute<LoginWebviewRouteProp>();
     const code = route.params?.token;
@@ -30,9 +30,8 @@ const KakaoLoginRedirect: React.FC<LoginRedirectProps> = ({ handleLoginSuccess }
             Alert.alert(
               '로그인 성공',
               '카카오 로그인이 성공적으로 완료되었습니다.',
-            );
-            
-            handleLoginSuccess();
+            ); 
+            handleLoginSuccess();  
           } else {
             if (loginData.statusCode === 401){
              Alert.alert(
@@ -81,4 +80,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default KakaoLoginRedirect;
+export default LoginRedirect;
