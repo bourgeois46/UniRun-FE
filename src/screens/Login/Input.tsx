@@ -14,12 +14,16 @@ import {registerUserInfo} from '../../api/memberAPI.ts';
 import {Alert} from 'react-native';
 
 type RootStackParamList = {
-  HomeStack: undefined;
   Home: undefined;
+  Record: undefined;
+  Running: undefined;
   Main: undefined;
 };
+type InputProps = {
+  handleLoginSuccess: () => void; 
+};
 
-const Input: React.FC<{}> = () => {
+const Input: React.FC<InputProps> = ({handleLoginSuccess}) => {
   const [selectedGender, setSelectedGender] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string>('');
   const [userUniName, setUserUniName] = useState<string>('');
@@ -32,7 +36,7 @@ const Input: React.FC<{}> = () => {
   const fixImage: ImageSourcePropType = require('../../../assets/fixbutton.png');
   const [isLogged, setIsLogged] = useState<boolean>(false);
 
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Main'>>();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>(); 
 
   const handleSignup = async () => {
     if (!nickname || !userUniName || !selectedGender || !birthYear || !height || !weight || !goal || !walletAddress) {
@@ -54,10 +58,12 @@ const Input: React.FC<{}> = () => {
     try {
       const response = await registerUserInfo(userInfo);
 
-      if (response.statusCode === 201) {
+      if (response.data.status === 201) {
         Alert.alert('회원가입 성공', '회원 정보가 성공적으로 등록되었습니다.');
-        navigation.navigate('Main');    
-      } else if (response.statusCode === 400) {
+        handleLoginSuccess();  // 회원가입 성공 후 로그인 상태로 변경
+        navigation.navigate('Home');  
+        
+      } else if (response.data.status === 400) {
         Alert.alert('회원가입 실패', '회원가입에 실패하였습니다. 다시 시도해주세요.');
       }
     } catch (error) {

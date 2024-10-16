@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   Image,
@@ -6,12 +6,12 @@ import {
   TouchableOpacity,
   SafeAreaView,
 } from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Calendar from './src/screens/Calendar/Calendar';
 import CheckRun from './src/screens/Calendar/CheckRun';
@@ -22,7 +22,7 @@ import Nft from './src/screens/NFT/Nft';
 import Login from './src/screens/Login/Login';
 import Input from './src/screens/Login/Input';
 import Running from './src/screens/Home/Running';
-import Record from './src/screens/Home/Record';
+import Record from './src/screens/Home/Record';  // Record는 스택에서 사용
 import MyRunning from './src/screens/My/MyRunning';
 import LoginWebview from './src/components/LoginWebview';
 import LoginRedirect from './src/components/LoginRedirect';
@@ -36,7 +36,6 @@ type RootStackParamList = {
   LoginWebview: undefined;
   LoginRedirect: undefined;
   Input: undefined;
-  Home: undefined;
   Calendar: undefined;
   CheckRun: undefined;
   CreateRun: undefined;
@@ -45,6 +44,7 @@ type RootStackParamList = {
   Record: undefined;
   Mypage: undefined;
   MyRunning: undefined;
+  Home: undefined;
 };
 
 type HeaderProps = {
@@ -52,7 +52,7 @@ type HeaderProps = {
   back?: boolean;
 };
 
-const Header: React.FC<HeaderProps> = ({navigation, back}) => {
+const Header: React.FC<HeaderProps> = ({ navigation, back }) => {
   return (
     <View style={styles.header}>
       {back && (
@@ -80,40 +80,41 @@ const HomeStackScreen = () => (
     <HomeStack.Screen
       name="Home"
       component={Home}
-      options={{headerShown: false}}
-    />
-    <HomeStack.Screen
-      name="Record"
-      component={Record}
-      options={{headerShown: false}}
+      options={{ headerShown: false }}
     />
     <HomeStack.Screen
       name="Running"
       component={Running}
-      options={{headerShown: false}}
+      options={{ headerShown: false }}
+    />
+    <HomeStack.Screen
+      name="Record"
+      component={Record}
+      options={{ headerShown: false }}
     />
   </HomeStack.Navigator>
 );
 
 const MyStack = createNativeStackNavigator();
 
-const MyStackScreen = () => (
+const MyStackScreen = ({ handleLoginSuccess }: { handleLoginSuccess: () => void }) => (
   <MyStack.Navigator>
     <MyStack.Screen
       name="Mypage"
       component={Mypage}
-      options={{headerShown: false}}
+      options={{ headerShown: false }}
     />
     <MyStack.Screen
       name="MyRunning"
       component={MyRunning}
-      options={{headerShown: false}}
+      options={{ headerShown: false }}
     />
     <MyStack.Screen
       name="Input"
-      component={Input}
-      options={{headerShown: false}}
-    />
+      options={{ headerShown: false }}
+    >
+      {props => <Input {...props} handleLoginSuccess={handleLoginSuccess} />}
+    </MyStack.Screen>
   </MyStack.Navigator>
 );
 
@@ -124,22 +125,22 @@ const CalStackScreen = () => (
     <Calstack.Screen
       name="Calendar"
       component={Calendar}
-      options={{headerShown: false}}
+      options={{ headerShown: false }}
     />
     <Calstack.Screen
       name="CheckRun"
       component={CheckRun}
-      options={{headerShown: false}}
+      options={{ headerShown: false }}
     />
     <Calstack.Screen
       name="CreateRun"
       component={CreateRun}
-      options={{headerShown: false}}
+      options={{ headerShown: false }}
     />
   </Calstack.Navigator>
 );
 
-const MainScreen = () => {
+const MainScreen = ({ handleLoginSuccess }: { handleLoginSuccess: () => void }) => {
   return (
     <Tab.Navigator
       initialRouteName="HomeStack"
@@ -171,7 +172,7 @@ const MainScreen = () => {
         options={{
           headerShown: false,
           tabBarLabel: '',
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <Image
               style={styles.tabIcon}
               source={require('./assets/calendar.png')}
@@ -185,7 +186,7 @@ const MainScreen = () => {
         options={{
           headerShown: false,
           tabBarLabel: '',
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <Image
               style={styles.tabIcon}
               source={require('./assets/nft.png')}
@@ -195,29 +196,34 @@ const MainScreen = () => {
       />
       <Tab.Screen
         name="MyStack"
-        component={MyStackScreen}
         options={{
           headerShown: false,
           tabBarLabel: '',
-          tabBarIcon: ({focused}) => (
+          tabBarIcon: ({ focused }) => (
             <Image style={styles.tabIcon} source={require('./assets/my.png')} />
           ),
-        }}
-      />
+        }}>
+        {props => <MyStackScreen {...props} handleLoginSuccess={handleLoginSuccess} />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 };
 
 const App = (): React.JSX.Element => {
-  const [isLogged, setIsLogged] = useState(false); //true -> 로그인된 상태, false -> 로그인 전 상태
+  const [isLogged, setIsLogged] = useState(false); // true -> 로그인된 상태, false -> 로그인 전 상태
 
   const handleLoginSuccess = () => {
+    console.log('로그인 성공 - isLogged를 true로 변경');
     setIsLogged(true);
   };
 
   const handleLogoutSuccess = () => {
     setIsLogged(false);
   };
+
+  useEffect(() => {
+    console.log('현재 isLogged 상태:', isLogged); // 상태 변경 확인을 위한 로그
+  }, [isLogged]);
 
   return (
     <NavigationContainer>
@@ -227,10 +233,15 @@ const App = (): React.JSX.Element => {
             <>
               <Stack.Screen
                 name="Main"
-                component={MainScreen}
-                options={({navigation}) => ({
+                options={({ navigation }) => ({
                   header: () => <Header navigation={navigation} back={true} />,
-                })}
+                })}>
+                {props => <MainScreen {...props} handleLoginSuccess={handleLoginSuccess} />}
+              </Stack.Screen>
+              <Stack.Screen
+                name="Home"
+                component={Home}
+                options={{ headerShown: false }}
               />
             </>
           ) : (
@@ -238,14 +249,13 @@ const App = (): React.JSX.Element => {
               <Stack.Screen
                 name="Login"
                 component={Login}
-                options={{headerShown: false}}
+                options={{ headerShown: false }}
               />
-             <Stack.Screen
+              <Stack.Screen
                 name="LoginWebview"
                 options={{ headerShown: false }}
                 component={LoginWebview}
-              >
-              </Stack.Screen>
+              />
               <Stack.Screen
                 name="LoginRedirect"
                 options={{ headerShown: false }}
@@ -254,9 +264,10 @@ const App = (): React.JSX.Element => {
               </Stack.Screen>
               <Stack.Screen
                 name="Input"
-                component={Input}
-                options={{headerShown: false}}
-              />
+                options={{ headerShown: false }}
+              >
+                {(props) => (<Input {...props} handleLoginSuccess={handleLoginSuccess} />)}
+              </Stack.Screen>
             </>
           )}
         </Stack.Navigator>

@@ -4,9 +4,9 @@ import {Alert} from 'react-native';
 export const loginKakao = async (code: string): Promise<any> => {
     try {
       console.log('Sending code to backend:', code);
-      const response = await instance.post('/user/auth', {code: code});
+      const response = await instance.post('/user/auth', {code: code}, { withCredentials: true, });
       console.log('Received response from backend:', response.data);
-      return response.data;
+      return response; // header에 접근 가능하도록 전체 응답 반환
     } catch (error) {
       console.error('카카오 로그인 에러:', error);
       throw error;
@@ -27,7 +27,7 @@ export const loginKakao = async (code: string): Promise<any> => {
       console.log('Sending user info to backend:', userInfo);
       const response = await instance.patch('/user/register', userInfo);
       console.log('Received response from backend:', response.data);
-      return response.data;
+      return response;
     } catch (error) {
       console.error('회원 정보 제출 에러:', error);
       throw error;
