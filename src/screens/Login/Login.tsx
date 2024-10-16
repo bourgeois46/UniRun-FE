@@ -6,6 +6,8 @@ import type {StackNavigationProp} from '@react-navigation/stack';
 type RootStackParamList = {
   Login: undefined;
   Input: undefined;
+  LoginWebview: undefined;
+  LoginRedirect: undefined;
 };
 
 const Login: React.FC<{}> = () => {
@@ -13,7 +15,7 @@ const Login: React.FC<{}> = () => {
     useNavigation<StackNavigationProp<RootStackParamList, 'Login'>>();
 
   const handleLogin = () => {
-    navigation.navigate('Input');
+    navigation.navigate('LoginWebview');
   };
 
   return (
