@@ -1,9 +1,11 @@
-import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
+import {View, Text, StyleSheet, Image} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useRoute} from '@react-navigation/native';
 import type {RouteProp} from '@react-navigation/native';
 import RunningDoneModal from '../../modal/RunningDoneModal';
 import CurrentDate from '../../components/CurrentDate';
+import MapView, {Marker, PROVIDER_GOOGLE, Region} from 'react-native-maps';
+import Geolocation from 'react-native-geolocation-service';
 
 type RootStackParamList = {
   Running: undefined;
@@ -13,6 +15,8 @@ type RootStackParamList = {
 const Record: React.FC = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'Record'>>();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [region, setRegion] = useState<Region | null>(null);
+  const [currentLocation, setCurrentLocation] = useState<any>(null); // 현재 위치 상태
 
   // useRoute로 전달된 파라미터가 true -> 모달 띄움
   useEffect(() => {
@@ -25,12 +29,53 @@ const Record: React.FC = () => {
     setIsModalVisible(false);
   };
 
+  useEffect(() => {
+    const getLocation = () => {
+      Geolocation.getCurrentPosition(
+        (position) => {
+          const {latitude, longitude} = position.coords;
+
+          // 현재 위치를 region과 currentLocation에 설정
+          setRegion({
+            latitude: latitude,
+            longitude: longitude,
+            latitudeDelta: 0.01, 
+            longitudeDelta: 0.01,
+          });
+          setCurrentLocation({
+            latitude: latitude,
+            longitude: longitude,
+          });
+        },
+        (error) => {
+          console.error(error.code, error.message);
+        },
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      );
+    };
+    getLocation();
+  }, []);
+
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../../../assets/runmap.png')}
-        style={styles.mapimage}
-      />
+      <View style={styles.mapContainer}>
+        {region && ( 
+          <MapView
+            style={styles.map}
+            provider={PROVIDER_GOOGLE}
+            region={region} 
+            showsUserLocation={true}
+          >
+            {currentLocation && (
+              <Marker
+                coordinate={currentLocation} 
+                title="현재 위치"
+                description="여기가 현재 위치입니다."
+              />
+            )}
+          </MapView>
+        )}
+      </View>
       <View style={styles.gridContainer}>
         <View style={styles.gridItem}>
           <Image
@@ -56,7 +101,7 @@ const Record: React.FC = () => {
             style={styles.icon}
           />
           <View style={styles.valueContainer}>
-            <Text style={styles.valueNumber}>3.75</Text>
+            <Text style={styles.valueNumber}>0</Text>
             <Text style={styles.valueUnit}>km</Text>
           </View>
         </View>
@@ -66,7 +111,7 @@ const Record: React.FC = () => {
             style={styles.icon}
           />
           <View style={styles.valueContainer}>
-            <Text style={styles.valueNumber}>20</Text>
+            <Text style={styles.valueNumber}>0</Text>
             <Text style={styles.valueUnit}>m</Text>
           </View>
         </View>
@@ -86,10 +131,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-  },
-  mapimage: {
-    width: 392,
-    height: 370,
   },
   modalContainer: {
     flex: 1,
@@ -130,14 +171,12 @@ const styles = StyleSheet.create({
     width: '90%',
     height: 300,
     marginTop: 20,
-    //borderWidth: 1,
   },
   gridItem: {
     width: '45%',
     height: '45%',
     justifyContent: 'center',
     alignItems: 'center',
-    //borderWidth: 1,
     margin: '2.5%',
   },
   icon: {
@@ -201,6 +240,13 @@ const styles = StyleSheet.create({
     borderColor: '#D9D9D9',
     marginHorizontal: 10,
   },
+  mapContainer: {
+    width: '100%',
+    height: '60%',
+  },
+  map: {
+    flex: 1,
+  }
 });
 
 export default Record;

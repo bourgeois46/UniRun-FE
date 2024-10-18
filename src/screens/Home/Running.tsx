@@ -2,6 +2,8 @@ import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import type {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation} from '@react-navigation/native';
+import MapView, {Marker, PROVIDER_GOOGLE, Region} from 'react-native-maps';
+import Geolocation from 'react-native-geolocation-service';
 
 type RootStackParamList = {
   Record: {showModal: boolean; time: string };
@@ -9,6 +11,9 @@ type RootStackParamList = {
 
 const Running: React.FC = () => {
   const [isPaused, setIsPaused] = useState<boolean>(false);
+  const [region, setRegion] = useState<Region | null>(null);
+  const [currentLocation, setCurrentLocation] = useState<any>(null); // 현재 위치 상태
+  
   const navigation =
     useNavigation<StackNavigationProp<RootStackParamList, 'Record'>>();
   const [seconds, setSeconds] = useState<number>(0);
@@ -17,30 +22,22 @@ const Running: React.FC = () => {
     setIsPaused(!isPaused);
   };
 
-  // 모달을 열면서 화면 이동
-  // 모달 닫은 후 Record 화면
   const handleCombinedPress = () => {
     const formattedTime = formatTime(seconds);
-    navigation.navigate('Record', { showModal: true, time: formattedTime }); // 측정된 시간 전달
+    navigation.navigate('Record', { showModal: true, time: formattedTime });
   };
 
   useEffect(() => {
-    let interval: ReturnType<typeof setInterval> | null = null; // setInterval가 반환하는 id 저장 -> clearInterval 이용해서 타이머 멈춤
-    // ReturnType : number
+    let interval: ReturnType<typeof setInterval> | null = null;
 
-    // 타이머 시작
     if (!isPaused) {
       interval = setInterval(() => {
         setSeconds((prevSeconds) => prevSeconds + 1);
-      }, 1000); // 1초
-    } 
-
-    // 타이머 정지
-    else if (isPaused && interval) {
+      }, 1000);
+    } else if (isPaused && interval) {
       clearInterval(interval);
     }
 
-    // 클린업 함수 -> 컴포넌트 언파운트, useEffect 재실행 전에 호출
     return () => {
       if (interval) {
         clearInterval(interval);
@@ -55,12 +52,55 @@ const Running: React.FC = () => {
     return `${getHours}:${getMinutes}:${getSeconds}`;
   };
 
+  // 현재 위치 가져오기
+  useEffect(() => {
+    const getLocation = () => {
+      Geolocation.getCurrentPosition(
+        (position) => {
+          const {latitude, longitude} = position.coords;
+
+          // 현재 위치를 region과 currentLocation에 설정
+          setRegion({
+            latitude: latitude,
+            longitude: longitude,
+            latitudeDelta: 0.01, 
+            longitudeDelta: 0.01,
+          });
+          setCurrentLocation({
+            latitude: latitude,
+            longitude: longitude,
+          });
+        },
+        (error) => {
+          console.error(error.code, error.message);
+        },
+        {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
+      );
+    };
+    getLocation();
+  }, []);
+
   return (
     <View style={styles.container}>
-      <Image
-        source={require('../../../assets/runmap.png')}
-        style={styles.mapimage}
-      />
+      <View style={styles.mapContainer}>
+        {region && ( 
+          <MapView
+            style={styles.map}
+            provider={PROVIDER_GOOGLE}
+            region={region} // 업데이트된 region 사용
+            showsUserLocation={true}
+          >
+            {currentLocation && (
+              <Marker
+                coordinate={currentLocation} // 현재 위치에 마커 표시
+                title="현재 위치"
+                description="여기가 현재 위치입니다."
+              />
+            )}
+          </MapView>
+        )}
+      </View>
+
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={handleButtonClick}>
           <Image
@@ -91,6 +131,7 @@ const Running: React.FC = () => {
           style={[styles.commonMargin, {top: 2}]}
         />
       </View>
+
       <View style={styles.textContainer}>
         <Text style={styles.secondText}>{formatTime(seconds)}</Text>
         <View style={styles.kmContainer}>
@@ -108,10 +149,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fff',
-  },
-  mapimage: {
-    width: 392,
-    height: 370,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -155,6 +192,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
+  mapContainer: {
+    width: '100%',
+    height: '60%',
+  },
+  map: {
+    flex: 1,
+  }
 });
 
 export default Running;
