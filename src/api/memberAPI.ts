@@ -80,3 +80,24 @@ export const withdrawalKakao = async (): Promise<any> => {
     );
   }
 };
+
+export const userInfoCheck = async (): Promise<any> => {
+  try {
+    const response = await instance.get('/user');
+
+    console.log('Received response from backend:', response.data);
+
+    if (response.data && response.data.status === 200) {
+      return response.data;
+    } else if (response.data && response.data.status === 404) {
+      Alert.alert('사용자 없음', '해당 사용자를 찾을 수 없습니다.');
+    }
+  } catch (error) {
+    const err = error as Error; 
+    console.error('회원 정보 조회 에러:', error);
+    Alert.alert(
+      '회원 정보 조회 에러',
+      err.message || '회원 정보 조회 중 오류가 발생했습니다.',
+    );
+  }
+};

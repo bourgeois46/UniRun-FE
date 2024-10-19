@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
 import {
@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import {registerUserInfo} from '../../api/memberAPI.ts';
 import {Alert} from 'react-native';
+import { userInfoCheck } from '../../api/memberAPI.ts';
 
 type RootStackParamList = {
   Home: undefined;
@@ -38,6 +39,32 @@ const Input: React.FC<InputProps> = ({handleLoginSuccess, isLogged}) => {
   const fixImage: ImageSourcePropType = require('../../../assets/fixbutton.png');
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>(); 
+
+  // 회원 정보 조회
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (isLogged) {
+        try {
+          const response = await userInfoCheck();
+          if (response && response.data) {
+            // 기존 정보가 있으면 해당 상태 업데이트
+            setNickname(response.data.nickname);
+            setUserUniName(response.data.userUniName);
+            setSelectedGender(response.data.gender);
+            setBirthYear(response.data.birthYear);
+            setHeight(response.data.height.toString());
+            setWeight(response.data.weight.toString());
+            setGoal(response.data.goal);
+            setWalletAddress(response.data.walletAddress);
+          }
+        } catch (error) {
+          console.error('회원 정보 조회 중 오류:', error);
+        }
+      }
+    };
+
+    fetchUserInfo(); 
+  }, [isLogged]);
 
   const handleSignup = async () => {
     if (!nickname || !userUniName || !selectedGender || !birthYear || !height || !weight || !goal || !walletAddress) {
@@ -73,7 +100,14 @@ const Input: React.FC<InputProps> = ({handleLoginSuccess, isLogged}) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView 
+       style={styles.container}
+        contentContainerStyle={{ flexGrow: 1 }} 
+        persistentScrollbar={true}  
+        keyboardShouldPersistTaps="handled"  
+        contentInsetAdjustmentBehavior="automatic"
+        scrollEnabled={true}
+      >
       <Text style={styles.title}>회원 정보 입력하기</Text>
       <Text style={styles.subtitle}>간단한 정보를 입력해주세요</Text>
 
@@ -176,20 +210,20 @@ const Input: React.FC<InputProps> = ({handleLoginSuccess, isLogged}) => {
         </View>
       </View>
 
-      <View style={styles.formCol}>
+      <View style={styles.formRow}>
         <Text style={styles.label}>목표 설정</Text>
         <TextInput
-          style={[styles.textInput, styles.inputGoal]}
+          style={[styles.textInput, styles.inputRow]}
           placeholder="ex) 포기하지말고 꾸준히!"
           value={goal}
           onChangeText={setGoal}
         />
       </View>
 
-      <View style={styles.formCol}>
+      <View style={styles.formRow}>
         <Text style={styles.label}>지갑 주소</Text>
         <TextInput
-          style={[styles.textInput, styles.inputGoal]}
+          style={[styles.textInput, styles.inputRow]}
           value={walletAddress}
           onChangeText={setWalletAddress}
         />
@@ -323,7 +357,7 @@ const styles = StyleSheet.create({
   },
   signupButton: {
     alignItems: 'center',
-    marginTop: -10,
+    marginTop: 20,
   },
   signupButtonText: {
     color: 'white',
