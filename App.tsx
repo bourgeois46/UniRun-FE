@@ -97,7 +97,10 @@ const HomeStackScreen = () => (
 
 const MyStack = createNativeStackNavigator();
 
-const MyStackScreen = ({ handleLoginSuccess, handleLogoutSuccess }: { handleLoginSuccess: () => void, handleLogoutSuccess: () => void }) => (
+const MyStackScreen = ({ handleLoginSuccess, handleLogoutSuccess, isLogged }: { 
+  handleLoginSuccess: () => void, 
+  handleLogoutSuccess: () => void, 
+  isLogged: boolean }) => (
   <MyStack.Navigator>
      <MyStack.Screen
       name="Mypage"
@@ -114,7 +117,7 @@ const MyStackScreen = ({ handleLoginSuccess, handleLogoutSuccess }: { handleLogi
       name="Input"
       options={{ headerShown: false }}
     >
-      {props => <Input {...props} handleLoginSuccess={handleLoginSuccess} />}
+      {props => <Input {...props} handleLoginSuccess={handleLoginSuccess} isLogged={isLogged} />}
     </MyStack.Screen>
   </MyStack.Navigator>
 );
@@ -141,7 +144,11 @@ const CalStackScreen = () => (
   </Calstack.Navigator>
 );
 
-const MainScreen = ({ handleLoginSuccess, handleLogoutSuccess}: { handleLoginSuccess: () => void, handleLogoutSuccess: () => void}) => {
+const MainScreen = ({ handleLoginSuccess, handleLogoutSuccess, isLogged}: { 
+  handleLoginSuccess: () => void, 
+  handleLogoutSuccess: () => void,
+  isLogged: boolean
+}) => {
   return (
     <Tab.Navigator
       initialRouteName="HomeStack"
@@ -209,6 +216,7 @@ const MainScreen = ({ handleLoginSuccess, handleLogoutSuccess}: { handleLoginSuc
             {...props} 
             handleLoginSuccess={handleLoginSuccess} 
             handleLogoutSuccess={handleLogoutSuccess} 
+            isLogged={isLogged}
           />
         )}
       </Tab.Screen>
@@ -218,14 +226,17 @@ const MainScreen = ({ handleLoginSuccess, handleLogoutSuccess}: { handleLoginSuc
 
 const App = (): React.JSX.Element => {
   const [isLogged, setIsLogged] = useState(false); // true -> 로그인된 상태, false -> 로그인 전 상태
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   const handleLoginSuccess = () => {
     console.log('로그인 성공 - isLogged를 true로 변경');
     setIsLogged(true);
+    setIsInitialLoad(false); 
   };
 
   const handleLogoutSuccess = () => {
     setIsLogged(false);
+    setIsInitialLoad(true);
   };
 
   useEffect(() => {
@@ -243,13 +254,15 @@ const App = (): React.JSX.Element => {
                 options={({ navigation }) => ({
                   header: () => <Header navigation={navigation} back={true} />,
                 })}>
-                {props => <MainScreen {...props} handleLoginSuccess={handleLoginSuccess} handleLogoutSuccess={handleLogoutSuccess} />}
+                {props => (
+                  <MainScreen
+                    {...props}
+                    handleLoginSuccess={handleLoginSuccess}
+                    handleLogoutSuccess={handleLogoutSuccess}
+                    isLogged={isLogged}
+                  />
+                )}
               </Stack.Screen>
-              <Stack.Screen
-                name="Home"
-                component={Home}
-                options={{ headerShown: false }}
-              />
             </>
           ) : (
             <>
@@ -273,7 +286,7 @@ const App = (): React.JSX.Element => {
                 name="Input"
                 options={{ headerShown: false }}
               >
-                {(props) => (<Input {...props} handleLoginSuccess={handleLoginSuccess} />)}
+                {(props) => (<Input {...props} handleLoginSuccess={handleLoginSuccess} isLogged={isLogged}/>)}
               </Stack.Screen>
             </>
           )}

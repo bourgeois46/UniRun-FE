@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
 import {
@@ -9,9 +9,10 @@ import {
   TouchableOpacity,
   Image,
   ImageSourcePropType,
+  ScrollView,
 } from 'react-native';
-import {registerUserInfo} from '../../api/memberAPI.ts';
 import {Alert} from 'react-native';
+import { registerUserInfo, userInfoCheck, userInfoUpdate } from '../../api/memberAPI.ts';
 
 type RootStackParamList = {
   Home: undefined;
@@ -20,10 +21,11 @@ type RootStackParamList = {
   Main: undefined;
 };
 type InputProps = {
-  handleLoginSuccess: () => void; 
+  handleLoginSuccess: () => void;
+  isLogged: boolean; 
 };
 
-const Input: React.FC<InputProps> = ({handleLoginSuccess}) => {
+const Input: React.FC<InputProps> = ({handleLoginSuccess, isLogged}) => {
   const [selectedGender, setSelectedGender] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string>('');
   const [userUniName, setUserUniName] = useState<string>('');
@@ -34,9 +36,67 @@ const Input: React.FC<InputProps> = ({handleLoginSuccess}) => {
   const [walletAddress, setWalletAddress] = useState<string>('');
   const signupImage: ImageSourcePropType = require('../../../assets/signup.png');
   const fixImage: ImageSourcePropType = require('../../../assets/fixbutton.png');
-  const [isLogged, setIsLogged] = useState<boolean>(false);
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>(); 
+
+  // 회원 정보 조회
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (isLogged) {
+        try {
+          const response = await userInfoCheck();
+          if (response && response.data) {
+            // 기존 정보가 있으면 해당 상태 업데이트
+            setNickname(response.data.nickname);
+            setUserUniName(response.data.userUniName);
+            setSelectedGender(response.data.gender);
+            setBirthYear(response.data.birthYear);
+            setHeight(response.data.height.toString());
+            setWeight(response.data.weight.toString());
+            setGoal(response.data.goal);
+            setWalletAddress(response.data.walletAddress);
+          }
+        } catch (error) {
+          console.error('회원 정보 조회 중 오류:', error);
+        }
+      }
+    };
+
+    fetchUserInfo(); 
+  }, [isLogged]);
+
+ // 회원 정보 수정
+ const handleUpdateUserInfo = async () => {
+  if (!nickname || !userUniName || !selectedGender || !birthYear || !height || !weight || !goal || !walletAddress) {
+    Alert.alert('모두 입력해주세요');
+    return;
+  }
+
+  const updatedUserInfo = {
+    nickname,
+    userUniName,
+    gender: selectedGender,
+    birthYear,
+    height: parseInt(height, 10),
+    weight: parseInt(weight, 10),
+    goal,
+    walletAddress,
+  };
+
+  try {
+    const response = await userInfoUpdate(updatedUserInfo);
+    if (response && response.status === 201) { // 회원가입 처리가 되므로 201로 설정해야 됨
+      Alert.alert('회원 정보 수정 성공', '회원 정보가 성공적으로 수정되었습니다.');
+      handleLoginSuccess(); // 성공 시 로그인 상태 변경 가능
+      navigation.navigate('Home');
+    } else {
+      Alert.alert('수정 실패', '회원 정보 수정에 실패하였습니다.');
+    }
+  } catch (error) {
+    Alert.alert('회원 정보 수정 오류', '서버와 통신하는 중 오류가 발생했습니다.');
+  }
+};
+
 
   const handleSignup = async () => {
     if (!nickname || !userUniName || !selectedGender || !birthYear || !height || !weight || !goal || !walletAddress) {
@@ -72,7 +132,14 @@ const Input: React.FC<InputProps> = ({handleLoginSuccess}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView 
+       style={styles.container}
+        contentContainerStyle={{ flexGrow: 1 }} 
+        persistentScrollbar={true}  
+        keyboardShouldPersistTaps="handled"  
+        contentInsetAdjustmentBehavior="automatic"
+        scrollEnabled={true}
+      >
       <Text style={styles.title}>회원 정보 입력하기</Text>
       <Text style={styles.subtitle}>간단한 정보를 입력해주세요</Text>
 
@@ -175,32 +242,32 @@ const Input: React.FC<InputProps> = ({handleLoginSuccess}) => {
         </View>
       </View>
 
-      <View style={styles.formCol}>
+      <View style={styles.formRow}>
         <Text style={styles.label}>목표 설정</Text>
         <TextInput
-          style={[styles.textInput, styles.inputGoal]}
+          style={[styles.textInput, styles.inputRow]}
           placeholder="ex) 포기하지말고 꾸준히!"
           value={goal}
           onChangeText={setGoal}
         />
       </View>
 
-      <View style={styles.formCol}>
+      <View style={styles.formRow}>
         <Text style={styles.label}>지갑 주소</Text>
         <TextInput
-          style={[styles.textInput, styles.inputGoal]}
+          style={[styles.textInput, styles.inputRow]}
           value={walletAddress}
           onChangeText={setWalletAddress}
         />
       </View>
 
-      <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
+      <TouchableOpacity style={styles.signupButton} onPress={isLogged ? handleUpdateUserInfo : handleSignup}>
         <Image
           style={[styles.lastButton, isLogged && styles.fixImageStyle]}
           source={isLogged ? fixImage : signupImage}
         />
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -322,7 +389,7 @@ const styles = StyleSheet.create({
   },
   signupButton: {
     alignItems: 'center',
-    marginTop: -10,
+    marginTop: 20,
   },
   signupButtonText: {
     color: 'white',
