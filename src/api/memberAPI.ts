@@ -1,5 +1,6 @@
 import instance from "./axiosInstance"
 import {Alert} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const loginKakao = async (code: string): Promise<any> => {
     try {
@@ -34,18 +35,19 @@ export const loginKakao = async (code: string): Promise<any> => {
     }
   };
 
-
-export const logoutKakao = async () => {
+export const logoutKakao = async (): Promise<any> => {
   try {
     const response = await instance.delete('/user/logout');
 
     console.log('Received response from backend:', response.data);
 
-    if (response.data && response.data.success) {
+    if (response.data && response.data.status === 200) {
+      await AsyncStorage.removeItem('SESSIONID');
       Alert.alert('로그아웃 되었습니다.');
     } else {
       throw new Error('로그아웃 실패');
     }
+    return response;
   } catch (error) {
     const err = error as Error; 
     console.error('Logout Error:', error);
@@ -56,17 +58,19 @@ export const logoutKakao = async () => {
   }
 };
 
-export const withdrawal = async () => {
+export const withdrawalKakao = async (): Promise<any> => {
   try {
     const response = await instance.delete('/user/delete');
 
     console.log('Received response from backend:', response.data);
 
-    if (response.data && response.data.success) {
+    if (response.data && response.data.status === 200) {
+      await AsyncStorage.removeItem('SESSIONID');
       Alert.alert('회원탈퇴 되었습니다.');
     } else {
       throw new Error('회원탈퇴 실패');
     }
+    return response;
   } catch (error) {
     const err = error as Error; 
     console.error('Withdrawal Error:', error);
