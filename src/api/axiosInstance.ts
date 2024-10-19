@@ -12,7 +12,7 @@ const saveSessionCookie = async (cookieValue:string) => {
     console.log('저장할 쿠키 값:', cookieValue);
     await AsyncStorage.setItem('SESSIONID', cookieValue);
     console.log('쿠키 저장됨:', cookieValue);
-    console.log('쿠키 저장 성공:', await AsyncStorage.getItem('SESSIONID')); // 쿠키가 제대로 저장되었는지 확인
+    console.log('쿠키 저장 성공:', await AsyncStorage.getItem('SESSIONID')); 
   } catch (error) {
     console.error('쿠키 저장 중 오류:', error);
   }

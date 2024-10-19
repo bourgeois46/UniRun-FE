@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import type {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation} from '@react-navigation/native';
 import { logoutKakao } from '../../api/memberAPI';
-import { withdrawal } from '../../api/memberAPI';
+import { withdrawalKakao } from '../../api/memberAPI';
 import {Alert} from 'react-native';
 
 type RootStackParamList = {
@@ -43,10 +43,16 @@ const Mypage: React.FC<{ handleLogoutSuccess: () => void }> = ({ handleLogoutSuc
 
   const handleWithdrawal = async () => {
     try {
-      await withdrawal();
-      navigation.navigate('Login');
+      const response = await withdrawalKakao(); 
+      if (response && response.status === 200) { 
+        handleLogoutSuccess();
+        navigation.navigate('Login');
+      }  else if (response && response.status === 500) {
+        Alert.alert('회원탈퇴 오류', response.message || '회원탈퇴 중 문제가 발생했습니다.');
+      }
     } catch (error) {
-      Alert.alert('회원탈퇴 오류', '회원 탈퇴 중 문제가 발생했습니다.');
+      Alert.alert('회원탈퇴 오류', '회원탈퇴 중 문제가 발생했습니다.');
+      console.error('Logout Error:', error);
     }
   };
 
