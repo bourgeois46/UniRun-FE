@@ -218,14 +218,17 @@ const MainScreen = ({ handleLoginSuccess, handleLogoutSuccess}: { handleLoginSuc
 
 const App = (): React.JSX.Element => {
   const [isLogged, setIsLogged] = useState(false); // true -> 로그인된 상태, false -> 로그인 전 상태
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   const handleLoginSuccess = () => {
     console.log('로그인 성공 - isLogged를 true로 변경');
     setIsLogged(true);
+    setIsInitialLoad(false); 
   };
 
   const handleLogoutSuccess = () => {
     setIsLogged(false);
+    setIsInitialLoad(true);
   };
 
   useEffect(() => {
@@ -243,13 +246,14 @@ const App = (): React.JSX.Element => {
                 options={({ navigation }) => ({
                   header: () => <Header navigation={navigation} back={true} />,
                 })}>
-                {props => <MainScreen {...props} handleLoginSuccess={handleLoginSuccess} handleLogoutSuccess={handleLogoutSuccess} />}
+                {props => (
+                  <MainScreen
+                    {...props}
+                    handleLoginSuccess={handleLoginSuccess}
+                    handleLogoutSuccess={handleLogoutSuccess}
+                  />
+                )}
               </Stack.Screen>
-              <Stack.Screen
-                name="Home"
-                component={Home}
-                options={{ headerShown: false }}
-              />
             </>
           ) : (
             <>
