@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Image,
   ImageSourcePropType,
+  ScrollView,
 } from 'react-native';
 import {registerUserInfo} from '../../api/memberAPI.ts';
 import {Alert} from 'react-native';
@@ -20,10 +21,11 @@ type RootStackParamList = {
   Main: undefined;
 };
 type InputProps = {
-  handleLoginSuccess: () => void; 
+  handleLoginSuccess: () => void;
+  isLogged: boolean; 
 };
 
-const Input: React.FC<InputProps> = ({handleLoginSuccess}) => {
+const Input: React.FC<InputProps> = ({handleLoginSuccess, isLogged}) => {
   const [selectedGender, setSelectedGender] = useState<string | null>(null);
   const [nickname, setNickname] = useState<string>('');
   const [userUniName, setUserUniName] = useState<string>('');
@@ -34,7 +36,6 @@ const Input: React.FC<InputProps> = ({handleLoginSuccess}) => {
   const [walletAddress, setWalletAddress] = useState<string>('');
   const signupImage: ImageSourcePropType = require('../../../assets/signup.png');
   const fixImage: ImageSourcePropType = require('../../../assets/fixbutton.png');
-  const [isLogged, setIsLogged] = useState<boolean>(false);
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>(); 
 
@@ -72,7 +73,7 @@ const Input: React.FC<InputProps> = ({handleLoginSuccess}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.title}>회원 정보 입력하기</Text>
       <Text style={styles.subtitle}>간단한 정보를 입력해주세요</Text>
 
@@ -200,7 +201,7 @@ const Input: React.FC<InputProps> = ({handleLoginSuccess}) => {
           source={isLogged ? fixImage : signupImage}
         />
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 

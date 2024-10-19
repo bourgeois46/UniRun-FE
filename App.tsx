@@ -97,7 +97,10 @@ const HomeStackScreen = () => (
 
 const MyStack = createNativeStackNavigator();
 
-const MyStackScreen = ({ handleLoginSuccess, handleLogoutSuccess }: { handleLoginSuccess: () => void, handleLogoutSuccess: () => void }) => (
+const MyStackScreen = ({ handleLoginSuccess, handleLogoutSuccess, isLogged }: { 
+  handleLoginSuccess: () => void, 
+  handleLogoutSuccess: () => void, 
+  isLogged: boolean }) => (
   <MyStack.Navigator>
      <MyStack.Screen
       name="Mypage"
@@ -114,7 +117,7 @@ const MyStackScreen = ({ handleLoginSuccess, handleLogoutSuccess }: { handleLogi
       name="Input"
       options={{ headerShown: false }}
     >
-      {props => <Input {...props} handleLoginSuccess={handleLoginSuccess} />}
+      {props => <Input {...props} handleLoginSuccess={handleLoginSuccess} isLogged={isLogged} />}
     </MyStack.Screen>
   </MyStack.Navigator>
 );
@@ -141,7 +144,11 @@ const CalStackScreen = () => (
   </Calstack.Navigator>
 );
 
-const MainScreen = ({ handleLoginSuccess, handleLogoutSuccess}: { handleLoginSuccess: () => void, handleLogoutSuccess: () => void}) => {
+const MainScreen = ({ handleLoginSuccess, handleLogoutSuccess, isLogged}: { 
+  handleLoginSuccess: () => void, 
+  handleLogoutSuccess: () => void,
+  isLogged: boolean
+}) => {
   return (
     <Tab.Navigator
       initialRouteName="HomeStack"
@@ -209,6 +216,7 @@ const MainScreen = ({ handleLoginSuccess, handleLogoutSuccess}: { handleLoginSuc
             {...props} 
             handleLoginSuccess={handleLoginSuccess} 
             handleLogoutSuccess={handleLogoutSuccess} 
+            isLogged={isLogged}
           />
         )}
       </Tab.Screen>
@@ -251,6 +259,7 @@ const App = (): React.JSX.Element => {
                     {...props}
                     handleLoginSuccess={handleLoginSuccess}
                     handleLogoutSuccess={handleLogoutSuccess}
+                    isLogged={isLogged}
                   />
                 )}
               </Stack.Screen>
@@ -277,7 +286,7 @@ const App = (): React.JSX.Element => {
                 name="Input"
                 options={{ headerShown: false }}
               >
-                {(props) => (<Input {...props} handleLoginSuccess={handleLoginSuccess} />)}
+                {(props) => (<Input {...props} handleLoginSuccess={handleLoginSuccess} isLogged={isLogged}/>)}
               </Stack.Screen>
             </>
           )}
