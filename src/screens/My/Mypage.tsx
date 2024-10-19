@@ -14,7 +14,7 @@ type RootStackParamList = {
 
 type MypageNavigationProp = StackNavigationProp<RootStackParamList>;
 
-const Mypage: React.FC = () => {
+const Mypage: React.FC<{ handleLogoutSuccess: () => void }> = ({ handleLogoutSuccess }) => {
   const navigation = useNavigation<MypageNavigationProp>();
 
   const handleButtonClick = () => {
@@ -27,12 +27,19 @@ const Mypage: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await logoutKakao();
-      navigation.navigate('Login');
+      const response = await logoutKakao(); 
+      if (response && response.status === 200) { 
+        handleLogoutSuccess();
+        navigation.navigate('Login');
+      }  else if (response && response.status === 500) {
+        Alert.alert('로그아웃 오류', response.message || '로그아웃 중 문제가 발생했습니다.');
+      }
     } catch (error) {
       Alert.alert('로그아웃 오류', '로그아웃 중 문제가 발생했습니다.');
+      console.error('Logout Error:', error);
     }
   };
+  
 
   const handleWithdrawal = async () => {
     try {

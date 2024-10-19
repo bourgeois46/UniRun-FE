@@ -97,13 +97,14 @@ const HomeStackScreen = () => (
 
 const MyStack = createNativeStackNavigator();
 
-const MyStackScreen = ({ handleLoginSuccess }: { handleLoginSuccess: () => void }) => (
+const MyStackScreen = ({ handleLoginSuccess, handleLogoutSuccess }: { handleLoginSuccess: () => void, handleLogoutSuccess: () => void }) => (
   <MyStack.Navigator>
-    <MyStack.Screen
+     <MyStack.Screen
       name="Mypage"
-      component={Mypage}
       options={{ headerShown: false }}
-    />
+    >
+      {props => <Mypage {...props} handleLogoutSuccess={handleLogoutSuccess} />}
+    </MyStack.Screen>
     <MyStack.Screen
       name="MyRunning"
       component={MyRunning}
@@ -140,7 +141,7 @@ const CalStackScreen = () => (
   </Calstack.Navigator>
 );
 
-const MainScreen = ({ handleLoginSuccess }: { handleLoginSuccess: () => void }) => {
+const MainScreen = ({ handleLoginSuccess, handleLogoutSuccess}: { handleLoginSuccess: () => void, handleLogoutSuccess: () => void}) => {
   return (
     <Tab.Navigator
       initialRouteName="HomeStack"
@@ -203,7 +204,13 @@ const MainScreen = ({ handleLoginSuccess }: { handleLoginSuccess: () => void }) 
             <Image style={styles.tabIcon} source={require('./assets/my.png')} />
           ),
         }}>
-        {props => <MyStackScreen {...props} handleLoginSuccess={handleLoginSuccess} />}
+          {props => (
+          <MyStackScreen 
+            {...props} 
+            handleLoginSuccess={handleLoginSuccess} 
+            handleLogoutSuccess={handleLogoutSuccess} 
+          />
+        )}
       </Tab.Screen>
     </Tab.Navigator>
   );
@@ -236,7 +243,7 @@ const App = (): React.JSX.Element => {
                 options={({ navigation }) => ({
                   header: () => <Header navigation={navigation} back={true} />,
                 })}>
-                {props => <MainScreen {...props} handleLoginSuccess={handleLoginSuccess} />}
+                {props => <MainScreen {...props} handleLoginSuccess={handleLoginSuccess} handleLogoutSuccess={handleLogoutSuccess} />}
               </Stack.Screen>
               <Stack.Screen
                 name="Home"
