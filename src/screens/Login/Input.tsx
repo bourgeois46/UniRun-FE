@@ -11,9 +11,8 @@ import {
   ImageSourcePropType,
   ScrollView,
 } from 'react-native';
-import {registerUserInfo} from '../../api/memberAPI.ts';
 import {Alert} from 'react-native';
-import { userInfoCheck } from '../../api/memberAPI.ts';
+import { registerUserInfo, userInfoCheck, userInfoUpdate } from '../../api/memberAPI.ts';
 
 type RootStackParamList = {
   Home: undefined;
@@ -65,6 +64,39 @@ const Input: React.FC<InputProps> = ({handleLoginSuccess, isLogged}) => {
 
     fetchUserInfo(); 
   }, [isLogged]);
+
+ // 회원 정보 수정
+ const handleUpdateUserInfo = async () => {
+  if (!nickname || !userUniName || !selectedGender || !birthYear || !height || !weight || !goal || !walletAddress) {
+    Alert.alert('모두 입력해주세요');
+    return;
+  }
+
+  const updatedUserInfo = {
+    nickname,
+    userUniName,
+    gender: selectedGender,
+    birthYear,
+    height: parseInt(height, 10),
+    weight: parseInt(weight, 10),
+    goal,
+    walletAddress,
+  };
+
+  try {
+    const response = await userInfoUpdate(updatedUserInfo);
+    if (response && response.status === 201) { // 회원가입 처리가 되므로 201로 설정해야 됨
+      Alert.alert('회원 정보 수정 성공', '회원 정보가 성공적으로 수정되었습니다.');
+      handleLoginSuccess(); // 성공 시 로그인 상태 변경 가능
+      navigation.navigate('Home');
+    } else {
+      Alert.alert('수정 실패', '회원 정보 수정에 실패하였습니다.');
+    }
+  } catch (error) {
+    Alert.alert('회원 정보 수정 오류', '서버와 통신하는 중 오류가 발생했습니다.');
+  }
+};
+
 
   const handleSignup = async () => {
     if (!nickname || !userUniName || !selectedGender || !birthYear || !height || !weight || !goal || !walletAddress) {
@@ -229,7 +261,7 @@ const Input: React.FC<InputProps> = ({handleLoginSuccess, isLogged}) => {
         />
       </View>
 
-      <TouchableOpacity style={styles.signupButton} onPress={handleSignup}>
+      <TouchableOpacity style={styles.signupButton} onPress={isLogged ? handleUpdateUserInfo : handleSignup}>
         <Image
           style={[styles.lastButton, isLogged && styles.fixImageStyle]}
           source={isLogged ? fixImage : signupImage}

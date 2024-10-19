@@ -101,3 +101,24 @@ export const userInfoCheck = async (): Promise<any> => {
     );
   }
 };
+
+export const userInfoUpdate = async (updatedUserInfo: any): Promise<any> => {
+  try {
+    const response = await instance.patch('/user/update', updatedUserInfo);
+
+    console.log('Received response from backend:', response.data);
+
+    if (response.data && response.status === 200) {
+      return response.data;
+    } else if (response.data && response.status === 400) {
+      Alert.alert('회원 정보 수정 에러', '회원 정보 수정에 실패하였습니다.');
+    }
+  } catch (error) {
+    const err = error as Error; 
+    console.error('회원 정보 수정 에러:', error);
+    Alert.alert(
+      '회원 정보 수정 에러',
+      err.message || '회원 정보 수정 중 오류가 발생했습니다.',
+    );
+  }
+};
