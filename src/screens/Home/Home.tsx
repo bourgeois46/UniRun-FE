@@ -1,16 +1,23 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Image,
   StyleSheet,
-  TouchableOpacity,
   Pressable,
 } from 'react-native';
 import RunningStartModal from '../../modal/RunningStartModal';
+import WebSocketService from '../../api/webSocketService';
 
 const Home: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const wsService = WebSocketService.getInstance(
+    'ws://ec2-54-180-232-224.ap-northeast-2.compute.amazonaws.com/running'
+  ); 
 
+  const handleStartClick = () => {
+    wsService.sendMessage('start');
+  };
+  
   const onPressModalOpen = () => {
     setIsModalVisible(true);
   };
@@ -40,7 +47,11 @@ const Home: React.FC = () => {
         />
       </Pressable>
 
-      <RunningStartModal visible={isModalVisible} onClose={onPressModalClose} />
+      <RunningStartModal 
+        visible={isModalVisible} 
+        onClose={onPressModalClose} 
+        onStartClick={handleStartClick}
+        />
     </View>
   );
 };
