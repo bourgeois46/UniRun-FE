@@ -4,28 +4,39 @@ import type {StackNavigationProp} from '@react-navigation/stack';
 import {useNavigation} from '@react-navigation/native';
 import MapView, {Marker, PROVIDER_GOOGLE, Region} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
+import WebSocketService from '../../api/webSocketService';
 
 type RootStackParamList = {
   Record: {showModal: boolean; time: string };
 };
 
 const Running: React.FC = () => {
+  const wsService = WebSocketService.getInstance(
+    'ws://ec2-54-180-232-224.ap-northeast-2.compute.amazonaws.com/running'
+  ); 
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [region, setRegion] = useState<Region | null>(null);
   const [currentLocation, setCurrentLocation] = useState<any>(null); // 현재 위치 상태
   
-  const navigation =
-    useNavigation<StackNavigationProp<RootStackParamList, 'Record'>>();
-  const [seconds, setSeconds] = useState<number>(0);
-
-  const handleButtonClick = () => {
-    setIsPaused(!isPaused);
+  const handlePauseClick = () => {
+    wsService.sendMessage('pause');
+    setIsPaused(true);
   };
 
-  const handleCombinedPress = () => {
-    const formattedTime = formatTime(seconds);
+  const handleRestartClick = () => {
+    wsService.sendMessage('restart');
+    setIsPaused(false);
+  };
+
+  const handleFinishAndNavigate = () => {
+    const formattedTime = formatTime(seconds); 
+    wsService.sendMessage('finish', formattedTime);
     navigation.navigate('Record', { showModal: true, time: formattedTime });
   };
+
+  const navigation =
+   useNavigation<StackNavigationProp<RootStackParamList, 'Record'>>();
+   const [seconds, setSeconds] = useState<number>(0);
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval> | null = null;
@@ -102,18 +113,18 @@ const Running: React.FC = () => {
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={handleButtonClick}>
+      <TouchableOpacity onPress={isPaused ? handleRestartClick : handlePauseClick}>
           <Image
             source={
               isPaused
-                ? require('../../../assets/pause.png')
-                : require('../../../assets/button1.png')
+                ? require('../../../assets/button1.png') // 재시작 이미지
+                : require('../../../assets/pause.png') // 일시정지 이미지
             }
             style={styles.commonMargin}
           />
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={handleCombinedPress}>
+        <TouchableOpacity onPress={handleFinishAndNavigate}>
           <Image
             source={require('../../../assets/button2.png')}
             style={styles.commonMargin}

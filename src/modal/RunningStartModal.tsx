@@ -7,12 +7,19 @@ type RootStackParamList = {
   Running: undefined;
 };
 
-const RunningStartModal: React.FC<{ visible: boolean; onClose: () => void }> = ({ visible, onClose }) => {
+interface RunningStartModalProps {
+  visible: boolean;
+  onClose: () => void;
+  onStartClick: () => void; // start 메시지 전송
+}
+
+const RunningStartModal: React.FC<RunningStartModalProps> = ({ visible, onClose, onStartClick }) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList, 'Running'>>();
 
   const handleRunning = () => {
     onClose(); // 모달을 닫고 화면 전환됨
     navigation.navigate('Running');
+    onStartClick();
   };
 
   return (
@@ -29,10 +36,7 @@ const RunningStartModal: React.FC<{ visible: boolean; onClose: () => void }> = (
             }}>
               <Text style={styles.buttonText}>돌아가기</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button2} onPress={() => { 
-              // console.log('러닝 시작 버튼 클릭됨');
-              handleRunning(); 
-            }}>
+            <TouchableOpacity style={styles.button2} onPress={handleRunning}>
               <Text style={styles.buttonText}>시작하기</Text>
             </TouchableOpacity>
           </View>
