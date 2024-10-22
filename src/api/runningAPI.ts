@@ -57,3 +57,28 @@ export const saveRunningName = async (runningDataId: number, runningName: string
       return null;
     }
   };
+
+  export const getRunningData = async (runningDataId: number): Promise<any> => {
+    try {
+      const response = await instance.get(`/my-running/running/${runningDataId}`);
+      console.log('러닝 데이터 조회 결과:', response.data);
+  
+      if (response.status === 200 && response.data.data) {
+        return response.data.data;
+      } else if (response.status === 404) {
+        Alert.alert('러닝 데이터 없음', `러닝 데이터 ID: ${runningDataId}에 해당하는 데이터가 없습니다.`);
+      } else if (response.status === 500) {
+        Alert.alert('서버 오류', '서버 내부 오류가 발생했습니다.');
+      } else {
+        Alert.alert('러닝 데이터 조회 실패', '러닝 데이터를 조회할 수 없습니다.');
+      }
+    } catch (error) {
+      const err = error as Error;
+      console.error('러닝 데이터 조회 실패:', error);
+      Alert.alert(
+        '러닝 데이터 조회 실패',
+        err.message || '러닝 데이터를 조회하는 중 오류가 발생했습니다.'
+      );
+      return null;
+    }
+  };
