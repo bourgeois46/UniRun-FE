@@ -17,7 +17,7 @@ const Running: React.FC = () => {
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [region, setRegion] = useState<Region | null>(null);
   const [currentLocation, setCurrentLocation] = useState<any>(null); // 현재 위치 상태
-  
+
   const handlePauseClick = () => {
     wsService.sendMessage('pause');
     setIsPaused(true);
