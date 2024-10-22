@@ -1,23 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Modal, TextInput, Image, TouchableOpacity } from 'react-native';
 import DropDownPicker, { ItemType } from 'react-native-dropdown-picker';
+import { getRunningTypes } from '../api/runningAPI';
 
 const RunningDoneModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
   visible,
   onClose,
 }) => {
-  // 드롭다운 열고 닫기
   const [open, setOpen] = useState(false);
-
-  // 드롭다운 값
   const [value, setValue] = useState<string | number | null>(null);
+  const [items, setItems] = useState<ItemType<string | number>[]>([]);
 
-  // 드롭다운 항목
-  const [items, setItems] = useState<ItemType<string | number>[]>([
-    { label: '[정규] 두런두런 - 한강런', value: 1 },
-    { label: '[번개] KUTR - 성북천 가볍게', value: 2 },
-    { label: '[번개] RIKU - 어대 한바퀴', value: 3 },
-  ]);
+  useEffect(() => {
+    const loadRunningTypes = async () => {
+      try {
+        const types = await getRunningTypes();
+
+        if (Array.isArray(types)) { // 배열인 경우에만 실행
+          const formattedTypes = types.map((type: { typeName: string }, index: number) => ({
+            label: type.typeName,
+            value: index + 1,
+          }));
+          setItems(formattedTypes);
+        } else {
+          console.error('러닝 타입 데이터가 배열이 아닙니다.');
+        }
+      } catch (error) {
+        console.error('러닝 타입 불러오기 에러:', error);
+      }
+    };
+
+    loadRunningTypes();
+  }, []);
 
   return (
     <Modal
@@ -32,7 +46,6 @@ const RunningDoneModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
           </Text>
           <Text style={styles.title}>러닝 완료 알림</Text>
 
-          {/* 부모 요소에 각각 zIndex 설정해서 배경색 투명한 문제 해결 */}
           <View style={{ zIndex: 2 }}>
             <View style={styles.formRow}>
               <Text style={styles.label}>러닝 타입</Text>
@@ -53,7 +66,7 @@ const RunningDoneModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
 
           <View style={styles.formRow}>
             <Text style={styles.label}>직접 입력</Text>
-            <TextInput style={styles.inputText} placeholder="직접 입력" />
+            <TextInput style={styles.inputText} placeholder="직접 입력해주세요." />
           </View>
 
           <TouchableOpacity onPress={onClose} style={styles.imageWrapper}>
@@ -129,6 +142,7 @@ const styles = StyleSheet.create({
     width: 195,
     height: 40,
     left: 9,
+    padding: 10,
   },
   imageWrapper: {
     marginTop: 20,
