@@ -6,6 +6,8 @@ import RunningDoneModal from '../../modal/RunningDoneModal';
 import CurrentDate from '../../components/CurrentDate';
 import MapView, {Marker, PROVIDER_GOOGLE, Region} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
+import { getRunningData } from '../../api/runningAPI';
+import { Alert } from 'react-native';
 
 type RootStackParamList = {
   Running: undefined;
@@ -16,9 +18,14 @@ const Record: React.FC = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'Record'>>();
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [region, setRegion] = useState<Region | null>(null);
-  const [currentLocation, setCurrentLocation] = useState<any>(null); // 현재 위치 상태
+  const [currentLocation, setCurrentLocation] = useState<any>(null);
 
-  // useRoute로 전달된 파라미터가 true -> 모달 띄움
+  const [totalTime, setTotalTime] = useState<string>('00:00:00');
+  const [totalKm, setTotalKm] = useState<number>(0);
+  const [calories, setCalories] = useState<number>(0);
+  const [runningDate, setRunningDate] = useState<string>('');
+  const [runningDataId, setRunningDataId] = useState<number | null>(null);  // RunningDoneModal로부터 받은 값을 저장
+
   useEffect(() => {
     if (route.params?.showModal) {
       setIsModalVisible(true);
@@ -35,11 +42,10 @@ const Record: React.FC = () => {
         (position) => {
           const {latitude, longitude} = position.coords;
 
-          // 현재 위치를 region과 currentLocation에 설정
           setRegion({
             latitude: latitude,
             longitude: longitude,
-            latitudeDelta: 0.01, 
+            latitudeDelta: 0.01,
             longitudeDelta: 0.01,
           });
           setCurrentLocation({
@@ -56,19 +62,40 @@ const Record: React.FC = () => {
     getLocation();
   }, []);
 
+  // RunningDoneModal로부터 전달받은 runningDataId로 러닝 데이터 가져옴
+  useEffect(() => {
+    const handleRunningData = async () => {
+      if (runningDataId !== null) { 
+        try {
+          const runningData = await getRunningData(runningDataId); 
+          if (runningData) {
+            setTotalTime(runningData.totalTime);
+            setTotalKm(runningData.totalKm);
+            setCalories(runningData.cal);
+            setRunningDate(runningData.runningDate);
+          }
+        } catch (error) {
+          Alert.alert('러닝 데이터 오류', '러닝 데이터를 불러오는 중 오류가 발생했습니다.');
+        }
+      }
+    };
+
+    handleRunningData();
+  }, [runningDataId]); 
+  
   return (
     <View style={styles.container}>
       <View style={styles.mapContainer}>
-        {region && ( 
+        {region && (
           <MapView
             style={styles.map}
             provider={PROVIDER_GOOGLE}
-            region={region} 
+            region={region}
             showsUserLocation={true}
           >
             {currentLocation && (
               <Marker
-                coordinate={currentLocation} 
+                coordinate={currentLocation}
                 title="현재 위치"
                 description="여기가 현재 위치입니다."
               />
@@ -87,21 +114,20 @@ const Record: React.FC = () => {
         <View style={styles.gridItem}>
           <Image
             source={require('../../../assets/time.png')}
-            style={styles.icon}
+            style={[styles.icon, { top: -18 }]}
           />
-          <Text style={styles.valueNumber}>{route.params?.time || '00:00:00'}</Text>
+          <Text style={styles.valueNumber}>{totalTime}</Text>
         </View>
 
         {/* 가로 점선 */}
         <View style={styles.horizontalLine} />
-
         <View style={styles.gridItem}>
           <Image
             source={require('../../../assets/distance.png')}
             style={styles.icon}
           />
           <View style={styles.valueContainer}>
-            <Text style={styles.valueNumber}>0</Text>
+            <Text style={styles.valueNumber}>{totalKm}</Text>
             <Text style={styles.valueUnit}>km</Text>
           </View>
         </View>
@@ -111,8 +137,8 @@ const Record: React.FC = () => {
             style={styles.icon}
           />
           <View style={styles.valueContainer}>
-            <Text style={styles.valueNumber}>0</Text>
-            <Text style={styles.valueUnit}>m</Text>
+            <Text style={styles.valueNumber}>{calories}</Text>
+            <Text style={styles.valueUnit}>cal</Text>
           </View>
         </View>
       </View>
@@ -120,7 +146,11 @@ const Record: React.FC = () => {
       {/* 세로 점선 */}
       <View style={styles.verticalLine} />
 
-      <RunningDoneModal visible={isModalVisible} onClose={onPressModalClose} />
+      <RunningDoneModal 
+        visible={isModalVisible} 
+        onClose={onPressModalClose} 
+        onRunningDataIdReceive={setRunningDataId}  // runningDataId를 받아오는 콜백 함수 전달
+      />
     </View>
   );
 };
@@ -182,6 +212,7 @@ const styles = StyleSheet.create({
   icon: {
     resizeMode: 'cover',
     right: '25%',
+    top: -20,
   },
   label: {
     fontSize: 16,
@@ -193,7 +224,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
   valueNumber: {
-    marginTop: 18,
+    top: -7,
     fontSize: 28,
     left: 24,
     fontWeight: 'bold',
@@ -205,6 +236,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 5,
     color: '#0F2869',
+    top: -7
   },
   valueDay: {
     top: 10,

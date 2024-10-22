@@ -4,12 +4,12 @@ import DropDownPicker, { ItemType } from 'react-native-dropdown-picker';
 import { getRunningTypes, saveRunningName } from '../api/runningAPI';
 import WebSocketService from '../api/webSocketService';
 
-const RunningDoneModal: React.FC<{ visible: boolean; onClose: () => void }> = ({ visible, onClose }) => {
+const RunningDoneModal: React.FC<{ visible: boolean; onClose: () => void; onRunningDataIdReceive: (id: number) => void }> = ({ visible, onClose, onRunningDataIdReceive }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string | number | null>(null);
   const [items, setItems] = useState<ItemType<string | number>[]>([]);
   const [runningName, setRunningName] = useState<string>('');
-  const [runningDataId, setRunningDataId] = useState<number | null>(null);
+  const [runningDataId, setRunningDataId] = useState<number | null>(null);  // 기존대로 유지
 
   useEffect(() => {
     const loadRunningTypes = async () => {
@@ -35,9 +35,10 @@ const RunningDoneModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
 
   useEffect(() => {
     const wsService = WebSocketService.getInstance('ws://ec2-54-180-232-224.ap-northeast-2.compute.amazonaws.com/running');
-    wsService.setOnRunningDataIdReceived((runningDataId: number) => {
-      console.log(`받은 runningDataId: ${runningDataId}`);
-      setRunningDataId(runningDataId); 
+    wsService.setOnRunningDataIdReceived((receivedRunningDataId: number) => {
+      console.log(`받은 runningDataId: ${receivedRunningDataId}`);
+      setRunningDataId(receivedRunningDataId);
+      onRunningDataIdReceive(receivedRunningDataId);  // 상위 컴포넌트에 전달
     });
   }, []);
 
