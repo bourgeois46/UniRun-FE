@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Modal} from 'react-native';
+import {View, Text, StyleSheet, Modal} from 'react-native';
 
 const CheckDeleteModal: React.FC<{visible: boolean; onClose: () => void}> = ({
   visible,

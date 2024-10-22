@@ -9,7 +9,7 @@ const RunningDoneModal: React.FC<{ visible: boolean; onClose: () => void; onRunn
   const [value, setValue] = useState<string | number | null>(null);
   const [items, setItems] = useState<ItemType<string | number>[]>([]);
   const [runningName, setRunningName] = useState<string>('');
-  const [runningDataId, setRunningDataId] = useState<number | null>(null);  // 기존대로 유지
+  const [runningDataId, setRunningDataId] = useState<number | null>(null);  
 
   useEffect(() => {
     const loadRunningTypes = async () => {
