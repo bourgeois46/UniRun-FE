@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderBottomWidth: 0.7,
     borderBottomColor: '#D9D9D9',
-    paddingVertical: 25, // item 간 간격
+    paddingVertical: 25, 
     paddingHorizontal: 15,
   },
   iconContainer: {

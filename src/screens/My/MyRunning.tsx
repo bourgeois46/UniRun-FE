@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   labelContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingHorizontal: 100, // 요소 사이 공간 조정
+    paddingHorizontal: 100,
     marginTop: 50,
     marginBottom: 15,
     right: 80,

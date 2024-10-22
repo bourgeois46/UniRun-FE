@@ -1,59 +1,62 @@
-import React, { useState } from 'react';
-import {View, StyleSheet, FlatList} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, FlatList, Alert } from 'react-native';
 import RunningItem from './RunningItem';
+import { getAllRunning } from '../api/runningAPI';
+
+type RunningData = {
+  runningDataId: number;
+  runningDate: string;
+  runningName: string;
+  totalKm: number;
+  totalTime: string;
+};
 
 const RunningList: React.FC = () => {
-  const [data, setData] = useState([
-    {
-      id: 1,
-      date: '2024. 8. 29',
-      title: '공릉천 러닝',
-      distance: '3.5 km',
-      time: '26:06',
-    },
-    {
-      id: 2,
-      date: '2024. 8. 15',
-      title: '한강 번개 러닝',
-      distance: '2.4 km',
-      time: '30:11',
-    },
-    {
-      id: 3,
-      date: '2024. 7. 3',
-      title: '대치동 러닝',
-      distance: '4.6 km',
-      time: '28:58',
-    },
-    {
-      id: 4,
-      date: '2024. 7. 1',
-      title: '선릉동 러닝',
-      distance: '2.0 km',
-      time: '10:02',
-    },
-  ]);
+  const [data, setData] = useState<RunningData[]>([]);
+
+  useEffect(() => {
+    const handleRunningData = async () => {
+      try {
+        const runningData = await getAllRunning();  
+        console.log('받은 러닝 데이터:', runningData);
+        if (runningData && Array.isArray(runningData)) {
+          //console.log('Setting data with:', runningData);
+          setData(runningData); 
+        } else {
+          console.error('러닝 데이터가 배열이 아닙니다.');
+        }
+      } catch (error) {
+        Alert.alert('데이터 오류', '러닝 데이터를 불러오는 중 오류가 발생했습니다.');
+      }
+    };
+
+    handleRunningData();  
+  }, []);
 
   const handleDeleteItem = (id: number) => {
-    setData(prevData => prevData.filter(item => item.id !== id));
+    setData(prevData => prevData.filter(item => item.runningDataId !== id));
   };
 
   return (
     <FlatList
       data={data}
-      renderItem={({item}) => (
-        <RunningItem
-          id={item.id}
-          date={item.date}
-          title={item.title}
-          distance={item.distance}
-          time={item.time}
-          onDelete={handleDeleteItem}
-        />
-      )}
-      keyExtractor={(item, index) => index.toString()}
-      style={styles.list}
-    />
+      renderItem={({ item }) => {
+      //console.log('FlatList item:', item);  // 각 아이템 확인
+    return (
+      <RunningItem
+        id={item.runningDataId}
+        date={item.runningDate}
+        title={item.runningName}
+        distance={`${item.totalKm} km`}
+        time={item.totalTime}
+        onDelete={handleDeleteItem}
+      />
+    );
+  }}
+  keyExtractor={(item) => item.runningDataId.toString()}
+  style={styles.list}
+/>
+
   );
 };
 
