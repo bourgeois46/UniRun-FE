@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Modal, TextInput, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Modal, TextInput, Image, TouchableOpacity, Alert } from 'react-native';
 import DropDownPicker, { ItemType } from 'react-native-dropdown-picker';
-import { getRunningTypes } from '../api/runningAPI';
+import { getRunningTypes, saveRunningName } from '../api/runningAPI';
+import WebSocketService from '../api/webSocketService';
 
-const RunningDoneModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
-  visible,
-  onClose,
-}) => {
+const RunningDoneModal: React.FC<{ visible: boolean; onClose: () => void }> = ({ visible, onClose }) => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState<string | number | null>(null);
   const [items, setItems] = useState<ItemType<string | number>[]>([]);
+  const [runningName, setRunningName] = useState<string>('');
+  const [runningDataId, setRunningDataId] = useState<number | null>(null);
 
   useEffect(() => {
     const loadRunningTypes = async () => {
       try {
         const types = await getRunningTypes();
 
-        if (Array.isArray(types)) { // 배열인 경우에만 실행
+        if (Array.isArray(types)) {
           const formattedTypes = types.map((type: { typeName: string }, index: number) => ({
             label: type.typeName,
             value: index + 1,
@@ -33,12 +33,33 @@ const RunningDoneModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
     loadRunningTypes();
   }, []);
 
+  useEffect(() => {
+    const wsService = WebSocketService.getInstance('ws://ec2-54-180-232-224.ap-northeast-2.compute.amazonaws.com/running');
+    wsService.setOnRunningDataIdReceived((runningDataId: number) => {
+      console.log(`받은 runningDataId: ${runningDataId}`);
+      setRunningDataId(runningDataId); 
+    });
+  }, []);
+
+  const handleSaveRunningName = async () => {
+    if (runningDataId !== null) { 
+      try {
+        console.log('저장할 runningDataId:', runningDataId);
+        const response = await saveRunningName(runningDataId, runningName); 
+        if (response) {
+          Alert.alert('성공', '러닝 이름이 성공적으로 저장되었습니다.');
+          onClose(); 
+        }
+      } catch (error) {
+        console.error('러닝 이름 저장 중 오류:', error);
+      }
+    } else {
+      Alert.alert('오류', 'runningDataId가 없습니다.');
+    }
+  };
+
   return (
-    <Modal
-      visible={visible}
-      animationType="fade"
-      transparent={true}
-      onRequestClose={onClose}>
+    <Modal visible={visible} animationType="fade" transparent={true} onRequestClose={onClose}>
       <View style={styles.modalContainer}>
         <View style={styles.modalView}>
           <Text style={styles.closeText} onPress={onClose}>
@@ -57,19 +78,27 @@ const RunningDoneModal: React.FC<{ visible: boolean; onClose: () => void }> = ({
                 setValue={setValue}
                 setItems={setItems}
                 placeholder="러닝 타입 선택"
-                containerStyle={[styles.dropdownContainer, { zIndex: 2 }]}  
+                containerStyle={[styles.dropdownContainer, { zIndex: 2 }]}
                 style={styles.dropdown}
-                dropDownContainerStyle={[styles.dropdownList, { zIndex: 3 }]}  
+                dropDownContainerStyle={[styles.dropdownList, { zIndex: 3 }]}
               />
             </View>
           </View>
 
           <View style={styles.formRow}>
             <Text style={styles.label}>직접 입력</Text>
-            <TextInput style={styles.inputText} placeholder="직접 입력해주세요." />
+            <TextInput
+              style={styles.inputText}
+              placeholder="직접 입력해주세요."
+              value={runningName}
+              onChangeText={setRunningName}
+            />
           </View>
 
-          <TouchableOpacity onPress={onClose} style={styles.imageWrapper}>
+          <TouchableOpacity 
+             onPress={handleSaveRunningName} 
+             style={styles.imageWrapper}
+             >
             <Image source={require('../../assets/done.png')} />
           </TouchableOpacity>
         </View>
