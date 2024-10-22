@@ -142,6 +142,7 @@ const styles = StyleSheet.create({
     width: 195,
     height: 40,
     left: 9,
+    padding: 10,
   },
   imageWrapper: {
     marginTop: 20,
