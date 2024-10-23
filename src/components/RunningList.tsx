@@ -20,7 +20,6 @@ const RunningList: React.FC = () => {
         const runningData = await getAllRunning();  
         console.log('받은 러닝 데이터:', runningData);
         if (runningData && Array.isArray(runningData)) {
-          //console.log('Setting data with:', runningData);
           setData(runningData); 
         } else {
           console.error('러닝 데이터가 배열이 아닙니다.');
@@ -41,22 +40,21 @@ const RunningList: React.FC = () => {
     <FlatList
       data={data}
       renderItem={({ item }) => {
-      //console.log('FlatList item:', item);  // 각 아이템 확인
-    return (
-      <RunningItem
-        id={item.runningDataId}
-        date={item.runningDate}
-        title={item.runningName}
-        distance={`${item.totalKm} km`}
-        time={item.totalTime}
-        onDelete={handleDeleteItem}
-      />
-    );
-  }}
-  keyExtractor={(item) => item.runningDataId.toString()}
-  style={styles.list}
-/>
-
+        return (
+          <RunningItem
+            id={item.runningDataId} 
+            date={item.runningDate}
+            title={item.runningName}
+            distance={`${item.totalKm} km`}
+            time={item.totalTime}
+            runningDataId={item.runningDataId}  // runningDataId 추가
+            onDelete={handleDeleteItem}
+          />
+        );
+      }}
+      keyExtractor={(item) => item.runningDataId.toString()}
+      style={styles.list}
+    />
   );
 };
 

@@ -30,7 +30,6 @@ export const getRunningTypes = async (): Promise<any> => {
 export const saveRunningName = async (runningDataId: number, runningName: string): Promise<any> => {
     //console.log('엔드포인트에 전달된 runningDataId:', runningDataId); 
     console.log('전달된 runningName:', runningName); 
-
     try {
       const response = await instance.patch(`/running/${runningDataId}/name`, {
         runningName: runningName,
@@ -61,7 +60,7 @@ export const saveRunningName = async (runningDataId: number, runningName: string
   export const getRunningData = async (runningDataId: number): Promise<any> => {
     try {
       const response = await instance.get(`/my-running/running/${runningDataId}`);
-      console.log('러닝 데이터 조회 결과:', response.data);
+      //console.log('러닝 데이터 조회 결과:', response.data);
   
       if (response.status === 200 && response.data.data) {
         return response.data.data;
@@ -108,4 +107,28 @@ export const saveRunningName = async (runningDataId: number, runningName: string
     }
   };
 
+  export const deleteRunning = async (runningDataId: number): Promise<void> => {
+    try {
+      const response = await instance.delete(`/my-running/${runningDataId}`);
+      console.log('러닝 삭제 로그:', response.data);
+
+      if (response.status === 200) {
+        Alert.alert('성공', '러닝 기록이 성공적으로 삭제되었습니다.');
+      } else if (response.status === 401) {
+        Alert.alert('세션 오류', '세션 Id가 없습니다.');
+      } else if (response.status === 403) {
+        Alert.alert('권한 오류', '이 러닝 기록을 삭제할 권한이 없습니다.');
+      } else if (response.status === 404) {
+        Alert.alert('러닝 데이터 없음', `러닝 데이터 ID: ${runningDataId}를 찾을 수 없습니다.`);
+      } else if (response.status === 500) {
+        Alert.alert('서버 오류', '서버에서 문제가 발생했습니다.');
+      } else {
+        Alert.alert('삭제 실패', '러닝 기록을 삭제하는 중 오류가 발생했습니다.');
+      }
+    } catch (error) {
+      const err = error as Error;
+      console.error('러닝 기록 삭제 실패:', err);
+      Alert.alert('러닝 기록 삭제 실패', err.message || '러닝 기록을 삭제하는 중 문제가 발생했습니다.');
+    }
+  };
 

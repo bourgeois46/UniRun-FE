@@ -5,16 +5,19 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import DeleteRecordModal from '../modal/DeleteRecordModal';
+import { deleteRunning } from '../api/runningAPI';
 
 type RunningItemProps = {
-  id: number;
-  date: string;
-  title: string;
-  distance: string;
-  time: string;
-  onDelete: (id: number) => void;
+  id: number;              
+  date: string;         
+  title: string;            
+  distance: string;       
+  time: string;           
+  onDelete: (id: number) => void;  
+  runningDataId: number | null;    // RunningDoneModal로부터 받아온 runningDataId 추가
 };
 
 const RunningItem: React.FC<RunningItemProps> = ({
@@ -24,6 +27,7 @@ const RunningItem: React.FC<RunningItemProps> = ({
   distance,
   time,
   onDelete,
+  runningDataId,   // RunningDoneModal로부터 받아온 runningDataId 추가
 }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
@@ -35,9 +39,20 @@ const RunningItem: React.FC<RunningItemProps> = ({
     setIsModalVisible(false);
   };
 
-  const handleDelete = () => {
-    onDelete(id); // id를 사용하여 삭제
-    onPressModalClose(); // 모달 닫기
+  const handleDelete = async () => {
+    if (runningDataId !== null) {   
+      try {
+        console.log('삭제할 runningDataId:', runningDataId);
+        await deleteRunning(runningDataId);  
+        onDelete(runningDataId);  // 삭제 후 콜백 함수 호출
+      } catch (error) {
+        console.error('삭제 오류:', error);
+        Alert.alert('삭제 실패', '러닝 기록을 삭제하는 중 오류가 발생했습니다.');
+      }
+    } else {
+      Alert.alert('삭제 불가', '러닝 데이터를 삭제할 수 없습니다.');
+    }
+    onPressModalClose();
   };
 
   return (
@@ -74,7 +89,7 @@ const RunningItem: React.FC<RunningItemProps> = ({
       <DeleteRecordModal
         visible={isModalVisible}
         onClose={onPressModalClose}
-        onDelete={handleDelete}
+        onDelete={handleDelete}  
       />
     </View>
   );

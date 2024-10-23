@@ -6,10 +6,14 @@ const DeleteRecordModal: React.FC<{ visible: boolean; onClose: () => void; onDel
     const [isCheckDeleteVisible, setIsCheckDeleteVisible] = useState(false);
 
     // onPress에서 2가지 동작 수행
-    const handleDeletePress = () => {
-      onDelete();
-      onClose(); // 기존 모달 닫기
-      setIsCheckDeleteVisible(true); // 새로운 모달 열기
+    const handleDeletePress = async () => {
+      try {
+        await onDelete();  // 삭제 API 호출
+        setIsCheckDeleteVisible(true);  
+        onClose();       
+      } catch (error) {
+        console.error("삭제 중 오류 발생:", error);
+      }
     };
   
     const handleCheckDeleteClose = () => {
