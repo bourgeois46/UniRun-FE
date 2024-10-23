@@ -113,7 +113,7 @@ export const saveRunningName = async (runningDataId: number, runningName: string
       console.log('러닝 삭제 로그:', response.data);
 
       if (response.status === 200) {
-       // Alert.alert('성공', '러닝 기록이 성공적으로 삭제되었습니다.');
+        Alert.alert('성공', '러닝 기록이 성공적으로 삭제되었습니다.');
       } else if (response.status === 401) {
         Alert.alert('세션 오류', '세션 Id가 없습니다.');
       } else if (response.status === 403) {
