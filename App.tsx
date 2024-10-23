@@ -26,6 +26,7 @@ import Record from './src/screens/Home/Record';  // Record는 스택에서 사�
 import MyRunning from './src/screens/My/MyRunning';
 import LoginWebview from './src/components/LoginWebview';
 import LoginRedirect from './src/components/LoginRedirect';
+import MetaMaskWebview from './src/components/MetaMaskWebview';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -45,6 +46,7 @@ type RootStackParamList = {
   Mypage: undefined;
   MyRunning: undefined;
   Home: undefined;
+  MetaMaskWebview: undefined;
 };
 
 type HeaderProps = {
@@ -275,6 +277,11 @@ const App = (): React.JSX.Element => {
                 name="LoginWebview"
                 options={{ headerShown: false }}
                 component={LoginWebview}
+              />
+              <Stack.Screen
+                name="MetaMaskWebview"  
+                component={MetaMaskWebview}
+                options={{ headerShown: false }}
               />
               <Stack.Screen
                 name="LoginRedirect"

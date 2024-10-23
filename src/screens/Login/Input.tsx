@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
 import {
   View,
@@ -19,6 +19,8 @@ type RootStackParamList = {
   Record: undefined;
   Running: undefined;
   Main: undefined;
+  Input: { walletRealAddress: string };
+  MetaMaskWebview: undefined; 
 };
 type InputProps = {
   handleLoginSuccess: () => void;
@@ -38,7 +40,16 @@ const Input: React.FC<InputProps> = ({handleLoginSuccess, isLogged}) => {
   const fixImage: ImageSourcePropType = require('../../../assets/fixbutton.png');
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>(); 
-
+  
+  const route = useRoute<RouteProp<RootStackParamList, 'Input'>>();
+  const walletRealAddress = route.params?.walletRealAddress || '';
+  
+  useEffect(() => {
+    if (walletRealAddress) {
+      console.log('Received wallet real address:', walletRealAddress);
+    }
+  }, [walletRealAddress]);
+  
   // 회원 정보 조회
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -253,7 +264,9 @@ const Input: React.FC<InputProps> = ({handleLoginSuccess, isLogged}) => {
       </View>
 
       <View style={styles.formRow}>
-        <Text style={styles.label}>지갑 주소</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('MetaMaskWebview')}>
+          <Text style={styles.label}>지갑 주소</Text>
+        </TouchableOpacity>
         <TextInput
           style={[styles.textInput, styles.inputRow]}
           value={walletAddress}
