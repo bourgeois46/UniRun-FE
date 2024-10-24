@@ -4,10 +4,13 @@ import UnivList from '../../components/UnivList';
 import MyList from '../../components/MyList';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import AddressModal from '../../modal/AddressModal';
+import { getRemainToken } from '../../api/blockchainAPI';
+import { Alert } from 'react-native';
 
 const Nft: React.FC = () => {
   const [selectedLabel, setSelectedLabel] = useState<string>('마스코트');
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [remainToken, setRemainToken] = useState<number>(0); 
 
   const handleLabelPress = (label: string) => {
     setSelectedLabel(label);
@@ -21,6 +24,20 @@ const Nft: React.FC = () => {
     setIsModalVisible(false);
   };
 
+  // 토큰 잔액 조회 
+  useEffect(() => {
+    const handleRemainToken = async () => {
+      const remainToken = await getRemainToken();
+      if (remainToken !== null) {
+        setRemainToken(remainToken); 
+      } else {
+        Alert.alert('잔액 조회 오류', '토큰 잔액을 가져올 수 없습니다.');
+      }
+    };
+
+    handleRemainToken(); 
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <Image
@@ -29,7 +46,7 @@ const Nft: React.FC = () => {
       />
       
       <View style={styles.rdcontainer}>
-        <Text style={styles.rd}>0</Text>
+        <Text style={styles.rd}>{remainToken}</Text>
         <Text style={styles.rd}> RD</Text>
       </View>
 
