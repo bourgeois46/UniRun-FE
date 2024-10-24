@@ -27,6 +27,11 @@ const Nft: React.FC = () => {
         source={require('../../../assets/nftBanner.png')}
         style={styles.banner}
       />
+      
+      <View style={styles.rdcontainer}>
+        <Text style={styles.rd}>0</Text>
+        <Text style={styles.rd}> RD</Text>
+      </View>
 
       <TouchableOpacity onPress={onPressModalOpen}>
           <Image
@@ -97,7 +102,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 0,
     padding: 0,
-    top: -40
+    top: -60
   },
   label: {
     fontSize: 20,
@@ -115,6 +120,16 @@ const styles = StyleSheet.create({
     left: -90,
     top: 60,
   },
+  rdcontainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    top: -25,
+    left: 10,
+    
+  },
+  rd: {
+    fontWeight: 'bold',
+  }
 });
 
 export default Nft;
