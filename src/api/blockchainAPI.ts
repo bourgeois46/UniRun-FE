@@ -56,3 +56,25 @@ export const geWalletAdress = async (): Promise<any> => {
       return null;
     }
   };
+
+  export const getNftItems = async (): Promise<any> => {
+    try {
+      const response = await instance.get('/block-chain/nfts');
+      console.log('NFT 아이템 전체 조회:', response.data);
+  
+      if (response.status === 200) {
+        return response.data.data; 
+      } else if (response.status === 500) {
+        Alert.alert('서버 오류', '서버와 통신하는 중 오류가 발생했습니다.');
+      }
+    } catch (error) {
+      const err = error as Error;
+      console.error('NFT 아이템 조회 실패:', error);
+  
+      Alert.alert(
+        'NFT 아이템 조회 실패',
+        err.message || 'NFT 아이템을 조회하는 중 오류가 발생했습니다.',
+      );
+      return null;
+    }
+  };

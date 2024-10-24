@@ -3,13 +3,14 @@ import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import GetItemModal from '../modal/GetItemModal';
 
 type UnivItemProps = {
-  mascot: any;
-  logo: any;
-  name: string;
-  rd: number;
+  universityUrl: any;
+  tokenURI: any;
+  universityName: string;
+  tokenPrice: number;
+  tokenId: any;
 };
 
-const UnivItem: React.FC<UnivItemProps> = ({mascot, logo, name, rd}) => {
+const UnivItem: React.FC<UnivItemProps> = ({universityUrl, tokenURI, universityName, tokenPrice, tokenId}) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   const onPressModalOpen = () => {
@@ -23,16 +24,20 @@ const UnivItem: React.FC<UnivItemProps> = ({mascot, logo, name, rd}) => {
   return (
     <>
       <TouchableOpacity style={styles.container} onPress={onPressModalOpen}>
-        <Image source={mascot} style={styles.mascot} />
+        <Image source={universityUrl} style={styles.mascot} />
 
         <View style={styles.univContainer}>
-          <Image source={logo} style={styles.logo} />
-          <Text style={[styles.name, {marginLeft: 10}]}>{name}</Text>
+          <Image source={tokenURI} style={styles.logo} />
+          <Text style={[styles.name, {marginLeft: 10}]}>{universityName}</Text>
+        </View>
+
+        <View>
+        <Text style={styles.tokenId}>#{tokenId}</Text>
         </View>
 
         <Image source={require('../../assets/rd.png')} style={styles.rdImg} />
         <View style={styles.rdContainer}>
-          <Text style={styles.rd}>{rd}</Text>
+          <Text style={styles.rd}>{tokenPrice}</Text>
         </View>
       </TouchableOpacity>
 
@@ -42,6 +47,17 @@ const UnivItem: React.FC<UnivItemProps> = ({mascot, logo, name, rd}) => {
 };
 
 const styles = StyleSheet.create({
+  tokenId: {
+    fontSize: 14,
+    backgroundColor: '#EFF3FE', 
+    color: '#739DF5', 
+    paddingHorizontal: 8, 
+    paddingVertical: 2,
+    borderRadius: 5, 
+    fontWeight: 'bold', 
+    top: 20, 
+    right: 37, 
+  },
   container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -55,6 +71,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginLeft: 15,
+    top: -10,
   },
   msg: {
     resizeMode: 'cover',
@@ -70,12 +87,13 @@ const styles = StyleSheet.create({
     marginLeft: 25,
   },
   name: {
+    width : 70,
     fontSize: 16,
     color: 'black',
     fontWeight: 'bold',
   },
   rdContainer: {
-    width: 100, // 시작점 통일
+    width: 100,
   },
   rd: {
     color: 'black',
@@ -87,6 +105,7 @@ const styles = StyleSheet.create({
     left: 30,
     resizeMode: 'contain',
   },
+  
 });
 
 export default UnivItem;

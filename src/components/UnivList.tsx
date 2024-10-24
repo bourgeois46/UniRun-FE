@@ -4,28 +4,32 @@ import UnivItem from './UnivItem';
 
 const mockData = [
   {
-    mascot: require('../../assets/m1.png'),
-    logo: require('../../assets/l1.png'),
-    name: '중앙대학교',
-    rd: 130.25,
+    universityUrl: require('../../assets/m1.png'),
+    tokenURI: require('../../assets/l1.png'), // 학교 로고
+    universityName: '중앙대학교',
+    tokenPrice: 130.25,
+    tokenId: 0,
   },
   {
-    mascot: require('../../assets/m2.png'),
-    logo: require('../../assets/l2.png'),
-    name: '고려대학교',
-    rd: 921.0,
+    universityUrl: require('../../assets/m2.png'),
+    tokenURI: require('../../assets/l2.png'),
+    universityName: '고려대학교',
+    tokenPrice: 921.0,
+    tokenId: 0,
   },
   {
-    mascot: require('../../assets/m3.png'),
-    logo: require('../../assets/l3.png'),
-    name: '연세대학교',
-    rd: 1204.6,
+    universityUrl: require('../../assets/m3.png'),
+    tokenURI: require('../../assets/l3.png'),
+    universityName: '연세대학교',
+    tokenPrice: 1204.6,
+    tokenId: 0,
   },
   {
-    mascot: require('../../assets/m4.png'),
-    logo: require('../../assets/l4.png'),
-    name: '건국대학교',
-    rd: 269.2,
+    universityUrl: require('../../assets/m4.png'),
+    tokenURI: require('../../assets/l4.png'),
+    universityName: '건국대학교',
+    tokenPrice: 269.2,
+    tokenId: 0,
   },
 ];
 
@@ -37,10 +41,11 @@ const UnivList: React.FC = () => {
         data={mockData}
         renderItem={({item}) => (
           <UnivItem
-            mascot={item.mascot}
-            logo={item.logo}
-            name={item.name}
-            rd={item.rd}
+            universityUrl={item.universityUrl}
+            tokenURI={item.tokenURI}
+            universityName={item.universityName}
+            tokenPrice={item.tokenPrice}
+            tokenId={item.tokenId}
           />
         )}
         keyExtractor={(item, index) => index.toString()}
@@ -59,7 +64,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     width: '102%',
     position: 'absolute',
-    top: 290,
+    top: 300,
   },
 });
 

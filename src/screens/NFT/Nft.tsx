@@ -99,15 +99,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   banner: {
-    // resizeMode: 'cover',
+    resizeMode: 'cover',
     top: 0,
     width: 393,
     height: 220,
   },
   addressButton: {
-    top: -100,
-    width: 45,
-    height: 45,
+    top: -130,
+    width: 50,
   },
   msg: {
     resizeMode: 'cover',
