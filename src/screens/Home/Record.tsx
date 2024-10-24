@@ -7,6 +7,7 @@ import CurrentDate from '../../components/CurrentDate';
 import MapView, {Marker, PROVIDER_GOOGLE, Region} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 import { getRunningData } from '../../api/runningAPI';
+import { getTokenReward } from '../../api/blockchainAPI';
 import { Alert } from 'react-native';
 
 type RootStackParamList = {
@@ -73,6 +74,18 @@ const Record: React.FC = () => {
             setTotalKm(runningData.totalKm);
             setCalories(runningData.cal);
             setRunningDate(runningData.runningDate);
+
+             // 5.5km 이상 이면 토큰 리워드 API 호출
+             if (runningData.totalKm >= 5.5) {
+              try {
+                const reward = await getTokenReward();
+                if (reward) {
+                  Alert.alert('5.5km 이상을 달려 토큰 리워드를 받았습니다.');
+                }
+              } catch (error) {
+                Alert.alert('리워드 오류', '토큰 리워드를 받을 수 없습니다.');
+              }
+            }
           }
         } catch (error) {
           Alert.alert('러닝 데이터 오류', '러닝 데이터를 불러오는 중 오류가 발생했습니다.');
