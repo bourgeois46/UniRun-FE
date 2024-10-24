@@ -53,7 +53,7 @@ const UnivList: React.FC = () => {
 const styles = StyleSheet.create({
   list: {
     width: '100%',
-    top: 30, 
+    top: 0, 
   },
   msg: {
     resizeMode: 'cover',

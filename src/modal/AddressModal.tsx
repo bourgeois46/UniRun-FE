@@ -1,12 +1,26 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, Modal} from 'react-native';
+import { geWalletAdress } from '../api/blockchainAPI';
+import { Alert } from 'react-native';
 
 const AddressModal: React.FC<{visible: boolean; onClose: () => void}> = ({
   visible,
   onClose,
 }) => {
+  const [walletAddress, setWalletAddress] = useState<string>(''); 
+
   useEffect(() => {
+    const handleWalletAddress = async () => {
+      const address = await geWalletAdress(); 
+      if (address !== null) {
+        setWalletAddress(address); 
+      } else {
+        Alert.alert('지갑 주소 조회 오류', '지갑 주소를 가져올 수 없습니다.');
+      }
+    };
+
     if (visible) {
+      handleWalletAddress();
       const timer = setTimeout(() => {
         onClose();
       }, 2000); 
@@ -19,8 +33,7 @@ const AddressModal: React.FC<{visible: boolean; onClose: () => void}> = ({
     <Modal visible={visible} transparent={true} animationType="fade">
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
-            {/* 추후 연동 */}
-          <Text style={styles.text}>0x8969e084f93B25e78556405c85a15Be0043007DA</Text>
+            <Text style={styles.text}>{walletAddress || '로딩 중...'}</Text> 
         </View>
       </View>
     </Modal>

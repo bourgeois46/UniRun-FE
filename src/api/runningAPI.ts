@@ -82,6 +82,7 @@ export const saveRunningName = async (runningDataId: number, runningName: string
     }
   };
 
+  // 토큰 리워드 발급시 사용
   export const getAllRunning = async (): Promise<any> => {
     try {
       const response = await instance.get('/my-running/runnings');
