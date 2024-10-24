@@ -1,44 +1,28 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {Image, StyleSheet, FlatList} from 'react-native';
 import UnivItem from './UnivItem';
-
-const mockData = [
-  {
-    universityUrl: require('../../assets/m1.png'),
-    tokenURI: require('../../assets/l1.png'), // 학교 로고
-    universityName: '중앙대학교',
-    tokenPrice: 130.25,
-    tokenId: 0,
-  },
-  {
-    universityUrl: require('../../assets/m2.png'),
-    tokenURI: require('../../assets/l2.png'),
-    universityName: '고려대학교',
-    tokenPrice: 921.0,
-    tokenId: 0,
-  },
-  {
-    universityUrl: require('../../assets/m3.png'),
-    tokenURI: require('../../assets/l3.png'),
-    universityName: '연세대학교',
-    tokenPrice: 1204.6,
-    tokenId: 0,
-  },
-  {
-    universityUrl: require('../../assets/m4.png'),
-    tokenURI: require('../../assets/l4.png'),
-    universityName: '건국대학교',
-    tokenPrice: 269.2,
-    tokenId: 0,
-  },
-];
+import { getNftItems } from '../api/blockchainAPI';
 
 const UnivList: React.FC = () => {
+  const [nftItems, setNftItems] = useState<any[]>([]);
+
+  useEffect(() => {
+    const handleNftItems = async () => {
+      const items = await getNftItems();
+      //console.log('NFT Items:', items); 
+      if (items) {
+        setNftItems(items);
+      }
+    };
+    
+    handleNftItems();
+  }, []);
+
   return (
     <>
       <Image source={require('../../assets/nftMsg.png')} style={styles.msg} />
       <FlatList
-        data={mockData}
+        data={nftItems}
         renderItem={({item}) => (
           <UnivItem
             universityUrl={item.universityUrl}

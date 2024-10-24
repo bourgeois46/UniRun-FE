@@ -3,8 +3,8 @@ import {View, Text, Image, StyleSheet, TouchableOpacity} from 'react-native';
 import GetItemModal from '../modal/GetItemModal';
 
 type UnivItemProps = {
-  universityUrl: any;
-  tokenURI: any;
+  universityUrl: string;
+  tokenURI: string;
   universityName: string;
   tokenPrice: number;
   tokenId: any;
@@ -24,10 +24,12 @@ const UnivItem: React.FC<UnivItemProps> = ({universityUrl, tokenURI, universityN
   return (
     <>
       <TouchableOpacity style={styles.container} onPress={onPressModalOpen}>
-        <Image source={universityUrl} style={styles.mascot} />
+        <View style={styles.imageWrapper}>
+          <Image source={{uri: tokenURI}} style={styles.mascot} /> 
+        </View>
 
         <View style={styles.univContainer}>
-          <Image source={tokenURI} style={styles.logo} />
+        <Image source={{uri: universityUrl}} style={styles.logo}/>
           <Text style={[styles.name, {marginLeft: 10}]}>{universityName}</Text>
         </View>
 
@@ -48,7 +50,7 @@ const UnivItem: React.FC<UnivItemProps> = ({universityUrl, tokenURI, universityN
 
 const styles = StyleSheet.create({
   tokenId: {
-    fontSize: 14,
+    fontSize: 13,
     backgroundColor: '#EFF3FE', 
     color: '#739DF5', 
     paddingHorizontal: 8, 
@@ -56,7 +58,16 @@ const styles = StyleSheet.create({
     borderRadius: 5, 
     fontWeight: 'bold', 
     top: 20, 
-    right: 37, 
+    right: 40, 
+  },
+  imageWrapper: {
+    borderWidth: 0.8,              
+    borderColor: '#D9D9D9',      
+    borderRadius: 20,             
+    padding: 8, 
+    justifyContent: 'center',     
+    alignItems: 'center',                
+    marginLeft: 30,
   },
   container: {
     flexDirection: 'row',
@@ -70,7 +81,6 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginLeft: 15,
     top: -10,
   },
   msg: {
@@ -79,16 +89,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   mascot: {
+    width: 50,
+    height: 50,
     resizeMode: 'contain',
-    marginLeft: 15,
   },
   logo: {
+    width: 28,
+    height: 28,
+    top: -5,
     resizeMode: 'contain',
     marginLeft: 25,
   },
   name: {
     width : 70,
-    fontSize: 16,
+    fontSize: 14,
     color: 'black',
     fontWeight: 'bold',
   },
@@ -98,7 +112,8 @@ const styles = StyleSheet.create({
   rd: {
     color: 'black',
     fontWeight: 'bold',
-    left: 40,
+    left: 38,
+    fontSize: 12,
   },
   rdImg: {
     marginLeft: 50,
