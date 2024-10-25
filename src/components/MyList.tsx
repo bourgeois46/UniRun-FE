@@ -1,23 +1,28 @@
-import React from 'react';
-import {View, StyleSheet, FlatList} from 'react-native';
-import MyItem from './MyItem';
-
-const mockData = [
-  {
-    item: require('../../assets/item1.png'),
-    logo: require('../../assets/l1.png'),
-  },
-  {
-    item: require('../../assets/item2.png'),
-    logo: require('../../assets/l2.png'),
-  },
-];
+import React, {useState, useEffect} from 'react';
+import {View, StyleSheet, FlatList, Image} from 'react-native';
+import { geMyNfts } from '../api/blockchainAPI';
 
 const MyList: React.FC = () => {
+  const [nfts, setNfts] = useState<string[]>([]);
+
+  useEffect(() => {
+    const handleMyNfts = async () => {
+      const data = await geMyNfts();
+      if (data) {
+        setNfts(data.map((item: any) => item.cardUri));
+      }
+    };
+    handleMyNfts();
+  }, []);
+
   return (
     <FlatList
-      data={mockData}
-      renderItem={({item}) => <MyItem item={item.item} />}
+      data={nfts}
+      renderItem={({item}) => (
+        <View style={styles.imageContainer}>
+          <Image source={{uri: item}} style={styles.item} />
+        </View>
+      )}
       keyExtractor={(item, index) => index.toString()}
       style={styles.list}
     />
@@ -28,6 +33,18 @@ const styles = StyleSheet.create({
   list: {
     width: '100%',
   },
+  imageContainer: {
+    flex: 1,
+    alignItems: 'center',    
+    justifyContent: 'center', 
+    marginVertical: -30,
+  },
+  item: {
+    resizeMode: 'contain',
+    width: 300,
+    height: 300,
+  },
 });
 
 export default MyList;
+
