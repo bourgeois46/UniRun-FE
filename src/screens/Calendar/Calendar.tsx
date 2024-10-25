@@ -4,6 +4,7 @@ import CalendarView from '../../components/CalendarView';
 import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 import CalendarList from '../../components/CalendarList';
 import type {StackNavigationProp} from '@react-navigation/stack';
+import {calendarMain} from '../../api/calendarAPI';
 
 type RootStackParamList = {
   CreateRun: undefined;
@@ -19,6 +20,25 @@ const Calendar: React.FC = () => {
   const [events, setEvents] = useState<any[]>([]);
 
   useEffect(() => {
+    //API 추가 코드
+    const fetchCalendarInfo = async () => {
+      try {
+        const today = new Date();
+        const year = today.getFullYear(); //현재 연도
+        const month = today.getMonth() + 1; //현재 월
+
+        const response = await calendarMain(year, month);
+        if (response && response.data) {
+          setEvents(response.data);
+        }
+      } catch (error) {
+        console.error('캘린더 메인 조회 중 오류: ', error);
+      }
+    };
+
+    fetchCalendarInfo();
+
+    //조건에 따른 상태 업데이트
     if (route.params?.newEvent) {
       setEvents(prevEvents => [...prevEvents, route.params.newEvent]);
     }
