@@ -12,7 +12,7 @@ type RootStackParamList = {
 
 const Running: React.FC = () => {
   const wsService = WebSocketService.getInstance(
-    'ws://ec2-54-180-232-224.ap-northeast-2.compute.amazonaws.com/running'
+    'ws://ec2-3-34-146-169.ap-northeast-2.compute.amazonaws.com/running'
   ); 
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [region, setRegion] = useState<Region | null>(null);
