@@ -10,7 +10,7 @@ export const calendarMain = async (
       `/calendar/running-schedules/monthly?year=${year}&month=${month}`,
     );
 
-    console.log('Received response from backend:', response.data);
+    console.log('월별 러닝 스케줄 날짜 조회:', response.data);
 
     if (response.data && response.data.status === 200) {
       return response.data || [];

@@ -27,10 +27,10 @@ const LoginRedirect: React.FC<LoginRedirectProps> = ({ handleLoginSuccess }) => 
       const sessionCookie = setCookieHeader[0].split(';')[0].split('=')[1];
       console.log('SESSIONID:', sessionCookie);
   
-      await CookieManager.set('http://ec2-54-180-232-224.ap-northeast-2.compute.amazonaws.com', {
+      await CookieManager.set('http://ec2-3-34-146-169.ap-northeast-2.compute.amazonaws.com', {
         name: 'SESSIONID',
         value: sessionCookie,
-        domain: 'ec2-54-180-232-224.ap-northeast-2.compute.amazonaws.com',
+        domain: 'ec2-3-34-146-169.ap-northeast-2.compute.amazonaws.com',
         path: '/',
       });
       console.log('로그인 쿠키 저장됨:', sessionCookie);
