@@ -10,6 +10,8 @@ import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import type {StackNavigationProp} from '@react-navigation/stack';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import {Alert} from 'react-native';
+import {createCalendar} from '../../api/calendarAPI';
 
 type RootStackParamList = {
   Calendar: {
@@ -40,6 +42,8 @@ const CreateRun: React.FC = () => {
   const [isStartTimePickerVisible, setStartTimePickerVisibility] =
     useState(false);
   const [isEndTimePickerVisible, setEndTimePickerVisibility] = useState(false);
+
+  const [events, setEvents] = useState<any[]>([]);
 
   const navigation =
     useNavigation<StackNavigationProp<RootStackParamList, 'Calendar'>>();
@@ -83,26 +87,61 @@ const CreateRun: React.FC = () => {
     hideEndTimePicker(); //모달 닫기
   };
 
-  const handleSignup = () => {
+  const handleSignup = async () => {
+    if (!selectedType || !title || !crew || !date || !startTime || !endTime || !place || !audienceType) {
+      Alert.alert('모든 필드를 입력해 주세요.');
+      return;
+    }
+
+    if (startTime >= endTime) {
+      Alert.alert('종료 시간이 시작 시간보다 빨라야 합니다.');
+      return;
+    }
+
     const newEvent = {
       type: selectedType,
       title,
       crew,
-      date: date?.toISOString().split('T')[0], // 날짜는 'YYYY-MM-DD' 형식으로 저장
+      date: date?.toISOString().split('T')[0].replace(/-/g, '.'), // 날짜 형식 'YYYY.MM.DD'로 변환
       startTime: startTime?.toLocaleTimeString([], {
         hour: '2-digit',
         minute: '2-digit',
-      }), // 시간은 'HH:MM' 형식으로 저장
+        hour12: false, // 24시간 형식으로 설정
+      }),
       endTime: endTime?.toLocaleTimeString([], {
         hour: '2-digit',
         minute: '2-digit',
+        hour12: false, // 24시간 형식으로 설정
       }),
       place,
       audienceType,
     };
 
-    //캘린더 메인으로 새로운 이벤트 데이터 전달
-    navigation.navigate('Calendar', {newEvent});
+    console.log('새로운 이벤트 정보:', newEvent);
+
+    try {
+      const response = await createCalendar(newEvent);
+      console.log(newEvent);
+      console.log(response);
+      if (response && response.status === 200) {
+        console.log('이벤트 생성 성공: ', response.data);
+
+        // 생성된 이벤트 정보를 상태에 저장
+        setEvents(prevEvents => [
+          ...prevEvents,
+          {...newEvent, id: response.data.id},
+        ]); // ID 추가 가정
+
+        // 캘린더 메인으로 새로운 이벤트 데이터 전달
+        navigation.navigate('Calendar', {newEvent});
+      } else {
+        console.error('이벤트 생성 후 응답 데이터가 없습니다.');
+        Alert.alert('이벤트 생성 오류');
+      }
+    } catch (error) {
+      console.error('이벤트 생성 실패: ', error);
+      Alert.alert('이벤트 생성 오류');
+    }
   };
 
   return (

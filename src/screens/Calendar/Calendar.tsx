@@ -4,7 +4,11 @@ import CalendarView from '../../components/CalendarView';
 import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 import CalendarList from '../../components/CalendarList';
 import type {StackNavigationProp} from '@react-navigation/stack';
-import {calendarMain, calendarDaily} from '../../api/calendarAPI';
+import {
+  calendarMain,
+  calendarDaily,
+  createCalendar,
+} from '../../api/calendarAPI';
 
 type RootStackParamList = {
   CreateRun: undefined;
@@ -31,6 +35,15 @@ const Calendar: React.FC = () => {
         const response = await calendarMain(year, month);
         if (response && response.data) {
           setEvents(response.data);
+          console.log('캘린더 메인 데이터: ', response.data);
+        }
+
+        // newEvent 추가 코드 위치 변경
+        if (route.params?.newEvent) {
+          console.log('받은 newEvent:', route.params.newEvent); // 로그로 확인
+          response.data = route.params.newEvent;
+          console.log(response.data);
+          setEvents(prevEvents => [...prevEvents, route.params.newEvent]);
         }
       } catch (error) {
         console.error('캘린더 메인 조회 중 오류: ', error);
@@ -38,15 +51,11 @@ const Calendar: React.FC = () => {
     };
 
     fetchCalendarInfo();
-
-    //조건에 따른 상태 업데이트
-    if (route.params?.newEvent) {
-      setEvents(prevEvents => [...prevEvents, route.params.newEvent]);
-    }
   }, [route.params?.newEvent]);
 
-  const handleButtonClick = () => {
+  const handleButtonClick = async () => {
     navigation.navigate('CreateRun');
+    console.log('일정 생성으로 이동');
   };
 
   // 캘린더에서 날짜를 클릭했을 때 호출될 함수
@@ -54,8 +63,12 @@ const Calendar: React.FC = () => {
     setSelectedDate(date); // 선택한 날짜를 상태로 설정
 
     const [year, month, day] = date.split('-').map(Number); //선택한 날짜를 연,월,일로 나누기
+    console.log('선택한 날짜:', date); // 추가된 로그
+    console.log('연도, 월, 일:', year, month, day); // 추가된 로그
+
     try {
       const dailyEvents = await calendarDaily(year, month, day);
+      console.log('선택한 날짜의 이벤트: ', dailyEvents);
       setFilteredEvents(dailyEvents.data || []); // 선택한 날짜의 일정으로 업데이트
     } catch (error) {
       console.error('날짜별 일정 조회 중 오류:', error);
