@@ -63,8 +63,6 @@ const Calendar: React.FC = () => {
     }
   };
 
-  // const filteredEvents = events.filter(event => event.date === selectedDate);
-
   return (
     <View style={styles.container}>
       <Text style={styles.name}>CALENDAR</Text>

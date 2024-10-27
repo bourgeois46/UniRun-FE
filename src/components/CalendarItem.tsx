@@ -69,7 +69,7 @@ const CalendarItem: React.FC<CalendarItemProps> = ({item}) => {
               style={styles.icon}
             />
             <Text style={styles.time}>
-              {item.startTime} - {item.endTime}
+              {item.startTime.substring(0, 5)} - {item.endTime.substring(0, 5)}
             </Text>
           </View>
 
