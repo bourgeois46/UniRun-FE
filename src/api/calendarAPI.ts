@@ -14,11 +14,8 @@ export const calendarMain = async (
 
     if (response.data && response.data.status === 200) {
       return response.data || [];
-    } else if (response.data && response.data.status === 404) {
-      Alert.alert('일정 없음', '해당 일정을 찾을 수 없습니다.');
-      return [];
-    } else {
-      return [];
+    } else if (response.data && response.data.status === 500) {
+      Alert.alert('서버 오류', '서버와 통신하는 중 오류가 발생했습니다.');
     }
   } catch (error) {
     const err = error as Error;
@@ -45,11 +42,8 @@ export const calendarDaily = async (
 
     if (response.data && response.data.status === 200) {
       return response.data || [];
-    } else if (response.data && response.data.status === 404) {
-      Alert.alert('날짜 없음', '해당 날짜의 일정을 찾을 수 없습니다.');
-      return [];
-    } else {
-      return [];
+    } else if (response.data && response.data.status === 500) {
+      Alert.alert('서버 오류', '서버와 통신하는 중 오류가 발생했습니다.');
     }
   } catch (error) {
     const err = error as Error;
