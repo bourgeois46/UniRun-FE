@@ -34,7 +34,7 @@ const RunningDoneModal: React.FC<{ visible: boolean; onClose: () => void; onRunn
   }, []);
 
   useEffect(() => {
-    const wsService = WebSocketService.getInstance('ws://ec2-3-34-146-169.ap-northeast-2.compute.amazonaws.com/running');
+    const wsService = WebSocketService.getInstance('ws://ec2-3-34-43-50.ap-northeast-2.compute.amazonaws.com/running');
     wsService.setOnRunningDataIdReceived((receivedRunningDataId: number) => {
       console.log(`받은 runningDataId: ${receivedRunningDataId}`);
       setRunningDataId(receivedRunningDataId);

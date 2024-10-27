@@ -2,7 +2,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const instance = axios.create({
-  baseURL: 'http://ec2-3-34-146-169.ap-northeast-2.compute.amazonaws.com',
+  baseURL: 'http://ec2-3-34-43-50.ap-northeast-2.compute.amazonaws.com',
   withCredentials: true, // 쿠키를 전송할 수 있도록 설정
 });
 
