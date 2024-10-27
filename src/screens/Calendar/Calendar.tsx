@@ -4,7 +4,7 @@ import CalendarView from '../../components/CalendarView';
 import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 import CalendarList from '../../components/CalendarList';
 import type {StackNavigationProp} from '@react-navigation/stack';
-import {calendarMain} from '../../api/calendarAPI';
+import {calendarMain, calendarDaily} from '../../api/calendarAPI';
 
 type RootStackParamList = {
   CreateRun: undefined;
@@ -18,6 +18,7 @@ const Calendar: React.FC = () => {
   const route = useRoute<RouteProp<RootStackParamList, 'Calendar'>>();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [events, setEvents] = useState<any[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<any[]>([]);
 
   useEffect(() => {
     //API 추가 코드
@@ -49,11 +50,18 @@ const Calendar: React.FC = () => {
   };
 
   // 캘린더에서 날짜를 클릭했을 때 호출될 함수
-  const handleDateSelect = (date: string) => {
+  const handleDateSelect = async (date: string) => {
     setSelectedDate(date); // 선택한 날짜를 상태로 설정
-  };
 
-  const filteredEvents = events.filter(event => event.date === selectedDate);
+    const [year, month, day] = date.split('-').map(Number); //선택한 날짜를 연,월,일로 나누기
+    try {
+      const dailyEvents = await calendarDaily(year, month, day);
+      setFilteredEvents(dailyEvents.data || []); // 선택한 날짜의 일정으로 업데이트
+    } catch (error) {
+      console.error('날짜별 일정 조회 중 오류:', error);
+      setFilteredEvents([]);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -74,7 +82,15 @@ const Calendar: React.FC = () => {
       </View>
 
       <View style={styles.calendarListContainer}>
-        <CalendarList selectedDate={selectedDate} events={filteredEvents} />
+        {selectedDate && filteredEvents.length === 0 ? (
+          // 선택한 날짜에 이벤트가 없을 때
+          <Text style={styles.noEventsText}>
+            선택한 날짜에 이벤트가 없습니다.
+          </Text>
+        ) : (
+          // 선택한 날짜에 이벤트가 있을 때
+          <CalendarList selectedDate={selectedDate} events={filteredEvents} />
+        )}
       </View>
     </View>
   );
@@ -114,6 +130,11 @@ const styles = StyleSheet.create({
   calendarListContainer: {
     top: -70,
     width: '100%',
+  },
+  noEventsText: {
+    textAlign: 'center',
+    top: 100,
+    color: '#343434',
   },
 });
 

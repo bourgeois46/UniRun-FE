@@ -21,8 +21,11 @@ interface CalendarListProps {
 const CalendarList: React.FC<CalendarListProps> = ({selectedDate, events}) => {
   //선택한 날짜에 해당하는 이벤트 필터링
   const filteredEvents = selectedDate
-    ? events.filter(event => event.date === selectedDate)
+    ? events.filter(event => event.runningDate === selectedDate)
     : events;
+
+  console.log('Selected Date:', selectedDate);
+  console.log('Filtered Events:', filteredEvents);
 
   return (
     <FlatList
