@@ -44,7 +44,7 @@
 		<true/>
 		<key>NSExceptionDomains</key>
 		<dict>
-			<key>ec2-3-34-43-50.ap-northeast-2.compute.amazonaws.com</key>
+			<key>ec2-3-38-192-141.ap-northeast-2.compute.amazonaws.com</key>
 			<dict>
 				<key>NSExceptionAllowsInsecureHTTPLoads</key>
 				<true/>
