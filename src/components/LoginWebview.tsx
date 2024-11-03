@@ -10,10 +10,10 @@ type RootStackParamList = {
 
 const LoginWebview = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const REACT_APP_REST_API_KEY = '7845a080f472eabd0d3ca3a3152d1962';
-  const REACT_APP_REDIRECT_URI =('http://ec2-3-38-192-141.ap-northeast-2.compute.amazonaws.com/user/auth');
+  const REACT_APP_REST_API_KEY = process.env.REACT_APP_REST_API_KEY || '';
+  const REACT_APP_REDIRECT_URI = process.env.REACT_APP_REDIRECT_URI || '';
   const KAKAO_AUTH_URI = `https://kauth.kakao.com/oauth/authorize?client_id=${REACT_APP_REST_API_KEY}&redirect_uri=${REACT_APP_REDIRECT_URI}&response_type=code`;
-
+  
   return (
     <SafeAreaView style={styles.container}>
       <WebView

@@ -422,6 +422,7 @@ const styles = StyleSheet.create({
     color: '#0F2869',
     fontWeight: '500',
     fontSize: 16,
+    width: 150,
   },
   timecolumn: {
     flexDirection: 'column',
