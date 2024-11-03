@@ -12,8 +12,9 @@ type RootStackParamList = {
 
 const Running: React.FC = () => {
   const wsService = WebSocketService.getInstance(
-    'ws://ec2-3-38-192-141.ap-northeast-2.compute.amazonaws.com/running'
-  ); 
+    process.env.REACT_APP_WEBSOCKET_URL || ''
+  );
+  
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const [region, setRegion] = useState<Region | null>(null);
   const [currentLocation, setCurrentLocation] = useState<any>(null); // 현재 위치 상태
